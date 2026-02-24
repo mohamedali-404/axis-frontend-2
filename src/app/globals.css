@@ -1,0 +1,155 @@
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
+    --primary-font: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+    --accent-color: #000;
+    --accent-foreground: #fff;
+    --secondary-color: #f7f7f7;
+    --border-color: #eaeaea;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+        --accent-color: #fff;
+        --accent-foreground: #000;
+        --secondary-color: #111;
+        --border-color: #333;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-start-rgb));
+    font-family: var(--primary-font);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Base Components Output */
+.btn-primary {
+    background-color: var(--accent-color);
+    color: var(--accent-foreground);
+    padding: 12px 24px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-color);
+    color: var(--accent-foreground);
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    background: rgb(var(--background-start-rgb));
+    color: rgb(var(--foreground-rgb));
+    border-radius: 4px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus,
+.select:focus {
+    border-color: var(--accent-color);
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Hover Utilities */
+.hover-scale {
+    transition: transform 0.5s ease !important;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05) !important;
+}
+
+.hover-opacity {
+    opacity: 0.8 !important;
+    transition: opacity 0.3s !important;
+}
+
+.hover-opacity:hover {
+    opacity: 1 !important;
+}
+
+.product-image-container .product-zoom {
+    transition: transform 0.4s ease;
+}
+
+.product-image-container:hover .product-zoom {
+    transform: scale(1.1);
+}
