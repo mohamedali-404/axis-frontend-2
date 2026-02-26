@@ -66,7 +66,7 @@ export default function Footer() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '10px 20px', backgroundColor: 'rgba(255, 255, 255, 0.04)', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', opacity: 0.9 }}>
                     <span style={{ fontSize: '0.85rem', fontWeight: 500, letterSpacing: '0.5px' }}>
-                        Designed & Engineered with ❤️ by <strong style={{ fontWeight: 800, letterSpacing: '1px' }}>Eng. Mohamed Ali</strong>
+                        Crafted with ❤️ and passion by <strong style={{ fontWeight: 800, letterSpacing: '1px' }}>Eng. Mohamed Ali</strong>
                     </span>
                     <span style={{ opacity: 0.4 }}>|</span>
                     <a href="https://wa.me/201282721189" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#25D366', backgroundColor: 'rgba(37, 211, 102, 0.1)', padding: '6px', borderRadius: '50%', transition: 'all 0.2s ease', cursor: 'pointer' }} title="Chat on WhatsApp">
