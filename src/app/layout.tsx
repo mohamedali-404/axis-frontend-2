@@ -58,11 +58,41 @@ export default async function RootLayout({
     } as React.CSSProperties : {} as React.CSSProperties;
 
     return (
-        // lang and dir will be dynamically set client-side by LanguageProvider
         <html lang="en" dir="ltr" suppressHydrationWarning>
             <head>
                 <link rel="manifest" href="/manifest.json" />
                 <meta name="theme-color" content={settings?.themeSettings?.accentColor || '#000000'} />
+                {/* ── Anti-Flash Script ─────────────────────────────────────
+                    Runs synchronously before first paint.
+                    Reads saved language from localStorage and sets html lang + dir
+                    immediately — so the browser never paints the wrong direction.
+                ────────────────────────────────────────────────────────── */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+(function(){
+  try {
+    var lang = localStorage.getItem('axis_lang');
+    if (lang === 'ar' || lang === 'en') {
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    }
+  } catch(e) {}
+})();
+                        `.trim()
+                    }}
+                />
+                {/* ── Anti-Flash CSS ────────────────────────────────────────
+                    Hide body for max 300ms until React hydration completes.
+                    The .hydrated class is added by LanguageProvider on mount.
+                ────────────────────────────────────────────────────────── */}
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+body { visibility: hidden; }
+body.hydrated { visibility: visible; animation: __axis_fadein 0.18s ease-out; }
+@keyframes __axis_fadein { from { opacity: 0.4; } to { opacity: 1; } }
+                    `.trim()
+                }} />
             </head>
             <body style={themeColors} suppressHydrationWarning>
                 <LanguageProvider>

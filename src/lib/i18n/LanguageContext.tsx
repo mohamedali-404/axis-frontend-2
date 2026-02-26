@@ -7,6 +7,16 @@ export type Language = 'en' | 'ar';
 
 const translations = { en, ar };
 
+// Safely read the lang that was already applied by the inline script
+function getInitialLang(): Language {
+    if (typeof window === 'undefined') return 'en';
+    try {
+        const saved = localStorage.getItem('axis_lang');
+        if (saved === 'ar' || saved === 'en') return saved;
+    } catch { }
+    return 'en';
+}
+
 // Deep-get a nested key like "cart.title"
 function getNestedValue(obj: any, path: string): string {
     const keys = path.split('.');
@@ -35,25 +45,17 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-    const [lang, setLangState] = useState<Language>('en');
-    const [mounted, setMounted] = useState(false);
+    // Initialize directly from localStorage — no useEffect needed for initial read
+    const [lang, setLangState] = useState<Language>(getInitialLang);
 
+    // Only update html attributes when lang changes (not on first render — inline script already handled it)
     useEffect(() => {
-        setMounted(true);
-        try {
-            const saved = localStorage.getItem('axis_lang') as Language | null;
-            if (saved === 'ar' || saved === 'en') {
-                setLangState(saved);
-            }
-        } catch { }
-    }, []);
-
-    useEffect(() => {
-        if (!mounted) return;
         const dir = lang === 'ar' ? 'rtl' : 'ltr';
         document.documentElement.setAttribute('lang', lang);
         document.documentElement.setAttribute('dir', dir);
-    }, [lang, mounted]);
+        // Signal that React has hydrated — removes visibility:hidden from body
+        document.body.classList.add('hydrated');
+    }, [lang]);
 
     const setLang = useCallback((newLang: Language) => {
         setLangState(newLang);

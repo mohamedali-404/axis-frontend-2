@@ -10,15 +10,14 @@ export default function Home() {
     const { t } = useLanguage();
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, { cache: 'no-store' } as RequestInit)
-            .then(res => res.json())
-            .then(data => setProducts(Array.isArray(data) ? data : []))
-            .catch(() => { });
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`, { cache: 'no-store' } as RequestInit)
-            .then(res => res.json())
-            .then(data => setSettings(data))
-            .catch(() => { });
+        // Parallel fetch for speed
+        Promise.all([
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`).then(r => r.json()).catch(() => []),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`).then(r => r.json()).catch(() => null),
+        ]).then(([prods, setts]) => {
+            setProducts(Array.isArray(prods) ? prods : []);
+            setSettings(setts);
+        });
     }, []);
 
     const featured = products.slice(0, 8);
