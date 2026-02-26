@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useCartStore } from '@/store/cartStore';
 import { usePathname } from 'next/navigation';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -13,6 +14,7 @@ export default function Navbar() {
     const toggleCart = useCartStore((state) => state.toggleCart);
     const items = useCartStore((state) => state.items);
     const pathname = usePathname();
+    const { t, lang, setLang, isRTL } = useLanguage();
 
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
@@ -53,6 +55,8 @@ export default function Navbar() {
 
     if (pathname.startsWith('/admin')) return null;
 
+    const toggleLang = () => setLang(lang === 'en' ? 'ar' : 'en');
+
     return (
         <>
             <nav style={{
@@ -77,13 +81,42 @@ export default function Navbar() {
                     </Link>
 
                     <div style={{ display: 'none', gap: '3rem' }} className="desktop-menu">
-                        <Link href="/" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>Home</Link>
-                        <Link href="/shop" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>Shop</Link>
-                        <Link href="/track" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>Track Order</Link>
-                        <Link href="/about" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>About</Link>
+                        <Link href="/" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.home')}</Link>
+                        <Link href="/shop" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.shop')}</Link>
+                        <Link href="/track" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.trackOrder')}</Link>
+                        <Link href="/about" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.about')}</Link>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        {/* Language Switcher */}
+                        {mounted && (
+                            <button
+                                onClick={toggleLang}
+                                aria-label={lang === 'en' ? 'Switch to Arabic' : 'Switch to English'}
+                                style={{
+                                    display: 'flex', alignItems: 'center', gap: '0.4rem',
+                                    padding: '6px 14px',
+                                    borderRadius: '20px',
+                                    border: `1.5px solid ${isScrolled ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.2)'}`,
+                                    backgroundColor: isScrolled ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.15)',
+                                    backdropFilter: 'blur(8px)',
+                                    color: 'inherit',
+                                    cursor: 'pointer',
+                                    fontWeight: 700,
+                                    fontSize: '0.85rem',
+                                    letterSpacing: '0.5px',
+                                    transition: 'all 0.3s ease',
+                                    fontFamily: 'inherit',
+                                    textTransform: 'uppercase'
+                                }}
+                                className="lang-switcher"
+                            >
+                                <span style={{ fontSize: '1rem' }}>{lang === 'en' ? '🇸🇦' : '🇺🇸'}</span>
+                                <span>{lang === 'en' ? 'AR' : 'EN'}</span>
+                            </button>
+                        )}
+
+                        {/* Cart Icon */}
                         <div style={{ position: 'relative', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '8px', borderRadius: '50%', transition: 'background-color 0.2s' }} onClick={toggleCart} className="hover-bg-subtle">
                             <ShoppingBag size={24} />
                             {mounted && totalItems > 0 && (
@@ -111,15 +144,31 @@ export default function Navbar() {
                     transition: 'transform 0.6s cubic-bezier(0.77, 0, 0.175, 1)',
                     pointerEvents: mobileMenuOpen ? 'auto' : 'none'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', height: '80px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', height: '80px', alignItems: 'center' }}>
+                        {/* Lang switcher in mobile menu */}
+                        <button
+                            onClick={toggleLang}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                                padding: '8px 16px', borderRadius: '20px',
+                                border: '1.5px solid rgba(255,255,255,0.3)',
+                                backgroundColor: 'rgba(255,255,255,0.08)',
+                                color: '#fff', cursor: 'pointer',
+                                fontWeight: 700, fontSize: '0.9rem',
+                                fontFamily: 'inherit'
+                            }}
+                        >
+                            <span>{lang === 'en' ? '🇸🇦' : '🇺🇸'}</span>
+                            <span>{lang === 'en' ? 'العربية' : 'English'}</span>
+                        </button>
                         <X size={32} cursor="pointer" onClick={() => setMobileMenuOpen(false)} style={{ color: '#ffffff', transform: mobileMenuOpen ? 'rotate(0)' : 'rotate(180deg)', transition: 'transform 0.6s ease' }} />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', flex: 1, justifyContent: 'center', alignItems: 'center', fontSize: '2rem', fontWeight: 800, textTransform: 'uppercase', opacity: mobileMenuOpen ? 1 : 0, transition: 'opacity 0.4s ease 0.3s' }}>
-                        <Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-                        <Link href="/shop" onClick={() => setMobileMenuOpen(false)}>Shop</Link>
-                        <Link href="/track" onClick={() => setMobileMenuOpen(false)}>Track Order</Link>
-                        <Link href="/about" onClick={() => setMobileMenuOpen(false)}>About</Link>
-                        <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+                        <Link href="/" onClick={() => setMobileMenuOpen(false)}>{t('nav.home')}</Link>
+                        <Link href="/shop" onClick={() => setMobileMenuOpen(false)}>{t('nav.shop')}</Link>
+                        <Link href="/track" onClick={() => setMobileMenuOpen(false)}>{t('nav.trackOrder')}</Link>
+                        <Link href="/about" onClick={() => setMobileMenuOpen(false)}>{t('nav.about')}</Link>
+                        <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>{t('nav.contact')}</Link>
                     </div>
                 </div>,
                 document.body
@@ -131,6 +180,10 @@ export default function Navbar() {
         }
         .hover-bg-subtle:hover {
             background-color: rgba(255,255,255,0.1);
+        }
+        .lang-switcher:hover {
+            background-color: rgba(255,255,255,0.25) !important;
+            transform: scale(1.05);
         }
       `}</style>
         </>

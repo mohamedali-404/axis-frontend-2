@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
 import FloatingCart from '@/components/FloatingCart';
 import HideOnAdmin from '@/components/HideOnAdmin';
+import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 
 async function getSettings() {
     try {
@@ -57,19 +58,22 @@ export default async function RootLayout({
     } as React.CSSProperties : {} as React.CSSProperties;
 
     return (
-        <html lang="en" suppressHydrationWarning>
+        // lang and dir will be dynamically set client-side by LanguageProvider
+        <html lang="en" dir="ltr" suppressHydrationWarning>
             <head>
                 <link rel="manifest" href="/manifest.json" />
                 <meta name="theme-color" content={settings?.themeSettings?.accentColor || '#000000'} />
             </head>
             <body style={themeColors} suppressHydrationWarning>
-                <Navbar />
-                <main style={{ minHeight: 'calc(100vh - 200px)' }}>{children}</main>
-                <HideOnAdmin>
-                    <Footer />
-                </HideOnAdmin>
-                <FloatingCart />
-                <CartDrawer />
+                <LanguageProvider>
+                    <Navbar />
+                    <main style={{ minHeight: 'calc(100vh - 200px)' }}>{children}</main>
+                    <HideOnAdmin>
+                        <Footer />
+                    </HideOnAdmin>
+                    <FloatingCart />
+                    <CartDrawer />
+                </LanguageProvider>
             </body>
         </html>
     );

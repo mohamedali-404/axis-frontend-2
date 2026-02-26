@@ -2,10 +2,12 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function ProductCard({ product }: { product: any }) {
     const [currentImgIndex, setCurrentImgIndex] = useState(0);
     const hoverIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const { t } = useLanguage();
 
     const handleMouseEnter = () => {
         if (product.images && product.images.length > 1) {
@@ -47,12 +49,12 @@ export default function ProductCard({ product }: { product: any }) {
 
                 {product.discountPrice && (
                     <span style={{ position: 'absolute', top: 16, right: 16, backgroundColor: 'var(--accent-color)', color: 'var(--accent-foreground)', padding: '6px 14px', fontSize: '0.8rem', fontWeight: 800, borderRadius: '4px', letterSpacing: '1px' }}>
-                        SALE
+                        {t('product.sale')}
                     </span>
                 )}
                 {product.stock === 0 && (
                     <span style={{ position: 'absolute', top: 16, left: 16, backgroundColor: 'var(--background-start-rgb)', color: 'var(--foreground-rgb)', padding: '6px 14px', fontSize: '0.8rem', fontWeight: 800, border: '2px solid var(--accent-color)', borderRadius: '4px' }}>
-                        SOLD OUT
+                        {t('product.soldOut')}
                     </span>
                 )}
             </Link>

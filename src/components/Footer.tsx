@@ -1,18 +1,19 @@
+'use client';
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-async function getSettings() {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`, { cache: 'no-store' });
-        if (!res.ok) return null;
-        return res.json();
-    } catch (err) {
-        return null;
-    }
-}
+export default function Footer() {
+    const [settings, setSettings] = useState<any>(null);
+    const { t } = useLanguage();
 
-export default async function Footer() {
-    const settings = await getSettings();
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`)
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(console.error);
+    }, []);
 
     return (
         <footer style={{ backgroundColor: 'var(--accent-color)', color: 'var(--accent-foreground)', padding: '6rem 2rem 3rem', marginTop: '6rem' }}>
@@ -20,12 +21,12 @@ export default async function Footer() {
                 <div>
                     <h2 style={{ fontSize: '2.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '1.5rem', lineHeight: 1 }}>AXIS</h2>
                     <p style={{ color: 'var(--accent-foreground)', opacity: 0.7, maxWidth: 300, marginBottom: '2.5rem', fontSize: '1.1rem', lineHeight: 1.6 }}>
-                        Minimal design. Maximum performance. Premium gym and sportswear.
+                        {t('footer.tagline')}
                     </p>
                     <div style={{ display: 'flex', gap: '2rem' }}>
-                        {settings?.socialLinks?.instagram && <a href={settings.socialLinks.instagram} style={{ color: 'var(--accent-foreground)', opacity: 0.8 }} className="hover-opacity" target="_blank"><Instagram size={28} /></a>}
-                        {settings?.socialLinks?.facebook && <a href={settings.socialLinks.facebook} style={{ color: 'var(--accent-foreground)', opacity: 0.8 }} className="hover-opacity" target="_blank"><Facebook size={28} /></a>}
-                        {settings?.socialLinks?.tiktok && <a href={settings.socialLinks.tiktok} style={{ color: 'var(--accent-foreground)', opacity: 0.8 }} className="hover-opacity" target="_blank">
+                        {settings?.socialLinks?.instagram && <a href={settings.socialLinks.instagram} style={{ color: 'var(--accent-foreground)', opacity: 0.8 }} className="hover-opacity" target="_blank" rel="noopener"><Instagram size={28} /></a>}
+                        {settings?.socialLinks?.facebook && <a href={settings.socialLinks.facebook} style={{ color: 'var(--accent-foreground)', opacity: 0.8 }} className="hover-opacity" target="_blank" rel="noopener"><Facebook size={28} /></a>}
+                        {settings?.socialLinks?.tiktok && <a href={settings.socialLinks.tiktok} style={{ color: 'var(--accent-foreground)', opacity: 0.8 }} className="hover-opacity" target="_blank" rel="noopener">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12.53 2.5h3.08A4.65 4.65 0 0018 7.37v3.13a8.2 8.2 0 01-3.6-.82v6.6a5.53 5.53 0 01-5.54 5.53 5.53 5.53 0 01-5.53-5.54 5.53 5.53 0 015.53-5.54 1.3 1.3 0 01.3.03v3.18a2.38 2.38 0 00-2.67 2.36 2.38 2.38 0 002.38 2.37 2.38 2.38 0 002.37-2.38v-13.8z" /></svg>
                         </a>}
                         {(!settings?.socialLinks?.facebook && !settings?.socialLinks?.instagram && !settings?.socialLinks?.tiktok) && (
@@ -41,26 +42,26 @@ export default async function Footer() {
                 </div>
 
                 <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>Shop</h3>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>{t('footer.shop')}</h3>
                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: 0 }}>
-                        <li><Link href="/shop" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">All Products</Link></li>
-                        <li><Link href="/shop?type=tshirts" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">T-Shirts</Link></li>
-                        <li><Link href="/shop?type=longsleeve" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">Long Sleeves</Link></li>
+                        <li><Link href="/shop" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.allProducts')}</Link></li>
+                        <li><Link href="/shop?type=tshirts" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.tshirts')}</Link></li>
+                        <li><Link href="/shop?type=longsleeve" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.longSleeves')}</Link></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>Support</h3>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>{t('footer.support')}</h3>
                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: 0 }}>
-                        <li><Link href="/contact" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">Contact Us</Link></li>
-                        <li><Link href="/policy" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">Return & Exchange</Link></li>
-                        <li><Link href="/shipping" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">Shipping Policy</Link></li>
+                        <li><Link href="/contact" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.contactUs')}</Link></li>
+                        <li><Link href="/policy" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.returnExchange')}</Link></li>
+                        <li><Link href="/shipping" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.shippingPolicy')}</Link></li>
                     </ul>
                 </div>
             </div>
             <div style={{ maxWidth: 1400, margin: '5rem auto 0', paddingTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', color: 'var(--accent-foreground)' }}>
                 <div style={{ fontSize: '1rem', opacity: 0.6 }}>
-                    &copy; {new Date().getFullYear()} AXIS. All rights reserved.
+                    &copy; {new Date().getFullYear()} AXIS. {t('footer.rights')}
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '10px 20px', backgroundColor: 'rgba(255, 255, 255, 0.04)', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', opacity: 0.9 }}>

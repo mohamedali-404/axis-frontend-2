@@ -2,8 +2,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function AdminDashboard() {
+    const { t, lang, setLang } = useLanguage();
     const [token, setToken] = useState('');
     const [loginForm, setLoginForm] = useState({ username: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
@@ -86,7 +88,7 @@ export default function AdminDashboard() {
             setToken(data.token);
             localStorage.setItem('axis_token', data.token);
         } catch {
-            alert('Login failed');
+            alert(t('admin.loginFailed'));
         }
     };
 
@@ -137,10 +139,10 @@ export default function AdminDashboard() {
 
             if (editingProductId) {
                 await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${editingProductId}`, pData, { headers: { Authorization: `Bearer ${token}` } });
-                alert('Product Updated Successfully');
+                alert(t('admin.productUpdated'));
             } else {
                 await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, pData, { headers: { Authorization: `Bearer ${token}` } });
-                alert('Product Added Successfully');
+                alert(t('admin.productAdded'));
             }
 
             fetchData();
@@ -182,7 +184,7 @@ export default function AdminDashboard() {
     };
 
     const deleteOrder = async (id: string) => {
-        if (!window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
+        if (!window.confirm(t('admin.confirmDelete'))) return;
         try {
             await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/orders/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
@@ -199,8 +201,8 @@ export default function AdminDashboard() {
                 ...couponForm, percentage: Number(couponForm.percentage)
             }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
-            alert('Coupon created');
-        } catch { alert('Error creating coupon'); }
+            alert(t('admin.couponCreated'));
+        } catch { alert(t('error.generic')); }
     };
 
     const deleteCoupon = async (id: string) => {
@@ -214,8 +216,8 @@ export default function AdminDashboard() {
         e.preventDefault();
         try {
             let updatePayload = { ...settings };
-            if (updatePayload._id) delete updatePayload._id; // safe pattern
-            if (updatePayload.__v !== undefined) delete updatePayload.__v; // safe pattern
+            if (updatePayload._id) delete updatePayload._id;
+            if (updatePayload.__v !== undefined) delete updatePayload.__v;
 
             if (logoObj) {
                 const formData = new FormData();
@@ -251,7 +253,7 @@ export default function AdminDashboard() {
             const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/settings`, updatePayload, { headers: { Authorization: `Bearer ${token}` } });
             setSettings(res.data);
             setCollectionImageObjs([null, null, null]);
-            alert('Settings updated successfully!');
+            alert(t('admin.settingsUpdated'));
         } catch (e: any) {
             console.error('Error updating settings:', e.response?.data || e.message || e);
             alert(`Error updating settings: ${e.response?.data?.message || 'Unknown network error'}`);
@@ -262,15 +264,20 @@ export default function AdminDashboard() {
         return (
             <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
                 <form onSubmit={handleLogin} style={{ padding: '3rem', backgroundColor: 'var(--secondary-color)', border: '1px solid var(--border-color)', width: '100%', maxWidth: 420, borderRadius: '16px', boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
-                    <h2 style={{ fontSize: '2.2rem', fontWeight: 800, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.5px' }}>Admin Axis</h2>
-                    <p style={{ textAlign: 'center', marginBottom: '2.5rem', opacity: 0.6, fontWeight: 500 }}>Enter your credentials to manage the store</p>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                        <button type="button" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} style={{ padding: '6px 14px', borderRadius: '20px', border: '1.5px solid var(--border-color)', background: 'transparent', cursor: 'pointer', fontWeight: 700, fontSize: '0.85rem' }}>
+                            {lang === 'en' ? '🇸🇦 AR' : '🇺🇸 EN'}
+                        </button>
+                    </div>
+                    <h2 style={{ fontSize: '2.2rem', fontWeight: 800, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.5px' }}>{t('admin.title')}</h2>
+                    <p style={{ textAlign: 'center', marginBottom: '2.5rem', opacity: 0.6, fontWeight: 500 }}>{t('admin.subtitle')}</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
                         <div>
-                            <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>Username</label>
+                            <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>{t('admin.username')}</label>
                             <input required className="input" placeholder="admin" value={loginForm.username} onChange={e => setLoginForm({ ...loginForm, username: e.target.value })} />
                         </div>
                         <div>
-                            <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>Password</label>
+                            <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>{t('admin.password')}</label>
                             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                                 <input required className="input" type={showPassword ? 'text' : 'password'} placeholder="••••••••" value={loginForm.password} onChange={e => setLoginForm({ ...loginForm, password: e.target.value })} style={{ width: '100%', paddingRight: '2.5rem' }} />
                                 <div style={{ position: 'absolute', right: '12px', cursor: 'pointer', opacity: 0.5, display: 'flex', alignItems: 'center' }} onClick={() => setShowPassword(!showPassword)}>
@@ -279,7 +286,7 @@ export default function AdminDashboard() {
                             </div>
                         </div>
                     </div>
-                    <button className="btn-primary" style={{ width: '100%', padding: '16px', fontSize: '1.1rem', borderRadius: '8px' }}>Sign In</button>
+                    <button className="btn-primary" style={{ width: '100%', padding: '16px', fontSize: '1.1rem', borderRadius: '8px' }}>{t('admin.signIn')}</button>
                 </form>
             </div>
         );
@@ -289,10 +296,15 @@ export default function AdminDashboard() {
         <div style={{ padding: '2rem', maxWidth: 1400, margin: '2rem auto 0', display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
             {/* Sidebar */}
             <div style={{ flex: '1 1 250px', display: 'flex', flexDirection: 'column', gap: '0.5rem', borderRight: '1px solid var(--border-color)', paddingRight: '2rem', minWidth: 250 }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '2rem' }}>Dashboard</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textTransform: 'uppercase', margin: 0 }}>{t('admin.dashboard')}</h2>
+                    <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} style={{ padding: '5px 12px', borderRadius: '16px', border: '1.5px solid var(--border-color)', background: 'transparent', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem' }}>
+                        {lang === 'en' ? '🇸🇦 AR' : '🇺🇸 EN'}
+                    </button>
+                </div>
                 {['products', 'orders', 'coupons', 'settings'].map(tab => (
                     <button key={tab} onClick={() => setActiveTab(tab)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', textAlign: 'left', backgroundColor: activeTab === tab ? 'var(--accent-color)' : 'transparent', color: activeTab === tab ? 'var(--accent-foreground)' : 'currentColor', border: 'none', cursor: 'pointer', fontWeight: 600, textTransform: 'capitalize', borderRadius: '8px', transition: 'all 0.2s', ... (activeTab !== tab && { opacity: 0.7 }) }}>
-                        <span>{tab}</span>
+                        <span>{t(`admin.${tab}`)}</span>
                         {tab === 'orders' && pendingOrdersCount > 0 && (
                             <span style={{ backgroundColor: '#ef4444', color: '#ffffff', fontSize: '0.8rem', padding: '2px 8px', borderRadius: '20px', fontWeight: 800, minWidth: '24px', textAlign: 'center', boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)' }}>
                                 {pendingOrdersCount}
@@ -301,7 +313,7 @@ export default function AdminDashboard() {
                     </button>
                 ))}
                 <button onClick={() => { setToken(''); localStorage.removeItem('axis_token'); }} style={{ padding: '1rem', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, color: '#ef4444', marginTop: '2rem', transition: 'all 0.2s', opacity: 0.8 }}>
-                    Logout
+                    {t('admin.logout')}
                 </button>
             </div>
 

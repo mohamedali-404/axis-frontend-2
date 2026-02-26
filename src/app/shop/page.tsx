@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function Shop() {
     const [products, setProducts] = useState<any[]>([]);
@@ -9,6 +9,7 @@ export default function Shop() {
     const [sort, setSort] = useState('newest');
     const [sizeFilter, setSizeFilter] = useState('');
     const [sleeveFilter, setSleeveFilter] = useState('');
+    const { t } = useLanguage();
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
@@ -42,33 +43,33 @@ export default function Shop() {
     return (
         <div style={{ padding: '8rem 2rem 4rem', maxWidth: 1200, margin: '0 auto' }}>
             <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '2rem', textAlign: 'center', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                Store
+                {t('shop.title')}
             </h1>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 {/* Filters */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', padding: '1.5rem', backgroundColor: 'var(--secondary-color)', border: '1px solid var(--border-color)', borderRadius: '12px' }}>
                     <div style={{ flex: '1 1 200px' }}>
-                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>Size</label>
+                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('shop.size')}</label>
                         <select className="select" value={sizeFilter} onChange={e => setSizeFilter(e.target.value)}>
-                            <option value="">All Sizes</option>
+                            <option value="">{t('shop.allSizes')}</option>
                             {['S', 'M', 'L', 'XL'].map(s => <option key={s} value={s}>{s}</option>)}
                         </select>
                     </div>
                     <div style={{ flex: '1 1 200px' }}>
-                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>Sleeve</label>
+                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('shop.sleeve')}</label>
                         <select className="select" value={sleeveFilter} onChange={e => setSleeveFilter(e.target.value)}>
-                            <option value="">All Types</option>
-                            <option value="Short">Short</option>
-                            <option value="Long">Long</option>
+                            <option value="">{t('shop.allTypes')}</option>
+                            <option value="Short">{t('shop.short')}</option>
+                            <option value="Long">{t('shop.long')}</option>
                         </select>
                     </div>
                     <div style={{ flex: '1 1 200px' }}>
-                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>Sort By</label>
+                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('shop.sortBy')}</label>
                         <select className="select" value={sort} onChange={e => setSort(e.target.value)}>
-                            <option value="newest">Newest</option>
-                            <option value="priceLow">Price: Low to High</option>
-                            <option value="priceHigh">Price: High to Low</option>
+                            <option value="newest">{t('shop.newest')}</option>
+                            <option value="priceLow">{t('shop.priceLow')}</option>
+                            <option value="priceHigh">{t('shop.priceHigh')}</option>
                         </select>
                     </div>
                 </div>
@@ -80,7 +81,7 @@ export default function Shop() {
                     ))}
                     {filtered.length === 0 && (
                         <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '6rem 2rem', color: 'var(--accent-color)', opacity: 0.6, fontSize: '1.2rem', fontWeight: 500, backgroundColor: 'var(--secondary-color)', borderRadius: '12px', border: '1px dashed var(--border-color)' }}>
-                            No products found matching your criteria.
+                            {t('shop.noProducts')}
                         </div>
                     )}
                 </div>
