@@ -14,7 +14,7 @@ export default function Navbar() {
     const toggleCart = useCartStore((state) => state.toggleCart);
     const items = useCartStore((state) => state.items);
     const pathname = usePathname();
-    const { t, lang, setLang, isRTL } = useLanguage();
+    const { t } = useLanguage();
 
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
@@ -55,7 +55,6 @@ export default function Navbar() {
 
     if (pathname.startsWith('/admin')) return null;
 
-    const toggleLang = () => setLang(lang === 'en' ? 'ar' : 'en');
 
     return (
         <>
@@ -88,33 +87,7 @@ export default function Navbar() {
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        {/* Language Switcher */}
-                        {mounted && (
-                            <button
-                                onClick={toggleLang}
-                                aria-label={lang === 'en' ? 'Switch to Arabic' : 'Switch to English'}
-                                style={{
-                                    display: 'flex', alignItems: 'center', gap: '0.4rem',
-                                    padding: '6px 14px',
-                                    borderRadius: '20px',
-                                    border: `1.5px solid ${isScrolled ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.2)'}`,
-                                    backgroundColor: isScrolled ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.15)',
-                                    backdropFilter: 'blur(8px)',
-                                    color: 'inherit',
-                                    cursor: 'pointer',
-                                    fontWeight: 700,
-                                    fontSize: '0.85rem',
-                                    letterSpacing: '0.5px',
-                                    transition: 'all 0.3s ease',
-                                    fontFamily: 'inherit',
-                                    textTransform: 'uppercase'
-                                }}
-                                className="lang-switcher"
-                            >
-                                <span style={{ fontSize: '1rem' }}>{lang === 'en' ? '🇸🇦' : '🇺🇸'}</span>
-                                <span>{lang === 'en' ? 'AR' : 'EN'}</span>
-                            </button>
-                        )}
+
 
                         {/* Cart Icon */}
                         <div style={{ position: 'relative', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '8px', borderRadius: '50%', transition: 'background-color 0.2s' }} onClick={toggleCart} className="hover-bg-subtle">
@@ -146,21 +119,6 @@ export default function Navbar() {
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', height: '80px', alignItems: 'center' }}>
                         {/* Lang switcher in mobile menu */}
-                        <button
-                            onClick={toggleLang}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: '0.4rem',
-                                padding: '8px 16px', borderRadius: '20px',
-                                border: '1.5px solid rgba(255,255,255,0.3)',
-                                backgroundColor: 'rgba(255,255,255,0.08)',
-                                color: '#fff', cursor: 'pointer',
-                                fontWeight: 700, fontSize: '0.9rem',
-                                fontFamily: 'inherit'
-                            }}
-                        >
-                            <span>{lang === 'en' ? '🇸🇦' : '🇺🇸'}</span>
-                            <span>{lang === 'en' ? 'العربية' : 'English'}</span>
-                        </button>
                         <X size={32} cursor="pointer" onClick={() => setMobileMenuOpen(false)} style={{ color: '#ffffff', transform: mobileMenuOpen ? 'rotate(0)' : 'rotate(180deg)', transition: 'transform 0.6s ease' }} />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', flex: 1, justifyContent: 'center', alignItems: 'center', fontSize: '2rem', fontWeight: 800, textTransform: 'uppercase', opacity: mobileMenuOpen ? 1 : 0, transition: 'opacity 0.4s ease 0.3s' }} suppressHydrationWarning>

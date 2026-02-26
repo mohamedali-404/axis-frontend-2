@@ -270,11 +270,7 @@ export default function AdminDashboard() {
         return (
             <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
                 <form onSubmit={handleLogin} style={{ padding: '3rem', backgroundColor: 'var(--secondary-color)', border: '1px solid var(--border-color)', width: '100%', maxWidth: 420, borderRadius: '16px', boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-                        <button type="button" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} style={{ padding: '6px 14px', borderRadius: '20px', border: '1.5px solid var(--border-color)', background: 'transparent', cursor: 'pointer', fontWeight: 700, fontSize: '0.85rem' }}>
-                            {lang === 'en' ? '🇸🇦 AR' : '🇺🇸 EN'}
-                        </button>
-                    </div>
+
                     <h2 style={{ fontSize: '2.2rem', fontWeight: 800, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.5px' }}>{t('admin.title')}</h2>
                     <p style={{ textAlign: 'center', marginBottom: '2.5rem', opacity: 0.6, fontWeight: 500 }}>{t('admin.subtitle')}</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
@@ -307,14 +303,9 @@ export default function AdminDashboard() {
 
     const SidebarContent = () => (
         <>
-            <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                <div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '3px' }}>AXIS</div>
-                    <div style={{ fontSize: '0.75rem', opacity: 0.5, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>Admin Panel</div>
-                </div>
-                <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} style={{ padding: '5px 11px', borderRadius: '16px', border: '1.5px solid var(--border-color)', background: 'transparent', cursor: 'pointer', fontWeight: 700, fontSize: '0.78rem', flexShrink: 0 }}>
-                    {lang === 'en' ? '🇸🇦 AR' : '🇺🇸 EN'}
-                </button>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)' }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '3px' }}>AXIS</div>
+                <div style={{ fontSize: '0.75rem', opacity: 0.5, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>Admin Panel</div>
             </div>
             <nav style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', flex: 1 }}>
                 {TABS.map(({ id, icon }) => (
@@ -363,9 +354,6 @@ export default function AdminDashboard() {
                 </button>
                 <div style={{ fontWeight: 900, fontSize: '1.3rem', fontStyle: 'italic', letterSpacing: '3px' }}>AXIS</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} style={{ padding: '5px 10px', borderRadius: '14px', border: '1.5px solid var(--border-color)', background: 'transparent', cursor: 'pointer', fontWeight: 700, fontSize: '0.78rem' }}>
-                        {lang === 'en' ? '🇸🇦' : '🇺🇸'}
-                    </button>
                     {pendingOrdersCount > 0 && (
                         <span onClick={() => handleTabChange('orders')} style={{ backgroundColor: '#ef4444', color: '#fff', fontSize: '0.75rem', padding: '3px 9px', borderRadius: '20px', fontWeight: 800, cursor: 'pointer' }}>
                             {pendingOrdersCount} 🛒
