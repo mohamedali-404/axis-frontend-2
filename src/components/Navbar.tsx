@@ -80,11 +80,11 @@ export default function Navbar() {
                         AXIS
                     </Link>
 
-                    <div style={{ display: 'none', gap: '3rem' }} className="desktop-menu">
-                        <Link href="/" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.home')}</Link>
-                        <Link href="/shop" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.shop')}</Link>
-                        <Link href="/track" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.trackOrder')}</Link>
-                        <Link href="/about" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }}>{t('nav.about')}</Link>
+                    <div style={{ display: 'none', gap: '3rem' }} className="desktop-menu" suppressHydrationWarning>
+                        <Link href="/" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }} suppressHydrationWarning>{t('nav.home')}</Link>
+                        <Link href="/shop" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }} suppressHydrationWarning>{t('nav.shop')}</Link>
+                        <Link href="/track" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }} suppressHydrationWarning>{t('nav.trackOrder')}</Link>
+                        <Link href="/about" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.9rem' }} suppressHydrationWarning>{t('nav.about')}</Link>
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -163,12 +163,12 @@ export default function Navbar() {
                         </button>
                         <X size={32} cursor="pointer" onClick={() => setMobileMenuOpen(false)} style={{ color: '#ffffff', transform: mobileMenuOpen ? 'rotate(0)' : 'rotate(180deg)', transition: 'transform 0.6s ease' }} />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', flex: 1, justifyContent: 'center', alignItems: 'center', fontSize: '2rem', fontWeight: 800, textTransform: 'uppercase', opacity: mobileMenuOpen ? 1 : 0, transition: 'opacity 0.4s ease 0.3s' }}>
-                        <Link href="/" onClick={() => setMobileMenuOpen(false)}>{t('nav.home')}</Link>
-                        <Link href="/shop" onClick={() => setMobileMenuOpen(false)}>{t('nav.shop')}</Link>
-                        <Link href="/track" onClick={() => setMobileMenuOpen(false)}>{t('nav.trackOrder')}</Link>
-                        <Link href="/about" onClick={() => setMobileMenuOpen(false)}>{t('nav.about')}</Link>
-                        <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>{t('nav.contact')}</Link>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', flex: 1, justifyContent: 'center', alignItems: 'center', fontSize: '2rem', fontWeight: 800, textTransform: 'uppercase', opacity: mobileMenuOpen ? 1 : 0, transition: 'opacity 0.4s ease 0.3s' }} suppressHydrationWarning>
+                        <Link href="/" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.home')}</Link>
+                        <Link href="/shop" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.shop')}</Link>
+                        <Link href="/track" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.trackOrder')}</Link>
+                        <Link href="/about" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.about')}</Link>
+                        <Link href="/contact" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.contact')}</Link>
                     </div>
                 </div>,
                 document.body
