@@ -45,66 +45,83 @@ export default function AdminDashboard() {
         if (savedToken) setToken(savedToken);
     }, []);
 
+    // Fetch data when tab or token changes
+    useEffect(() => {
+        if (!token) return;
+        fetchData();
+    }, [token, activeTab]);
+
+    // Socket.IO: register listeners ONCE per token - prevents listener accumulation
     useEffect(() => {
         if (!token) return;
 
-        fetchData();
-
-        // Real-time Socket.IO events
         const socket = getSocket();
 
-        socket.on('new_order', (newOrder: any) => {
-            // Add new order to top of list if on orders tab
+        const onNewOrder = (newOrder: any) => {
             setOrders(prev => [newOrder, ...prev]);
-            // Increment pending count
             setPendingOrdersCount(prev => prev + 1);
-        });
+        };
 
-        socket.on('order_updated', (updatedOrder: any) => {
-            setOrders(prev =>
-                prev.map(o => o._id === updatedOrder._id ? updatedOrder : o)
-            );
-            // Recalculate pending count from updated list
+        const onOrderUpdated = (updatedOrder: any) => {
             setOrders(prev => {
-                const pending = prev.filter(o => o.status === 'Pending').length;
-                setPendingOrdersCount(pending);
-                return prev;
+                const updated = prev.map(o => o._id === updatedOrder._id ? updatedOrder : o);
+                setPendingOrdersCount(updated.filter(o => o.status === 'Pending').length);
+                return updated;
             });
-        });
+        };
 
-        socket.on('order_deleted', ({ id }: { id: string }) => {
+        const onOrderDeleted = ({ id }: { id: string }) => {
             setOrders(prev => {
                 const filtered = prev.filter(o => o._id !== id);
-                const pending = filtered.filter(o => o.status === 'Pending').length;
-                setPendingOrdersCount(pending);
+                setPendingOrdersCount(filtered.filter(o => o.status === 'Pending').length);
                 return filtered;
             });
-        });
+        };
 
-        socket.on('settings_updated', (newSettings: any) => {
-            if (activeTab === 'settings') {
-                setSettings(newSettings);
-            }
-        });
+        const onSettingsUpdated = (newSettings: any) => {
+            setSettings(newSettings);
+        };
+
+        const onProductCreated = (product: any) => {
+            setProducts(prev => [product, ...prev]);
+        };
+
+        const onProductUpdated = (product: any) => {
+            setProducts(prev => prev.map(p => p._id === product._id ? product : p));
+        };
+
+        const onProductDeleted = ({ id }: { id: string }) => {
+            setProducts(prev => prev.filter(p => p._id !== id));
+        };
+
+        socket.on('new_order', onNewOrder);
+        socket.on('order_updated', onOrderUpdated);
+        socket.on('order_deleted', onOrderDeleted);
+        socket.on('settings_updated', onSettingsUpdated);
+        socket.on('product_created', onProductCreated);
+        socket.on('product_updated', onProductUpdated);
+        socket.on('product_deleted', onProductDeleted);
 
         return () => {
-            socket.off('new_order');
-            socket.off('order_updated');
-            socket.off('order_deleted');
-            socket.off('settings_updated');
+            socket.off('new_order', onNewOrder);
+            socket.off('order_updated', onOrderUpdated);
+            socket.off('order_deleted', onOrderDeleted);
+            socket.off('settings_updated', onSettingsUpdated);
+            socket.off('product_created', onProductCreated);
+            socket.off('product_updated', onProductUpdated);
+            socket.off('product_deleted', onProductDeleted);
         };
-    }, [token, activeTab]);
+    }, [token]);
 
     const fetchData = async () => {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
-            // Always fetch pending count
             const { data: countData } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders/pending/count`, config);
             setPendingOrdersCount(countData.count);
 
             if (activeTab === 'products') {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/admin/all`, config);
                 setProducts(data);
             } else if (activeTab === 'orders') {
                 const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders`, config);
