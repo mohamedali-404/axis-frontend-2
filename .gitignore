@@ -4,3 +4,15 @@ node_modules
 build
 dist
 build_output.txt
+
+# Temporary / helper files
+commit_msg.txt
+*.bak
+*.tmp
+*.log
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+
+# One-off scripts
+replace.js
