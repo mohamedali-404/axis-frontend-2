@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { getSocket } from '@/lib/socket';
 
 function TrackOrderContent() {
     const searchParams = useSearchParams();
@@ -18,6 +19,20 @@ function TrackOrderContent() {
             handleTrack();
         }
     }, []);
+
+    // Real-time: update order status if admin changes it while customer is viewing
+    useEffect(() => {
+        if (!order) return;
+        const socket = getSocket();
+        socket.on('order_updated', (updatedOrder: any) => {
+            if (updatedOrder._id === order._id) {
+                setOrder(updatedOrder);
+            }
+        });
+        return () => {
+            socket.off('order_updated');
+        };
+    }, [order]);
 
     const handleTrack = async (e?: any) => {
         if (e) e.preventDefault();
@@ -145,7 +160,7 @@ function TrackOrderContent() {
                         <p style={{ margin: 0, fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}><span style={{ opacity: 0.6 }}>{t('track.address')}</span> <span>{order.city}</span></p>
                         <p style={{ margin: 0, fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}><span style={{ opacity: 0.6 }}>{t('track.payment')}</span> <span style={{ textTransform: 'uppercase', fontSize: '0.85rem', fontWeight: 800 }}>{order.paymentMethod}</span></p>
                         <p style={{ margin: 0, fontWeight: 800, display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '0.8rem', marginTop: '0.4rem' }}>
-                            <span>{t('track.totalAmount')}</span> <span style={{ color: '#10b981', fontSize: '1.1rem' }}>${order.total.toFixed(2)}</span>
+                            <span>{t('track.totalAmount')}</span> <span style={{ color: '#10b981', fontSize: '1.1rem' }}>{order.total.toFixed(0)} ج.م</span>
                         </p>
                     </div>
 
@@ -158,7 +173,7 @@ function TrackOrderContent() {
                                     <p style={{ margin: '0 0 0.3rem', fontWeight: 800, fontSize: '1.1rem' }}>{item.name}</p>
                                     <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.7, fontWeight: 600 }}>{t('product.size')}: <span style={{ border: '1px solid var(--border-color)', padding: '2px 6px', borderRadius: '4px' }}>{item.size}</span> | {t('track.items')}: {item.quantity}</p>
                                 </div>
-                                <p style={{ fontWeight: 800, fontSize: '1.1rem' }}>${(item.price * item.quantity).toFixed(2)}</p>
+                                <p style={{ fontWeight: 800, fontSize: '1.1rem' }}>{(item.price * item.quantity).toFixed(0)} ج.م</p>
                             </div>
                         ))}
                     </div>

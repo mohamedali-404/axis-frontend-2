@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 export default function Home() {
     const [products, setProducts] = useState<any[]>([]);
     const [settings, setSettings] = useState<any>(null);
+    const [settingsReady, setSettingsReady] = useState(false);
     const { t } = useLanguage();
 
     useEffect(() => {
@@ -17,6 +18,7 @@ export default function Home() {
         ]).then(([prods, setts]) => {
             setProducts(Array.isArray(prods) ? prods : []);
             setSettings(setts);
+            setSettingsReady(true);
         });
     }, []);
 
@@ -32,13 +34,18 @@ export default function Home() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("${settings?.heroBanner || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1920'}")`,
+                backgroundImage: settingsReady
+                    ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("${settings?.heroBanner || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1920'}")`
+                    : 'none',
+                backgroundColor: settingsReady ? undefined : '#111',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundAttachment: 'fixed',
                 color: '#fff',
                 textAlign: 'center',
-                padding: '0 2rem'
+                padding: '0 2rem',
+                opacity: settingsReady ? 1 : 0,
+                transition: 'opacity 0.4s ease-in',
             }}>
                 <div style={{ animation: 'fadeIn 1s ease-out', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
                     <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.5rem', textShadow: '2px 4px 10px rgba(0,0,0,0.5)', lineHeight: 1.1, wordWrap: 'break-word', overflowWrap: 'break-word' }}>

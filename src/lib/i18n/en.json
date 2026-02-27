@@ -88,6 +88,9 @@
         "qty": "Qty",
         "walletInstructions1": "Please transfer the total amount",
         "walletInstructions2": "to this number and send a screenshot via WhatsApp:",
+        "walletBoxTitle": "E-Wallet / Mobile Cash Payment Instructions",
+        "walletInstructionsFull": "1. Please transfer the total amount of",
+        "walletInstructionsTo": "to the number below, then send a screenshot via WhatsApp:",
         "required": "*"
     },
     "track": {

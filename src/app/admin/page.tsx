@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { getSocket } from '@/lib/socket';
 
 export default function AdminDashboard() {
     const { t, lang, setLang } = useLanguage();
@@ -45,16 +46,53 @@ export default function AdminDashboard() {
     }, []);
 
     useEffect(() => {
-        if (token) {
-            fetchData();
-            // Live update for pending orders every 30 seconds
-            const interval = setInterval(() => {
-                axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders/pending/count`, { headers: { Authorization: `Bearer ${token}` } })
-                    .then(res => setPendingOrdersCount(res.data.count))
-                    .catch(console.error);
-            }, 30000);
-            return () => clearInterval(interval);
-        }
+        if (!token) return;
+
+        fetchData();
+
+        // Real-time Socket.IO events
+        const socket = getSocket();
+
+        socket.on('new_order', (newOrder: any) => {
+            // Add new order to top of list if on orders tab
+            setOrders(prev => [newOrder, ...prev]);
+            // Increment pending count
+            setPendingOrdersCount(prev => prev + 1);
+        });
+
+        socket.on('order_updated', (updatedOrder: any) => {
+            setOrders(prev =>
+                prev.map(o => o._id === updatedOrder._id ? updatedOrder : o)
+            );
+            // Recalculate pending count from updated list
+            setOrders(prev => {
+                const pending = prev.filter(o => o.status === 'Pending').length;
+                setPendingOrdersCount(pending);
+                return prev;
+            });
+        });
+
+        socket.on('order_deleted', ({ id }: { id: string }) => {
+            setOrders(prev => {
+                const filtered = prev.filter(o => o._id !== id);
+                const pending = filtered.filter(o => o.status === 'Pending').length;
+                setPendingOrdersCount(pending);
+                return filtered;
+            });
+        });
+
+        socket.on('settings_updated', (newSettings: any) => {
+            if (activeTab === 'settings') {
+                setSettings(newSettings);
+            }
+        });
+
+        return () => {
+            socket.off('new_order');
+            socket.off('order_updated');
+            socket.off('order_deleted');
+            socket.off('settings_updated');
+        };
     }, [token, activeTab]);
 
     const fetchData = async () => {
@@ -453,7 +491,7 @@ export default function AdminDashboard() {
                                     {products.map(p => (
                                         <tr key={p._id} className="table-row">
                                             <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', fontWeight: 600 }}>{p.name}</td>
-                                            <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', fontWeight: 700 }}>${p.price}</td>
+                                            <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', fontWeight: 700 }}>{p.price} ج.م</td>
                                             <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)' }}>
                                                 <span className={p.stock > 0 ? 'badge badge-info' : 'badge badge-danger'}>
                                                     {p.stock > 0 ? `${p.stock} ${t('admin.inStock')}` : t('admin.outOfStock')}
@@ -477,7 +515,7 @@ export default function AdminDashboard() {
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <p style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                                                <span style={{ fontWeight: 800, fontSize: '1rem' }}>${p.price}</span>
+                                                <span style={{ fontWeight: 800, fontSize: '1rem' }}>{p.price} ج.م</span>
                                                 <span className={p.stock > 0 ? 'badge badge-info' : 'badge badge-danger'} style={{ fontSize: '0.72rem' }}>
                                                     {p.stock > 0 ? `${p.stock} ${t('admin.inStock')}` : t('admin.outOfStock')}
                                                 </span>
@@ -510,7 +548,7 @@ export default function AdminDashboard() {
                                         <p style={{ margin: '0.5rem 0 0', fontWeight: 600, fontSize: '0.9rem', color: 'var(--accent-color)', opacity: 0.7 }}>Placed at {new Date(order.createdAt).toLocaleDateString()}</p>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                        <span style={{ fontWeight: 800, fontSize: '1.6rem', color: '#10b981' }}>${order.total?.toFixed(2)}</span>
+                                        <span style={{ fontWeight: 800, fontSize: '1.6rem', color: '#10b981' }}>{order.total?.toFixed(0)} ج.م</span>
                                         <button onClick={() => deleteOrder(order._id)} className="hover-scale" style={{ color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'all 0.2s' }}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
                                             Delete
@@ -537,9 +575,9 @@ export default function AdminDashboard() {
                                                 Transfer No: <span style={{ opacity: 0.9 }}>{order.vodafoneCashNumber}</span>
                                             </p>
                                         )}
-                                        <p style={{ margin: '0.3rem 0', fontWeight: 600, fontSize: '0.95rem' }}>Subtotal: <span style={{ opacity: 0.8 }}>${order.subtotal?.toFixed(2)}</span></p>
-                                        {order.discountApplied > 0 && <p style={{ margin: '0.3rem 0', fontWeight: 800, fontSize: '0.95rem', color: '#10b981' }}>Discount: -${order.discountApplied?.toFixed(2)}</p>}
-                                        <p style={{ margin: '0.3rem 0', fontWeight: 600, fontSize: '0.95rem' }}>Shipping: <span style={{ opacity: 0.8 }}>${order.shippingCost?.toFixed(2)}</span></p>
+                                        <p style={{ margin: '0.3rem 0', fontWeight: 600, fontSize: '0.95rem' }}>Subtotal: <span style={{ opacity: 0.8 }}>{order.subtotal?.toFixed(0)} ج.م</span></p>
+                                        {order.discountApplied > 0 && <p style={{ margin: '0.3rem 0', fontWeight: 800, fontSize: '0.95rem', color: '#10b981' }}>Discount: -{order.discountApplied?.toFixed(0)} ج.م</p>}
+                                        <p style={{ margin: '0.3rem 0', fontWeight: 600, fontSize: '0.95rem' }}>Shipping: <span style={{ opacity: 0.8 }}>{order.shippingCost?.toFixed(0)} ج.م</span></p>
                                     </div>
                                 </div>
 
@@ -554,7 +592,7 @@ export default function AdminDashboard() {
                                                     <p style={{ fontSize: '0.9rem', color: 'var(--accent-color)', opacity: 0.8, margin: 0, fontWeight: 600 }}>Size: <span style={{ border: '1px solid var(--accent-color)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8rem' }}>{item.size}</span> | Qty: {item.quantity}</p>
                                                 </div>
                                             </div>
-                                            <p style={{ fontWeight: 800, fontSize: '1.2rem' }}>${(item.price * item.quantity).toFixed(2)}</p>
+                                            <p style={{ fontWeight: 800, fontSize: '1.2rem' }}>{(item.price * item.quantity).toFixed(0)} ج.م</p>
                                         </div>
                                     ))}
                                 </div>

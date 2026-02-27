@@ -58,7 +58,7 @@ export default function CartDrawer() {
                                         <Trash2 size={20} color="#ef4444" cursor="pointer" onClick={() => removeItem(item.id, item.size)} style={{ opacity: 0.8, flexShrink: 0 }} className="hover-opacity" />
                                     </div>
                                     <p style={{ color: 'var(--accent-color)', opacity: 0.6, marginTop: '0.25rem', fontSize: '0.9rem', fontWeight: 500 }}>{t('cart.size')}: {item.size}</p>
-                                    <p style={{ fontWeight: 800, marginTop: '0.5rem', fontSize: '1.1rem' }}>${item.price.toFixed(2)}</p>
+                                    <p style={{ fontWeight: 800, marginTop: '0.5rem', fontSize: '1.1rem' }}>{item.price.toFixed(0)} ج.م</p>
 
                                     <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', border: '2px solid var(--border-color)', width: 'fit-content', borderRadius: '8px', overflow: 'hidden' }}>
                                         <button style={{ padding: '0.4rem 0.6rem', background: 'var(--secondary-color)', border: 'none', borderRight: '1px solid var(--border-color)', cursor: 'pointer', color: 'var(--accent-color)' }} onClick={() => updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))} className="hover-opacity"><Minus size={16} /></button>
@@ -75,7 +75,7 @@ export default function CartDrawer() {
                     <div style={{ padding: '2rem', borderTop: '2px dashed var(--border-color)', backgroundColor: 'var(--secondary-color)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1.3rem', fontWeight: 800 }}>
                             <span>{t('cart.subtotal')}</span>
-                            <span>${subtotal.toFixed(2)}</span>
+                            <span>{subtotal.toFixed(0)} ج.م</span>
                         </div>
                         <Link href="/checkout" onClick={toggleCart} style={{ display: 'block', width: '100%', textDecoration: 'none' }}>
                             <button className="btn-primary" style={{ width: '100%', height: '60px', fontSize: '1.1rem', borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

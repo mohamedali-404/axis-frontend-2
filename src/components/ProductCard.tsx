@@ -64,11 +64,11 @@ export default function ProductCard({ product }: { product: any }) {
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         {product.discountPrice ? (
                             <>
-                                <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ef4444' }}>${product.discountPrice.toFixed(2)}</span>
-                                <span style={{ color: 'var(--accent-color)', opacity: 0.5, textDecoration: 'line-through', fontWeight: 600 }}>${product.price.toFixed(2)}</span>
+                                <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ef4444' }}>{product.discountPrice.toFixed(0)} ج.م</span>
+                                <span style={{ color: 'var(--accent-color)', opacity: 0.5, textDecoration: 'line-through', fontWeight: 600 }}>{product.price.toFixed(0)} ج.م</span>
                             </>
                         ) : (
-                            <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-color)' }}>${product.price.toFixed(2)}</span>
+                            <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-color)' }}>{product.price.toFixed(0)} ج.م</span>
                         )}
                     </div>
                 </div>

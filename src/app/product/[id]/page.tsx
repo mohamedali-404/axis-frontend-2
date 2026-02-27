@@ -91,11 +91,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                             {product.discountPrice ? (
                                 <>
-                                    <span style={{ fontSize: '2rem', fontWeight: 800, color: '#ef4444' }}>${product.discountPrice.toFixed(2)}</span>
-                                    <span style={{ fontSize: '1.5rem', color: 'var(--accent-color)', opacity: 0.5, textDecoration: 'line-through', fontWeight: 600 }}>${product.price.toFixed(2)}</span>
+                                    <span style={{ fontSize: '2rem', fontWeight: 800, color: '#ef4444' }}>{product.discountPrice.toFixed(0)} ج.م</span>
+                                    <span style={{ fontSize: '1.5rem', color: 'var(--accent-color)', opacity: 0.5, textDecoration: 'line-through', fontWeight: 600 }}>{product.price.toFixed(0)} ج.م</span>
                                 </>
                             ) : (
-                                <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-color)' }}>${product.price.toFixed(2)}</span>
+                                <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-color)' }}>{product.price.toFixed(0)} ج.م</span>
                             )}
                         </div>
                         <div style={{ marginTop: '1rem' }}>
@@ -178,11 +178,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                         {rp.discountPrice ? (
                                             <>
-                                                <span style={{ fontWeight: 800, color: '#ef4444' }}>${rp.discountPrice.toFixed(2)}</span>
-                                                <span style={{ opacity: 0.5, textDecoration: 'line-through', fontSize: '0.9rem' }}>${rp.price.toFixed(2)}</span>
+                                                <span style={{ fontWeight: 800, color: '#ef4444' }}>{rp.discountPrice.toFixed(0)} ج.م</span>
+                                                <span style={{ opacity: 0.5, textDecoration: 'line-through', fontSize: '0.9rem' }}>{rp.price.toFixed(0)} ج.م</span>
                                             </>
                                         ) : (
-                                            <span style={{ fontWeight: 800 }}>${rp.price.toFixed(2)}</span>
+                                            <span style={{ fontWeight: 800 }}>{rp.price.toFixed(0)} ج.م</span>
                                         )}
                                     </div>
                                 </div>

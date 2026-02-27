@@ -177,7 +177,7 @@ export default function Checkout() {
                                 <select required className="select" value={form.city} onChange={e => setForm({ ...form, city: e.target.value })}>
                                     <option value="" disabled>{t('checkout.selectArea')}</option>
                                     {shippingRates.map((rate, idx) => (
-                                        <option key={idx} value={rate.city}>{rate.city} - ${rate.cost}</option>
+                                        <option key={idx} value={rate.city}>{rate.city} - {rate.cost} ج.م</option>
                                     ))}
                                 </select>
                             </div>
@@ -206,20 +206,23 @@ export default function Checkout() {
                                 </select>
                             </div>
                             {form.paymentMethod !== 'Cash on Delivery' && paymentSettings.eWallet !== false && (
-                                <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '8px' }}>
-                                    <h4 style={{ color: '#4338ca', marginBottom: '1rem', fontWeight: 800 }}>{paymentSettings.eWalletName || 'E-Wallet'} Instructions</h4>
-                                    <p style={{ fontSize: '0.9rem', color: '#4338ca', marginBottom: '0.5rem', fontWeight: 600, direction: 'rtl', textAlign: 'right' }}>
-                                        1. {t('checkout.walletInstructions1')} (<strong>${total.toFixed(2)}</strong>) {t('checkout.walletInstructions2')}
+                                <div style={{ marginTop: '1rem', padding: '1.2rem', backgroundColor: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '8px' }}>
+                                    <h4 style={{ color: '#4338ca', marginBottom: '1rem', fontWeight: 800, direction: 'rtl', textAlign: 'right' }}>📲 تعليمات الدفع بالمحفظة الإلكترونية</h4>
+                                    <p style={{ fontSize: '0.95rem', color: '#4338ca', marginBottom: '0.5rem', fontWeight: 700, direction: 'rtl', textAlign: 'right' }}>
+                                        ١. برجاء تحويل إجمالي المبلغ <strong style={{ fontSize: '1.1rem', color: '#ef4444' }}>{total.toFixed(0)} ج.م</strong> على الرقم التالي:
                                     </p>
-                                    <div style={{ backgroundColor: '#fff', padding: '0.5rem 1rem', borderRadius: '4px', display: 'inline-block', fontWeight: 800, fontSize: '1.2rem', color: '#ef4444', marginBottom: '1rem', border: '2px dashed #c7d2fe' }}>
+                                    <div style={{ backgroundColor: '#fff', padding: '0.5rem 1rem', borderRadius: '4px', display: 'inline-block', fontWeight: 800, fontSize: '1.2rem', color: '#ef4444', marginBottom: '0.8rem', border: '2px dashed #c7d2fe' }}>
                                         {paymentSettings.eWalletNumber || '01000000000'}
                                     </div>
-                                    <p style={{ fontSize: '0.9rem', color: '#4338ca', marginBottom: '1rem', fontWeight: 600 }}>
-                                        2. {t('checkout.enterTransferNumber')}
+                                    <p style={{ fontSize: '0.9rem', color: '#4338ca', marginBottom: '1rem', fontWeight: 600, direction: 'rtl', textAlign: 'right' }}>
+                                        ثم أرسل سكرين شوت للتحويل على نفس الرقم واتس اب.
                                     </p>
-                                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: '#4338ca' }}>{t('checkout.yourTransferNumber')} *</label>
-                                    <input required className="input" type="tel" placeholder="010XXXXXXXX" value={form.vodafoneCashNumber} onChange={e => setForm({ ...form, vodafoneCashNumber: e.target.value })} />
-                                    <p style={{ fontSize: '0.85rem', color: '#4338ca', marginTop: '0.5rem', fontWeight: 500 }}>{t('checkout.orderProcessed')}</p>
+                                    <p style={{ fontSize: '0.95rem', color: '#4338ca', marginBottom: '1rem', fontWeight: 700, direction: 'rtl', textAlign: 'right' }}>
+                                        ٢. أدخل رقم المحفظة اللي حولت <strong>منه</strong> للتأكيد:
+                                    </p>
+                                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.5rem', fontSize: '0.9rem', color: '#4338ca', direction: 'rtl', textAlign: 'right' }}>رقم تحويلك *</label>
+                                    <input required className="input" type="tel" placeholder="010XXXXXXXX" value={form.vodafoneCashNumber} onChange={e => setForm({ ...form, vodafoneCashNumber: e.target.value })} style={{ direction: 'ltr' }} />
+                                    <p style={{ fontSize: '0.85rem', color: '#4338ca', marginTop: '0.5rem', fontWeight: 600, direction: 'rtl', textAlign: 'right' }}>✅ سيتم تأكيد طلبك فور التحقق من التحويل.</p>
                                 </div>
                             )}
 
@@ -249,7 +252,7 @@ export default function Checkout() {
                                     <p style={{ color: 'var(--accent-color)', opacity: 0.7, fontSize: '0.85rem', fontWeight: 500 }}>{t('cart.size')}: {item.size} | {t('checkout.qty')}: {item.quantity}</p>
                                 </div>
                             </div>
-                            <span style={{ fontWeight: 800, fontSize: '1.1rem', flexShrink: 0 }}>${(item.price * item.quantity).toFixed(2)}</span>
+                            <span style={{ fontWeight: 800, fontSize: '1.1rem', flexShrink: 0 }}>{(item.price * item.quantity).toFixed(0)} ج.م</span>
                         </div>
                     ))}
                 </div>
@@ -262,21 +265,21 @@ export default function Checkout() {
                 <div style={{ borderTop: '2px dashed var(--border-color)', paddingTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: 'var(--accent-color)', opacity: 0.7, fontWeight: 600 }}>{t('checkout.subtotal')}</span>
-                        <span style={{ fontWeight: 700 }}>${subtotal.toFixed(2)}</span>
+                        <span style={{ fontWeight: 700 }}>{subtotal.toFixed(0)} ج.م</span>
                     </div>
                     {discount > 0 && (
                         <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10b981' }}>
                             <span style={{ fontWeight: 600 }}>{t('checkout.discount')} ({discount}%)</span>
-                            <span style={{ fontWeight: 700 }}>-${(subtotal * discount / 100).toFixed(2)}</span>
+                            <span style={{ fontWeight: 700 }}>-{(subtotal * discount / 100).toFixed(0)} ج.م</span>
                         </div>
                     )}
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: 'var(--accent-color)', opacity: 0.7, fontWeight: 600 }}>{t('checkout.shippingCost')}</span>
-                        <span style={{ fontWeight: 700 }}>${shippingCost.toFixed(2)}</span>
+                        <span style={{ fontWeight: 700 }}>{shippingCost.toFixed(0)} ج.م</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', borderTop: '2px solid var(--accent-color)', paddingTop: '1.5rem', fontSize: '1.8rem', fontWeight: 800 }}>
                         <span>{t('checkout.total')}</span>
-                        <span>${total.toFixed(2)}</span>
+                        <span>{total.toFixed(0)} ج.م</span>
                     </div>
                 </div>
             </div>

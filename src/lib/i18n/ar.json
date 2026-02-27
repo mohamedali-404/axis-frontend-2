@@ -88,6 +88,9 @@
         "qty": "الكمية",
         "walletInstructions1": "برجاء تحويل المبلغ الإجمالي",
         "walletInstructions2": "على هذا الرقم وإرسال سكرين شوت واتس اب:",
+        "walletBoxTitle": "تعليمات الدفع بالمحفظة الإلكترونية",
+        "walletInstructionsFull": "١. برجاء تحويل إجمالي المبلغ",
+        "walletInstructionsTo": "على الرقم التالي، ثم أرسل سكرين شوت للتحويل عبر واتس اب:",
         "required": "*"
     },
     "track": {
