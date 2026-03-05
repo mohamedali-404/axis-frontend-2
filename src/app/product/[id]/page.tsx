@@ -17,7 +17,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     const router = useRouter();
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`)
+        fetch(`https://axis-backend-2.onrender.com/api/products/${id}`)
             .then(res => res.json())
             .then(data => {
                 setProduct(data);
@@ -26,7 +26,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             })
             .catch(err => console.error(err));
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+        fetch(`https://axis-backend-2.onrender.com/api/products`)
             .then(res => res.json())
             .then(data => {
                 const filtered = data.filter((p: any) => p._id !== id).slice(0, 4);

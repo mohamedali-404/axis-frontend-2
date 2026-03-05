@@ -9,7 +9,7 @@ export default function Footer() {
     const { t } = useLanguage();
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`)
+        fetch(`https://axis-backend-2.onrender.com/api/settings`)
             .then(res => res.json())
             .then(data => setSettings(data))
             .catch(console.error);

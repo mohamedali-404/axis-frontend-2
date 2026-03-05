@@ -45,7 +45,7 @@ function TrackOrderContent() {
         setLoading(true);
 
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders/track`, {
+            const res = await axios.post(`https://axis-backend-2.onrender.com/api/orders/track`, {
                 orderId, phone
             });
             setOrder(res.data);

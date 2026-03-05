@@ -8,7 +8,7 @@ import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 
 async function getSettings() {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`, { cache: 'no-store' });
+        const res = await fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' });
         if (!res.ok) return null;
         return res.json();
     } catch {

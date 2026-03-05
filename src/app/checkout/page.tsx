@@ -35,7 +35,7 @@ export default function Checkout() {
     useEffect(() => { setMounted(true); }, []);
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`)
+        fetch(`https://axis-backend-2.onrender.com/api/settings`)
             .then(res => res.json())
             .then(data => {
                 if (data.shippingRates) {
@@ -70,7 +70,7 @@ export default function Checkout() {
 
     const handleApplyCoupon = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/coupons/validate`, {
+            const res = await fetch(`https://axis-backend-2.onrender.com/api/coupons/validate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code: couponCode })
@@ -123,7 +123,7 @@ export default function Checkout() {
         };
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+            const res = await fetch(`https://axis-backend-2.onrender.com/api/orders`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)

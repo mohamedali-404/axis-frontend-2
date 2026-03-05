@@ -5,7 +5,7 @@ let socket: Socket | null = null;
 export function getSocket(): Socket {
     if (!socket) {
         const backendUrl =
-            process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
+            'https://axis-backend-2.onrender.com/api'?.replace('/api', '') ||
             'http://localhost:5001';
 
         socket = io(backendUrl, {

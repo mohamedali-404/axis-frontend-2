@@ -117,20 +117,20 @@ export default function AdminDashboard() {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
-            const { data: countData } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders/pending/count`, config);
+            const { data: countData } = await axios.get(`https://axis-backend-2.onrender.com/api/orders/pending/count`, config);
             setPendingOrdersCount(countData.count);
 
             if (activeTab === 'products') {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/admin/all`, config);
+                const { data } = await axios.get(`https://axis-backend-2.onrender.com/api/products/admin/all`, config);
                 setProducts(data);
             } else if (activeTab === 'orders') {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders`, config);
+                const { data } = await axios.get(`https://axis-backend-2.onrender.com/api/orders`, config);
                 setOrders(data);
             } else if (activeTab === 'coupons') {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/coupons`, config);
+                const { data } = await axios.get(`https://axis-backend-2.onrender.com/api/coupons`, config);
                 setCoupons(data);
             } else if (activeTab === 'settings') {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/settings`);
+                const { data } = await axios.get(`https://axis-backend-2.onrender.com/api/settings`);
                 setSettings(data);
             }
         } catch (err) {
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
     const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, loginForm);
+            const { data } = await axios.post(`https://axis-backend-2.onrender.com/api/auth/login`, loginForm);
             setToken(data.token);
             localStorage.setItem('axis_token', data.token);
         } catch {
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
     const handleSecurityUpdate = async (e: any) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`, securityForm, {
+            const res = await axios.post(`https://axis-backend-2.onrender.com/api/auth/change-password`, securityForm, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert(res.data.message);
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
                 for (const file of productForm.imageObjs) {
                     const formData = new FormData();
                     formData.append('image', file);
-                    const uploadRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/upload`, formData, {
+                    const uploadRes = await axios.post(`https://axis-backend-2.onrender.com/api/upload`, formData, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     imageUrls.push(uploadRes.data.url);
@@ -199,10 +199,10 @@ export default function AdminDashboard() {
             if (imageUrls.length > 0) pData.images = imageUrls;
 
             if (editingProductId) {
-                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${editingProductId}`, pData, { headers: { Authorization: `Bearer ${token}` } });
+                await axios.put(`https://axis-backend-2.onrender.com/api/products/${editingProductId}`, pData, { headers: { Authorization: `Bearer ${token}` } });
                 alert(t('admin.productUpdated'));
             } else {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, pData, { headers: { Authorization: `Bearer ${token}` } });
+                await axios.post(`https://axis-backend-2.onrender.com/api/products`, pData, { headers: { Authorization: `Bearer ${token}` } });
                 alert(t('admin.productAdded'));
             }
 
@@ -232,14 +232,14 @@ export default function AdminDashboard() {
 
     const deleteProduct = async (id: string) => {
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.delete(`https://axis-backend-2.onrender.com/api/products/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch { alert('Error deleting'); }
     };
 
     const updateOrderStatus = async (id: string, status: string) => {
         try {
-            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/orders/${id}`, { status }, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.put(`https://axis-backend-2.onrender.com/api/orders/${id}`, { status }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch { alert('Error updating order'); }
     };
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
     const deleteOrder = async (id: string) => {
         if (!window.confirm(t('admin.confirmDelete'))) return;
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/orders/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.delete(`https://axis-backend-2.onrender.com/api/orders/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (e: any) {
             console.error('Delete error:', e);
@@ -258,7 +258,7 @@ export default function AdminDashboard() {
     const createCoupon = async (e: any) => {
         e.preventDefault();
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/coupons`, {
+            await axios.post(`https://axis-backend-2.onrender.com/api/coupons`, {
                 ...couponForm, percentage: Number(couponForm.percentage)
             }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
@@ -268,7 +268,7 @@ export default function AdminDashboard() {
 
     const deleteCoupon = async (id: string) => {
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/coupons/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.delete(`https://axis-backend-2.onrender.com/api/coupons/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch { alert('Error deleting coupon'); }
     };
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
             if (logoObj) {
                 const formData = new FormData();
                 formData.append('image', logoObj);
-                const uploadRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/upload`, formData, {
+                const uploadRes = await axios.post(`https://axis-backend-2.onrender.com/api/upload`, formData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 updatePayload.brandLogo = uploadRes.data.url;
@@ -291,7 +291,7 @@ export default function AdminDashboard() {
             if (bannerObj) {
                 const formData = new FormData();
                 formData.append('image', bannerObj);
-                const uploadRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/upload`, formData, {
+                const uploadRes = await axios.post(`https://axis-backend-2.onrender.com/api/upload`, formData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 updatePayload.heroBanner = uploadRes.data.url;
@@ -303,7 +303,7 @@ export default function AdminDashboard() {
                 if (collectionImageObjs[i]) {
                     const formData = new FormData();
                     formData.append('image', collectionImageObjs[i]);
-                    const uploadRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/upload`, formData, {
+                    const uploadRes = await axios.post(`https://axis-backend-2.onrender.com/api/upload`, formData, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     newCollectionCards[i].image = uploadRes.data.url;
@@ -311,7 +311,7 @@ export default function AdminDashboard() {
             }
             updatePayload.collectionCards = newCollectionCards;
 
-            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/settings`, updatePayload, { headers: { Authorization: `Bearer ${token}` } });
+            const res = await axios.put(`https://axis-backend-2.onrender.com/api/settings`, updatePayload, { headers: { Authorization: `Bearer ${token}` } });
             setSettings(res.data);
             setCollectionImageObjs([null, null, null]);
             alert(t('admin.settingsUpdated'));

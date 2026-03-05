@@ -14,7 +14,7 @@ export default function Shop() {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+        fetch(`https://axis-backend-2.onrender.com/api/products`)
             .then(res => res.json())
             .then(data => {
                 const validData = Array.isArray(data) ? data : [];

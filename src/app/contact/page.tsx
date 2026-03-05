@@ -9,7 +9,7 @@ export default function Contact() {
     });
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`)
+        fetch(`https://axis-backend-2.onrender.com/api/settings`)
             .then(res => res.json())
             .then(data => {
                 if (data.contactInfo) setContactInfo(data.contactInfo);

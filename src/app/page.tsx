@@ -13,8 +13,8 @@ export default function Home() {
     useEffect(() => {
         // Parallel fetch for speed
         Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`).then(r => r.json()).catch(() => []),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings`).then(r => r.json()).catch(() => null),
+            fetch(`https://axis-backend-2.onrender.com/api/products`).then(r => r.json()).catch(() => []),
+            fetch(`https://axis-backend-2.onrender.com/api/settings`).then(r => r.json()).catch(() => null),
         ]).then(([prods, setts]) => {
             setProducts(Array.isArray(prods) ? prods : []);
             setSettings(setts);
