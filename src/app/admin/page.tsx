@@ -13,7 +13,7 @@ export default function AdminDashboard() {
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [activeTab, setActiveTab] = useState('products');
-    const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '' });
+    const [securityForm, setSecurityForm] = useState({ currentUsername: '', currentPassword: '', newUsername: '', newPassword: '' });
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleTabChange = (tab: string) => {
@@ -154,16 +154,16 @@ export default function AdminDashboard() {
     };
 
 
-    const handleChangePassword = async (e: any) => {
+    const handleSecurityUpdate = async (e: any) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`, passwordForm, {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`, securityForm, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert(res.data.message);
-            setPasswordForm({ currentPassword: '', newPassword: '' });
+            setSecurityForm({ currentUsername: '', currentPassword: '', newUsername: '', newPassword: '' });
         } catch (e: any) {
-            alert(e.response?.data?.message || 'Error occurred while changing password');
+            alert(e.response?.data?.message || 'Error occurred while updating security credentials');
             if (e.response?.status === 401) {
                 setToken('');
                 localStorage.removeItem('axis_token');
@@ -884,29 +884,43 @@ export default function AdminDashboard() {
                             </form>
                         </div>
 
-                        <h3 className="admin-section-title" style={{ marginTop: '1rem' }}>🔐 {t('admin.accountSecurity')}</h3>
+                        <h3 className="admin-section-title" style={{ marginTop: '1rem' }}>🔐 {t('admin.accountSecurity')} (الأمان)</h3>
                         <div className="admin-section-card">
-                            <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: 600 }}>
+                            <form onSubmit={handleSecurityUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: 600 }}>
+
+                                <div className="settings-grid-2">
+                                    <div>
+                                        <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>Current Username / اسم المستخدم الحالي</label>
+                                        <input className="input" placeholder="admin" value={securityForm.currentUsername} onChange={e => setSecurityForm({ ...securityForm, currentUsername: e.target.value })} style={{ width: '100%' }} />
+                                    </div>
+                                    <div>
+                                        <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>New Username / اسم المستخدم الجديد</label>
+                                        <input className="input" placeholder="Leave blank to keep current" value={securityForm.newUsername} onChange={e => setSecurityForm({ ...securityForm, newUsername: e.target.value })} style={{ width: '100%' }} />
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>Current Password</label>
+                                    <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>Current Password / كلمة المرور الحالية</label>
                                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                                        <input required type={showCurrentPassword ? 'text' : 'password'} className="input" value={passwordForm.currentPassword} onChange={e => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} style={{ width: '100%', paddingRight: '2.5rem' }} />
+                                        <input required type={showCurrentPassword ? 'text' : 'password'} className="input" value={securityForm.currentPassword} onChange={e => setSecurityForm({ ...securityForm, currentPassword: e.target.value })} style={{ width: '100%', paddingRight: '2.5rem' }} />
                                         <div style={{ position: 'absolute', right: '12px', cursor: 'pointer', opacity: 0.5, display: 'flex', alignItems: 'center' }} onClick={() => setShowCurrentPassword(!showCurrentPassword)}>
                                             {showCurrentPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                         </div>
                                     </div>
                                 </div>
+
                                 <div>
-                                    <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>New Secure Password</label>
+                                    <label style={{ fontWeight: 600, fontSize: '0.9rem', display: 'block', marginBottom: '0.5rem' }}>New Secure Password / كلمة المرور الجديدة</label>
                                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                                        <input required type={showNewPassword ? 'text' : 'password'} minLength={12} className="input" placeholder="Min 12 characters" value={passwordForm.newPassword} onChange={e => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} style={{ width: '100%', paddingRight: '2.5rem' }} />
+                                        <input type={showNewPassword ? 'text' : 'password'} className="input" placeholder="Min 12 characters (Leave blank to keep current)" value={securityForm.newPassword} onChange={e => setSecurityForm({ ...securityForm, newPassword: e.target.value })} style={{ width: '100%', paddingRight: '2.5rem' }} />
                                         <div style={{ position: 'absolute', right: '12px', cursor: 'pointer', opacity: 0.5, display: 'flex', alignItems: 'center' }} onClick={() => setShowNewPassword(!showNewPassword)}>
                                             {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                         </div>
                                     </div>
                                     <p style={{ fontSize: '0.8rem', opacity: 0.7, marginTop: '0.5rem' }}>Use a mix of uppercase, lowercase, numbers, and symbols.</p>
                                 </div>
-                                <button type="submit" className="btn-primary" style={{ padding: '16px', fontSize: '1.1rem', borderRadius: '10px' }}>{t('admin.updatePassword')}</button>
+
+                                <button type="submit" className="btn-primary" style={{ padding: '16px', fontSize: '1.1rem', borderRadius: '10px' }}>Update Security Info / تحديث التسجيل</button>
                             </form>
                         </div>
                     </div>

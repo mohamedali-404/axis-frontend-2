@@ -6,20 +6,26 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 export default function Shop() {
     const [products, setProducts] = useState<any[]>([]);
     const [filtered, setFiltered] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [sort, setSort] = useState('newest');
     const [sizeFilter, setSizeFilter] = useState('');
     const [sleeveFilter, setSleeveFilter] = useState('');
     const { t } = useLanguage();
 
     useEffect(() => {
+        setIsLoading(true);
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
             .then(res => res.json())
             .then(data => {
                 const validData = Array.isArray(data) ? data : [];
                 setProducts(validData);
                 setFiltered(validData);
+                setIsLoading(false);
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                setIsLoading(false);
+            });
     }, []);
 
     useEffect(() => {
@@ -42,31 +48,31 @@ export default function Shop() {
 
     return (
         <div style={{ padding: '8rem 2rem 4rem', maxWidth: 1200, margin: '0 auto' }}>
-            <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '2rem', textAlign: 'center', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+            <h1 className="stagger-1" style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '2rem', textAlign: 'center', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                 {t('shop.title')}
             </h1>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 {/* Filters */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', padding: '1.5rem', backgroundColor: 'var(--secondary-color)', border: '1px solid var(--border-color)', borderRadius: '12px' }}>
-                    <div style={{ flex: '1 1 200px' }}>
-                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('shop.size')}</label>
-                        <select className="select" value={sizeFilter} onChange={e => setSizeFilter(e.target.value)}>
-                            <option value="">{t('shop.allSizes')}</option>
-                            {['S', 'M', 'L', 'XL'].map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
+                <div className="store-filter-bar stagger-2">
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', flex: 1 }}>
+                        <div className="filter-group">
+                            <span className="filter-label">{t('shop.size')}:</span>
+                            <button className={`filter-pill ${sizeFilter === '' ? 'active' : ''}`} onClick={() => setSizeFilter('')}>{t('shop.allSizes')}</button>
+                            {['S', 'M', 'L', 'XL'].map(s => (
+                                <button key={s} className={`filter-pill ${sizeFilter === s ? 'active' : ''}`} onClick={() => setSizeFilter(s)}>{s}</button>
+                            ))}
+                        </div>
+                        <div className="filter-group">
+                            <span className="filter-label">{t('shop.sleeve')}:</span>
+                            <button className={`filter-pill ${sleeveFilter === '' ? 'active' : ''}`} onClick={() => setSleeveFilter('')}>{t('shop.allTypes')}</button>
+                            <button className={`filter-pill ${sleeveFilter === 'Short' ? 'active' : ''}`} onClick={() => setSleeveFilter('Short')}>{t('shop.short') || 'Short'}</button>
+                            <button className={`filter-pill ${sleeveFilter === 'Long' ? 'active' : ''}`} onClick={() => setSleeveFilter('Long')}>{t('shop.long') || 'Long'}</button>
+                        </div>
                     </div>
-                    <div style={{ flex: '1 1 200px' }}>
-                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('shop.sleeve')}</label>
-                        <select className="select" value={sleeveFilter} onChange={e => setSleeveFilter(e.target.value)}>
-                            <option value="">{t('shop.allTypes')}</option>
-                            <option value="Short">{t('shop.short')}</option>
-                            <option value="Long">{t('shop.long')}</option>
-                        </select>
-                    </div>
-                    <div style={{ flex: '1 1 200px' }}>
-                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('shop.sortBy')}</label>
-                        <select className="select" value={sort} onChange={e => setSort(e.target.value)}>
+                    <div className="filter-group" style={{ justifyContent: 'flex-start' }}>
+                        <span className="filter-label">{t('shop.sortBy')}:</span>
+                        <select className="sort-select" value={sort} onChange={e => setSort(e.target.value)}>
                             <option value="newest">{t('shop.newest')}</option>
                             <option value="priceLow">{t('shop.priceLow')}</option>
                             <option value="priceHigh">{t('shop.priceHigh')}</option>
@@ -75,14 +81,26 @@ export default function Shop() {
                 </div>
 
                 {/* Product Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '3rem', marginTop: '2rem', minHeight: '50vh' }}>
-                    {filtered.map(product => (
-                        <ProductCard key={product._id} product={product} />
-                    ))}
-                    {filtered.length === 0 && (
-                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '6rem 2rem', color: 'var(--accent-color)', opacity: 0.6, fontSize: '1.2rem', fontWeight: 500, backgroundColor: 'var(--secondary-color)', borderRadius: '12px', border: '1px dashed var(--border-color)' }}>
-                            {t('shop.noProducts')}
-                        </div>
+                <div className="stagger-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '3rem', marginTop: '2rem', minHeight: '50vh' }}>
+                    {isLoading ? (
+                        [...Array(6)].map((_, idx) => (
+                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className="skeleton-loading" style={{ width: '100%', aspectRatio: '3/4' }}></div>
+                                <div className="skeleton-loading" style={{ width: '80%', height: '24px' }}></div>
+                                <div className="skeleton-loading" style={{ width: '40%', height: '20px' }}></div>
+                            </div>
+                        ))
+                    ) : (
+                        <>
+                            {filtered.map(product => (
+                                <ProductCard key={product._id} product={product} />
+                            ))}
+                            {filtered.length === 0 && (
+                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '6rem 2rem', color: 'var(--accent-color)', opacity: 0.6, fontSize: '1.2rem', fontWeight: 500, backgroundColor: 'var(--secondary-color)', borderRadius: '12px', border: '1px dashed var(--border-color)' }}>
+                                    {t('shop.noProducts')}
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

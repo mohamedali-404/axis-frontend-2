@@ -44,7 +44,8 @@ export default function FloatingCart() {
                     position: 'absolute', top: -5, right: -5, backgroundColor: '#e11d48', color: '#fff',
                     fontSize: '0.8rem', fontWeight: 800, width: 24, height: 24,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                    animation: 'pulse 2s infinite'
                 }}>
                     {totalItems}
                 </span>

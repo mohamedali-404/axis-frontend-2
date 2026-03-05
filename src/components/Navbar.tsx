@@ -74,7 +74,7 @@ export default function Navbar() {
                 color: isScrolled ? '#ffffff' : 'inherit',
                 boxShadow: isScrolled ? '0 20px 40px rgba(0,0,0,0.2)' : 'none'
             }}>
-                <div style={{ padding: '0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '80px' }}>
+                <div style={{ padding: '0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: isScrolled ? '60px' : '80px', transition: 'height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)' }}>
                     <Link href="/" style={{ fontSize: '2.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', color: 'inherit', textShadow: isScrolled ? 'none' : '2px 4px 10px rgba(0,0,0,0.5)', transition: 'all 0.3s' }}>
                         AXIS
                     </Link>

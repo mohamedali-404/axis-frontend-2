@@ -35,7 +35,7 @@ export default function Home() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundImage: settingsReady
-                    ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("${settings?.heroBanner || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1920'}")`
+                    ? `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url("${settings?.heroBanner || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1920'}")`
                     : 'none',
                 backgroundColor: settingsReady ? undefined : '#111',
                 backgroundSize: 'cover',
@@ -45,16 +45,49 @@ export default function Home() {
                 textAlign: 'center',
                 padding: '0 2rem',
                 opacity: settingsReady ? 1 : 0,
-                transition: 'opacity 0.4s ease-in',
+                transition: 'opacity 0.6s ease-in',
             }}>
-                <div style={{ animation: 'fadeIn 1s ease-out', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-                    <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.5rem', textShadow: '2px 4px 10px rgba(0,0,0,0.5)', lineHeight: 1.1, wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <h1 style={{
+                        fontSize: 'clamp(2rem, 6vw, 3.5rem)',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        letterSpacing: '3px',
+                        marginBottom: '1.5rem',
+                        textShadow: '0px 4px 20px rgba(0,0,0,0.5)',
+                        lineHeight: 1.1,
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word',
+                        opacity: 0,
+                        animation: 'heroLogoAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+                    }}>
                         {settings?.heroHeadline || "Train Hard. Look Sharp."}
                     </h1>
-                    <p style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)', marginBottom: '3rem', maxWidth: 650, margin: '0 auto 3rem', opacity: 0.9, fontWeight: 500, letterSpacing: '0.5px', padding: '0 1rem' }}>
+                    <p style={{
+                        fontSize: 'clamp(1rem, 4vw, 1.25rem)',
+                        marginBottom: '3rem',
+                        maxWidth: 650,
+                        color: 'rgba(255, 255, 255, 0.95)',
+                        fontWeight: 600,
+                        letterSpacing: '0.6px',
+                        padding: '0 1rem',
+                        textShadow: '0px 2px 10px rgba(0,0,0,0.4)',
+                        opacity: 0,
+                        animation: 'heroSubtitleAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards'
+                    }}>
                         {settings?.subHeadline || "Minimal design. Maximum performance. Discover our new premium collection."}
                     </p>
-                    <Link href="/shop" className="btn-primary" style={{ fontSize: '1.2rem', padding: '16px 48px', backgroundColor: '#fff', color: '#000', borderRadius: '50px', fontWeight: 800, transition: 'transform 0.2s', display: 'inline-block' }}>
+                    <Link href="/shop" className="btn-primary hero-btn-premium" style={{
+                        fontSize: '1.1rem',
+                        padding: '16px 48px',
+                        backgroundColor: '#fff',
+                        color: '#000',
+                        borderRadius: '50px',
+                        fontWeight: 800,
+                        display: 'inline-block',
+                        opacity: 0,
+                        animation: 'heroBtnAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards'
+                    }}>
                         {t('home.shopNow')}
                     </Link>
                 </div>
