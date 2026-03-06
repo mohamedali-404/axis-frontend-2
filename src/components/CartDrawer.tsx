@@ -48,22 +48,25 @@ export default function CartDrawer() {
                         </div>
                     ) : (
                         items.map((item) => (
-                            <div key={`${item.id}-${item.size}`} style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                            <div key={`${item.id}-${item.size}-${item.color || 'none'}`} style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                                 <div style={{ width: 90, height: 110, backgroundColor: 'var(--secondary-color)', borderRadius: '12px', overflow: 'hidden', flexShrink: 0 }}>
                                     <img src={item.image || 'https://via.placeholder.com/90x110?text=No+Image'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </div>
                                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
                                         <h3 style={{ fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', fontWeight: 700, lineHeight: 1.2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', margin: 0 }}>{item.name}</h3>
-                                        <Trash2 size={20} color="#ef4444" cursor="pointer" onClick={() => removeItem(item.id, item.size)} style={{ opacity: 0.8, flexShrink: 0 }} className="hover-opacity" />
+                                        <Trash2 size={20} color="#ef4444" cursor="pointer" onClick={() => removeItem(item.id, item.size, item.color)} style={{ opacity: 0.8, flexShrink: 0 }} className="hover-opacity" />
                                     </div>
-                                    <p style={{ color: 'var(--accent-color)', opacity: 0.6, marginTop: '0.25rem', fontSize: '0.9rem', fontWeight: 500 }}>{t('cart.size')}: {item.size}</p>
+                                    <p style={{ color: 'var(--accent-color)', opacity: 0.6, marginTop: '0.25rem', fontSize: '0.9rem', fontWeight: 500 }}>
+                                        {t('cart.size')}: {item.size}
+                                        {item.color && ` | Color: ${item.color}`}
+                                    </p>
                                     <p style={{ fontWeight: 800, marginTop: '0.5rem', fontSize: '1.1rem' }}>{item.price.toFixed(0)} ج.م</p>
 
                                     <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', border: '2px solid var(--border-color)', width: 'fit-content', borderRadius: '8px', overflow: 'hidden' }}>
-                                        <button style={{ padding: '0.4rem 0.6rem', background: 'var(--secondary-color)', border: 'none', borderRight: '1px solid var(--border-color)', cursor: 'pointer', color: 'var(--accent-color)' }} onClick={() => updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))} className="hover-opacity"><Minus size={16} /></button>
+                                        <button style={{ padding: '0.4rem 0.6rem', background: 'var(--secondary-color)', border: 'none', borderRight: '1px solid var(--border-color)', cursor: 'pointer', color: 'var(--accent-color)' }} onClick={() => updateQuantity(item.id, item.size, item.color, Math.max(1, item.quantity - 1))} className="hover-opacity"><Minus size={16} /></button>
                                         <span style={{ padding: '0 1rem', fontWeight: 700, minWidth: '40px', textAlign: 'center' }}>{item.quantity}</span>
-                                        <button style={{ padding: '0.4rem 0.6rem', background: 'var(--secondary-color)', border: 'none', borderLeft: '1px solid var(--border-color)', cursor: 'pointer', color: 'var(--accent-color)' }} onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)} className="hover-opacity"><Plus size={16} /></button>
+                                        <button style={{ padding: '0.4rem 0.6rem', background: 'var(--secondary-color)', border: 'none', borderLeft: '1px solid var(--border-color)', cursor: 'pointer', color: 'var(--accent-color)' }} onClick={() => updateQuantity(item.id, item.size, item.color, item.quantity + 1)} className="hover-opacity"><Plus size={16} /></button>
                                     </div>
                                 </div>
                             </div>

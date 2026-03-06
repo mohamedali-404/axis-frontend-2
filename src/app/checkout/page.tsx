@@ -115,7 +115,7 @@ export default function Checkout() {
 
         const orderData = {
             ...form,
-            items: items.map(i => ({ product: i.id, name: i.name, price: i.price, quantity: i.quantity, size: i.size, image: i.image })),
+            items: items.map(i => ({ product: i.id, name: i.name, price: i.price, quantity: i.quantity, size: i.size, image: i.image, color: i.color })),
             subtotal,
             shippingCost,
             total,
@@ -249,7 +249,9 @@ export default function Checkout() {
                                 <img src={item.image || 'https://via.placeholder.com/60x80?text=x'} alt={item.name} style={{ width: 60, height: 80, objectFit: 'cover', borderRadius: '8px' }} />
                                 <div style={{ overflow: 'hidden' }}>
                                     <h4 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.2rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{item.name}</h4>
-                                    <p style={{ color: 'var(--accent-color)', opacity: 0.7, fontSize: '0.85rem', fontWeight: 500 }}>{t('cart.size')}: {item.size} | {t('checkout.qty')}: {item.quantity}</p>
+                                    <p style={{ color: 'var(--accent-color)', opacity: 0.7, fontSize: '0.85rem', fontWeight: 500 }}>
+                                        {t('cart.size')}: {item.size} {item.color && `| Color: ${item.color}`} | {t('checkout.qty')}: {item.quantity}
+                                    </p>
                                 </div>
                             </div>
                             <span style={{ fontWeight: 800, fontSize: '1.1rem', flexShrink: 0 }}>{(item.price * item.quantity).toFixed(0)} ج.م</span>

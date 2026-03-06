@@ -23,8 +23,10 @@ export default function AdminDashboard() {
 
     // Products
     const [products, setProducts] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({ name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[] });
+    const [productForm, setProductForm] = useState({ name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[], colorVariants: [] as { name: string; hexCode: string; imageObjs: File[]; existingImages: string[] }[] });
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
+
+    const emptyForm = { name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[], colorVariants: [] as { name: string; hexCode: string; imageObjs: File[]; existingImages: string[] }[] };
 
     // Orders
     const [orders, setOrders] = useState<any[]>([]);
@@ -187,14 +189,29 @@ export default function AdminDashboard() {
                 }
             }
 
+            // Upload color variant images
+            const finalColorVariants = [];
+            for (const cv of productForm.colorVariants) {
+                if (!cv.name.trim() || !cv.hexCode.trim()) continue;
+                const cvImageUrls: string[] = [...(cv.existingImages || [])];
+                for (const file of cv.imageObjs) {
+                    const fd = new FormData();
+                    fd.append('image', file);
+                    const upRes = await axios.post(`https://axis-backend-2.onrender.com/api/upload`, fd, { headers: { Authorization: `Bearer ${token}` } });
+                    cvImageUrls.push(upRes.data.url);
+                }
+                finalColorVariants.push({ name: cv.name.trim(), hexCode: cv.hexCode, images: cvImageUrls });
+            }
+
             const pData: any = {
                 name: productForm.name,
                 price: Number(productForm.price),
                 discountPrice: productForm.discountPrice ? Number(productForm.discountPrice) : undefined,
                 stock: productForm.stock !== '' ? Number(productForm.stock) : null,
-                descriptionEn: productForm.descriptionEn,
-                descriptionAr: productForm.descriptionAr,
-                sizes: productForm.sizes.split(',').map((s: string) => s.trim()).filter(Boolean)
+                descriptionEn: productForm.descriptionEn || '',
+                descriptionAr: productForm.descriptionAr || '',
+                sizes: productForm.sizes.split(',').map((s: string) => s.trim()).filter(Boolean),
+                colorVariants: finalColorVariants
             };
 
             if (imageUrls.length > 0) pData.images = imageUrls;
@@ -209,7 +226,7 @@ export default function AdminDashboard() {
 
             fetchData();
             setEditingProductId(null);
-            setProductForm({ name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[] });
+            setProductForm({ ...emptyForm });
         } catch (e: any) {
             console.error('Error saving product:', e.response?.data || e.message || e);
             alert(`Error saving product: ${e.response?.data?.message || 'Unknown network error'}`);
@@ -226,7 +243,8 @@ export default function AdminDashboard() {
             descriptionEn: p.descriptionEn || '',
             descriptionAr: p.descriptionAr || '',
             sizes: p.sizes ? p.sizes.join(', ') : 'S, M, L, XL',
-            imageObjs: [] as File[]
+            imageObjs: [] as File[],
+            colorVariants: (p.colorVariants || []).map((cv: any) => ({ name: cv.name, hexCode: cv.hexCode, imageObjs: [] as File[], existingImages: cv.images || [] }))
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -468,12 +486,12 @@ export default function AdminDashboard() {
                                     <input className="input" type="number" step="0.01" placeholder="0.00" value={productForm.discountPrice} onChange={e => setProductForm({ ...productForm, discountPrice: e.target.value })} />
                                 </div>
                                 <div className="field-group full-width">
-                                    <label className="field-label">{t('admin.descEn')}</label>
-                                    <textarea required className="input" placeholder="Detailed product description in English..." rows={4} value={productForm.descriptionEn} onChange={e => setProductForm({ ...productForm, descriptionEn: e.target.value })}></textarea>
+                                    <label className="field-label">{t('admin.descEn')} <span style={{ opacity: 0.5, fontSize: '0.75rem', textTransform: 'none' }}>({t('admin.optional')})</span></label>
+                                    <textarea className="input" placeholder="Detailed product description in English..." rows={4} value={productForm.descriptionEn} onChange={e => setProductForm({ ...productForm, descriptionEn: e.target.value })}></textarea>
                                 </div>
                                 <div className="field-group full-width">
-                                    <label className="field-label">{t('admin.descAr')}</label>
-                                    <textarea required className="input" placeholder="وصف المنتج بالعربية..." rows={4} value={productForm.descriptionAr} onChange={e => setProductForm({ ...productForm, descriptionAr: e.target.value })} dir="rtl"></textarea>
+                                    <label className="field-label">{t('admin.descAr')} <span style={{ opacity: 0.5, fontSize: '0.75rem', textTransform: 'none' }}>({t('admin.optional')})</span></label>
+                                    <textarea className="input" placeholder="وصف المنتج بالعربية..." rows={4} value={productForm.descriptionAr} onChange={e => setProductForm({ ...productForm, descriptionAr: e.target.value })} dir="rtl"></textarea>
                                 </div>
                                 <div className="field-group full-width">
                                     <label className="field-label">{t('admin.productImages')}</label>
@@ -485,10 +503,44 @@ export default function AdminDashboard() {
                                     <input required className="input" placeholder="e.g. S, M, L, XL" value={productForm.sizes} onChange={e => setProductForm({ ...productForm, sizes: e.target.value })} />
                                     <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0 }}>{t('admin.sizesHint')}</p>
                                 </div>
+
+                                {/* ── COLOR VARIANTS (OPTIONAL) ── */}
+                                <div className="field-group full-width">
+                                    <label className="field-label">Color Variants <span style={{ opacity: 0.5, fontSize: '0.75rem', textTransform: 'none' }}>(Optional)</span></label>
+                                    <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: '0 0 0.75rem' }}>Add colors with their own images. Leave empty if product has no color options.</p>
+
+                                    {productForm.colorVariants.map((cv, idx) => (
+                                        <div key={idx} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', marginBottom: '0.75rem', backgroundColor: 'rgb(var(--background-start-rgb))' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: cv.hexCode, border: '2px solid var(--border-color)', flexShrink: 0 }} />
+                                                    <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{cv.name || `Color ${idx + 1}`}</span>
+                                                </div>
+                                                <button type="button" onClick={() => { const upd = [...productForm.colorVariants]; upd.splice(idx, 1); setProductForm({ ...productForm, colorVariants: upd }); }} style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: 'none', padding: '4px 10px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem' }}>✕ Remove</button>
+                                            </div>
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                                                <input className="input" placeholder="Color name (e.g. Black)" value={cv.name} onChange={e => { const upd = [...productForm.colorVariants]; upd[idx] = { ...upd[idx], name: e.target.value }; setProductForm({ ...productForm, colorVariants: upd }); }} />
+                                                <input type="color" className="input" value={cv.hexCode} onChange={e => { const upd = [...productForm.colorVariants]; upd[idx] = { ...upd[idx], hexCode: e.target.value }; setProductForm({ ...productForm, colorVariants: upd }); }} style={{ padding: '2px', height: '40px', cursor: 'pointer' }} />
+                                            </div>
+                                            {cv.existingImages && cv.existingImages.length > 0 && (
+                                                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                                    {cv.existingImages.map((img, imgIdx) => (
+                                                        <div key={imgIdx} style={{ position: 'relative' }}>
+                                                            <img src={img} alt={`${cv.name} ${imgIdx}`} style={{ width: 52, height: 64, objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border-color)' }} />
+                                                            <button type="button" onClick={() => { const upd = [...productForm.colorVariants]; upd[idx] = { ...upd[idx], existingImages: upd[idx].existingImages.filter((_, i) => i !== imgIdx) }; setProductForm({ ...productForm, colorVariants: upd }); }} style={{ position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%', background: '#ef4444', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>✕</button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            <input type="file" multiple accept="image/*" className="input" onChange={e => { const upd = [...productForm.colorVariants]; upd[idx] = { ...upd[idx], imageObjs: Array.from(e.target.files || []) }; setProductForm({ ...productForm, colorVariants: upd }); }} style={{ padding: '8px', fontSize: '0.8rem' }} />
+                                        </div>
+                                    ))}
+                                    <button type="button" onClick={() => setProductForm({ ...productForm, colorVariants: [...productForm.colorVariants, { name: '', hexCode: '#000000', imageObjs: [], existingImages: [] }] })} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '10px 16px', border: '2px dashed var(--border-color)', borderRadius: '10px', background: 'transparent', cursor: 'pointer', fontWeight: 700, fontSize: '0.85rem', color: 'var(--accent-color)', width: '100%', justifyContent: 'center', transition: 'all 0.2s' }}>+ Add Color</button>
+                                </div>
                                 <div className="full-width" style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
                                     <button type="submit" className="btn-primary" style={{ flex: '1 1 200px' }}>{editingProductId ? t('admin.saveChanges') : t('admin.addProduct')}</button>
                                     {editingProductId && (
-                                        <button type="button" onClick={() => { setEditingProductId(null); setProductForm({ name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[] }); }} className="btn-secondary" style={{ flex: '1 1 200px' }}>{t('admin.cancel')}</button>
+                                        <button type="button" onClick={() => { setEditingProductId(null); setProductForm({ ...emptyForm }); }} className="btn-secondary" style={{ flex: '1 1 200px' }}>{t('admin.cancel')}</button>
                                     )}
                                 </div>
                             </form>
@@ -607,7 +659,7 @@ export default function AdminDashboard() {
                                                 <img src={item.image || 'https://via.placeholder.com/60'} alt={item.name} style={{ width: 60, height: 70, objectFit: 'cover', borderRadius: '6px', backgroundColor: '#eee' }} />
                                                 <div>
                                                     <p style={{ fontWeight: 800, margin: '0 0 0.3rem', fontSize: '1.1rem' }}>{item.name}</p>
-                                                    <p style={{ fontSize: '0.9rem', color: 'var(--accent-color)', opacity: 0.8, margin: 0, fontWeight: 600 }}>Size: <span style={{ border: '1px solid var(--accent-color)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8rem' }}>{item.size}</span> | Qty: {item.quantity}</p>
+                                                    <p style={{ fontSize: '0.9rem', color: 'var(--accent-color)', opacity: 0.8, margin: 0, fontWeight: 600 }}>Size: <span style={{ border: '1px solid var(--accent-color)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8rem' }}>{item.size}</span> {item.color && <>| Color: <span style={{ border: '1px solid var(--accent-color)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8rem' }}>{item.color}</span></>} | Qty: {item.quantity}</p>
                                                 </div>
                                             </div>
                                             <p style={{ fontWeight: 800, fontSize: '1.2rem' }}>{(item.price * item.quantity).toFixed(0)} ج.م</p>

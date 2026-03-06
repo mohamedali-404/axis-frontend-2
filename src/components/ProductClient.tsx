@@ -35,6 +35,9 @@ function ProductGallery({ images, productName }: { images: string[]; productName
     const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
     const imgRef = useRef<HTMLDivElement>(null);
 
+    // Reset to first image when images array changes (e.g. color switch)
+    useEffect(() => { setMainIndex(0); }, [images]);
+
     const mainImage = images[mainIndex] || '';
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -190,10 +193,28 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
     const product = initialProduct;
     const [qty, setQty] = useState(1);
     const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || '');
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [showSizeGuide, setShowSizeGuide] = useState(false);
     const addItem = useCartStore(state => state.addItem);
     const router = useRouter();
-    const images: string[] = product?.images || [];
+    const baseImages: string[] = product?.images || [];
+    const colorVariants: { name: string; hexCode: string; images: string[] }[] = product?.colorVariants || [];
+
+    // Compute active images based on selected color
+    const activeImages = (() => {
+        if (selectedColor && colorVariants.length > 0) {
+            const cv = colorVariants.find(c => c.name === selectedColor);
+            if (cv && cv.images.length > 0) return cv.images;
+        }
+        return baseImages;
+    })();
+
+    // Auto-select first color if product has color variants
+    useEffect(() => {
+        if (colorVariants.length > 0 && !selectedColor) {
+            setSelectedColor(colorVariants[0].name);
+        }
+    }, [colorVariants]);
 
     // Close size guide on Escape
     useEffect(() => {
@@ -220,7 +241,8 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
             price: product.discountPrice || product.price,
             size: selectedSize,
             quantity: qty,
-            image: images[0] || '',
+            image: activeImages[0] || '',
+            color: selectedColor || undefined,
         });
     };
 
@@ -247,7 +269,7 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
             <div className="product-page-grid">
 
                 {/* LEFT — Gallery */}
-                <ProductGallery images={images} productName={product.name} />
+                <ProductGallery images={activeImages} productName={product.name} />
 
                 {/* RIGHT — Info */}
                 <div className="product-page-info stagger-2">
@@ -276,6 +298,26 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
                             <span className={`pp-stock-badge${product.stock > 0 ? ' in-stock' : ' out-stock'}`}>
                                 {product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
                             </span>
+                        </div>
+                    )}
+
+                    {/* ── COLOR SELECTOR ── */}
+                    {colorVariants.length > 0 && (
+                        <div className="pp-field-block">
+                            <span className="pp-field-label">Color{selectedColor ? `: ${selectedColor}` : ''}</span>
+                            <div className="color-selector">
+                                {colorVariants.map(cv => (
+                                    <button
+                                        key={cv.name}
+                                        className={`color-swatch${selectedColor === cv.name ? ' selected' : ''}`}
+                                        style={{ '--swatch-color': cv.hexCode } as React.CSSProperties}
+                                        onClick={() => setSelectedColor(cv.name)}
+                                        title={cv.name}
+                                        aria-label={`Select color ${cv.name}`}
+                                        aria-pressed={selectedColor === cv.name}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     )}
 
