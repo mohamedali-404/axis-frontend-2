@@ -1715,11 +1715,36 @@ a {
     .admin-main {
         margin-left: 0;
         max-width: 100%;
-        padding: 1rem;
+        padding: 10px;
+        overflow-x: hidden;
     }
 
-    .admin-form-grid {
+    .admin-section-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+
+    .admin-form-grid,
+    .settings-grid-2,
+    .settings-grid-3 {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Prevent inputs from zooming on iOS and breaking layout */
+    .admin-main input,
+    .admin-main textarea,
+    .admin-main select {
+        font-size: 16px !important;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Fix image overflowing in admin forms */
+    .admin-main img {
+        max-width: 100%;
+        height: auto;
     }
 
     .products-table {
@@ -1729,6 +1754,7 @@ a {
     .products-cards {
         display: flex;
         flex-direction: column;
+        gap: 1rem;
     }
 
     .shipping-rate-row {
