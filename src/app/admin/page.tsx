@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Eye, EyeOff, Bell } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { getSocket } from '@/lib/socket';
 
@@ -397,30 +397,23 @@ export default function AdminDashboard() {
             </aside>
 
             {/* Mobile topbar */}
-            <header className="admin-topbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 20px', backgroundColor: 'var(--secondary-color)', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, zIndex: 40 }}>
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
-                    <button
-                        className="admin-hamburger"
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                        style={{ display: 'flex', flexDirection: 'column', gap: '5px', background: 'none', border: 'none', cursor: 'pointer', padding: '8px 0', borderRadius: '8px' }}
-                        aria-label="Open menu"
-                    >
-                        <span style={{ display: 'block', width: 22, height: 2, background: 'var(--accent-color)', borderRadius: 2, transition: 'all 0.3s', transform: sidebarOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
-                        <span style={{ display: 'block', width: 22, height: 2, background: 'var(--accent-color)', borderRadius: 2, transition: 'all 0.3s', opacity: sidebarOpen ? 0 : 1 }} />
-                        <span style={{ display: 'block', width: 22, height: 2, background: 'var(--accent-color)', borderRadius: 2, transition: 'all 0.3s', transform: sidebarOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
-                    </button>
-                </div>
-
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'center', fontWeight: 900, fontSize: '1.4rem', fontStyle: 'italic', letterSpacing: '3px', color: 'var(--accent-color)' }}>AXIS</div>
-
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <header className="admin-topbar">
+                <button
+                    className="admin-hamburger"
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '5px', background: 'none', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '8px' }}
+                    aria-label="Open menu"
+                >
+                    <span style={{ display: 'block', width: 24, height: 2.5, background: 'var(--accent-color)', borderRadius: 2, transition: 'all 0.3s', transform: sidebarOpen ? 'rotate(45deg) translateY(7.5px)' : 'none' }} />
+                    <span style={{ display: 'block', width: 24, height: 2.5, background: 'var(--accent-color)', borderRadius: 2, transition: 'all 0.3s', opacity: sidebarOpen ? 0 : 1 }} />
+                    <span style={{ display: 'block', width: 24, height: 2.5, background: 'var(--accent-color)', borderRadius: 2, transition: 'all 0.3s', transform: sidebarOpen ? 'rotate(-45deg) translateY(-7.5px)' : 'none' }} />
+                </button>
+                <div style={{ fontWeight: 900, fontSize: '1.3rem', fontStyle: 'italic', letterSpacing: '3px' }}>AXIS</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     {pendingOrdersCount > 0 && (
-                        <div onClick={() => handleTabChange('orders')} style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                            <Bell size={22} color="var(--accent-color)" />
-                            <span style={{ position: 'absolute', top: '-6px', right: '-6px', backgroundColor: '#e63946', color: '#fff', fontSize: '10px', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', fontWeight: 800 }}>
-                                {pendingOrdersCount}
-                            </span>
-                        </div>
+                        <span onClick={() => handleTabChange('orders')} style={{ backgroundColor: '#ef4444', color: '#fff', fontSize: '0.75rem', padding: '3px 9px', borderRadius: '20px', fontWeight: 800, cursor: 'pointer' }}>
+                            {pendingOrdersCount} 🛒
+                        </span>
                     )}
                 </div>
             </header>
