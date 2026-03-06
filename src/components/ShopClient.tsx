@@ -1,15 +1,32 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-export default function ShopClient({ initialProducts = [] }: { initialProducts?: any[] }) {
+function ShopContent({ initialProducts = [] }: { initialProducts?: any[] }) {
+    const searchParams = useSearchParams();
     const [products, setProducts] = useState<any[]>(initialProducts);
     const [filtered, setFiltered] = useState<any[]>(initialProducts);
     const [sort, setSort] = useState('newest');
     const [sizeFilter, setSizeFilter] = useState('');
-    const [sleeveFilter, setSleeveFilter] = useState('');
+
+    // Initialize filter from URL parameter if present
+    const typeParam = searchParams?.get('type');
+    const getInitialSleeve = () => {
+        if (typeParam === 'longsleeve') return 'Long';
+        if (typeParam === 'tshirts') return 'Short';
+        return '';
+    };
+
+    const [sleeveFilter, setSleeveFilter] = useState(getInitialSleeve());
     const { t } = useLanguage();
+
+    useEffect(() => {
+        if (typeParam === 'longsleeve') setSleeveFilter('Long');
+        else if (typeParam === 'tshirts') setSleeveFilter('Short');
+        else setSleeveFilter('');
+    }, [typeParam]);
 
     useEffect(() => {
         let result = Array.isArray(products) ? [...products] : [];
@@ -17,7 +34,7 @@ export default function ShopClient({ initialProducts = [] }: { initialProducts?:
             result = result.filter(p => p.sizes && p.sizes.includes(sizeFilter));
         }
         if (sleeveFilter) {
-            result = result.filter(p => p.sleeveType === sleeveFilter);
+            result = result.filter(p => p.sleeveType && p.sleeveType.toLowerCase() === sleeveFilter.toLowerCase());
         }
         if (sort === 'priceLow') {
             result.sort((a, b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
@@ -76,5 +93,13 @@ export default function ShopClient({ initialProducts = [] }: { initialProducts?:
                 </>
             </div>
         </div>
+    );
+}
+
+export default function ShopClient({ initialProducts = [] }: { initialProducts?: any[] }) {
+    return (
+        <Suspense fallback={<div style={{ minHeight: '50vh', padding: '10rem 2rem', textAlign: 'center', fontWeight: 'bold' }}>Loading shop...</div>}>
+            <ShopContent initialProducts={initialProducts} />
+        </Suspense>
     );
 }

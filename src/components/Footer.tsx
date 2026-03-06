@@ -55,7 +55,7 @@ export default function Footer() {
                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: 0 }}>
                         <li><Link href="/contact" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.contactUs')}</Link></li>
                         <li><Link href="/policy" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.returnExchange')}</Link></li>
-                        <li><Link href="/shipping" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.shippingPolicy')}</Link></li>
+
                     </ul>
                 </div>
             </div>
