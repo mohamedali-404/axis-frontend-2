@@ -16,7 +16,7 @@ export default function Footer() {
     }, []);
 
     return (
-        <footer style={{ backgroundColor: 'var(--accent-color)', color: 'var(--accent-foreground)', padding: '6rem 2rem 3rem', marginTop: '6rem' }}>
+        <footer style={{ backgroundColor: 'var(--accent-color)', color: 'var(--accent-foreground)', padding: '3rem 2rem 2rem', marginTop: '3rem' }}>
             <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '4rem' }}>
                 <div>
                     <h2 style={{ fontSize: '2.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '1.5rem', lineHeight: 1 }}>AXIS</h2>
@@ -41,14 +41,6 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>{t('footer.shop')}</h3>
-                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: 0 }}>
-                        <li><Link href="/shop" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.allProducts')}</Link></li>
-                        <li><Link href="/shop?type=tshirts" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.tshirts')}</Link></li>
-                        <li><Link href="/shop?type=longsleeve" style={{ color: 'var(--accent-foreground)', opacity: 0.7, fontSize: '1.1rem', textDecoration: 'none' }} className="hover-opacity">{t('footer.longSleeves')}</Link></li>
-                    </ul>
-                </div>
 
                 <div>
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>{t('footer.support')}</h3>
@@ -59,7 +51,7 @@ export default function Footer() {
                     </ul>
                 </div>
             </div>
-            <div style={{ maxWidth: 1400, margin: '5rem auto 0', paddingTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', color: 'var(--accent-foreground)' }}>
+            <div style={{ maxWidth: 1400, margin: '3rem auto 0', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', color: 'var(--accent-foreground)' }}>
                 <div style={{ fontSize: '1rem', opacity: 0.6 }}>
                     &copy; {new Date().getFullYear()} AXIS. {t('footer.rights')}
                 </div>
