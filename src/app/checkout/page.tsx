@@ -209,37 +209,66 @@ export default function Checkout() {
                                 </select>
                             </div>
                             {form.paymentMethod !== 'Cash on Delivery' && paymentSettings.eWallet !== false && (
-                                <div style={{ marginTop: '1rem', padding: '1.2rem', backgroundColor: '#eef2ff', border: '1px solid #c7d2fe', borderRadius: '8px' }}>
-                                    <h4 style={{ color: '#4338ca', marginBottom: '1rem', fontWeight: 800, direction: 'rtl', textAlign: 'right' }}>📲 تعليمات الدفع بالمحفظة الإلكترونية</h4>
-                                    <p style={{ fontSize: '0.95rem', color: '#4338ca', marginBottom: '0.5rem', fontWeight: 700, direction: 'rtl', textAlign: 'right' }}>
-                                        ١. برجاء تحويل إجمالي المبلغ <strong style={{ fontSize: '1.1rem', color: '#ef4444' }}>{total.toFixed(0)} ج.م</strong> على الرقم التالي:
-                                    </p>
-                                    <div style={{ backgroundColor: '#fff', padding: '1rem', borderRadius: '8px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '2px dashed #c7d2fe', marginBottom: '1rem' }}>
-                                        <span style={{ fontWeight: 900, fontSize: '1.4rem', color: '#ef4444', letterSpacing: '1px' }}>{paymentSettings.eWalletNumber || '01000000000'}</span>
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                navigator.clipboard.writeText(paymentSettings.eWalletNumber || '01000000000');
-                                                const btn = e.currentTarget;
-                                                const originalText = btn.innerHTML;
-                                                btn.innerHTML = 'تم النسخ!';
-                                                setTimeout(() => btn.innerHTML = originalText, 2000);
-                                            }}
-                                            style={{ backgroundColor: '#4f46e5', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem' }}
-                                        >
-                                            نسخ
-                                        </button>
+                                <div style={{ marginTop: '1.5rem', padding: 'clamp(1.5rem, 4vw, 2.5rem)', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', direction: 'rtl' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '2rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '1.2rem' }}>
+                                        <span style={{ fontSize: '1.8rem' }}>💳</span>
+                                        <h4 style={{ color: '#0f172a', margin: 0, fontWeight: 900, fontSize: 'clamp(1.2rem, 4vw, 1.4rem)' }}>تعليمات الدفع بالمحفظة الإلكترونية</h4>
                                     </div>
-                                    <a href={`https://wa.me/${(paymentSettings.eWalletNumber || '').startsWith('0') ? '2' + paymentSettings.eWalletNumber : paymentSettings.eWalletNumber}?text=${encodeURIComponent('Hello AXIS, I want to transfer payment for my new order.')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '12px', borderRadius: '8px', fontWeight: 800, textAlign: 'center', marginBottom: '1.5rem', boxShadow: '0 4px 12px rgba(37,211,102,0.3)' }}>
-                                        إرسال إيصال الدفع عبر واتساب
-                                    </a>
-                                    <p style={{ fontSize: '0.95rem', color: '#4338ca', marginBottom: '1rem', fontWeight: 700, direction: 'rtl', textAlign: 'right' }}>
-                                        ٢. أدخل رقم المحفظة اللي حولت <strong>منه</strong> للتأكيد:
-                                    </p>
-                                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.5rem', fontSize: '0.9rem', color: '#4338ca', direction: 'rtl', textAlign: 'right' }}>رقم تحويلك *</label>
-                                    <input required className="input" type="tel" placeholder="010XXXXXXXX" value={form.vodafoneCashNumber} onChange={e => setForm({ ...form, vodafoneCashNumber: e.target.value })} style={{ direction: 'ltr' }} />
-                                    <p style={{ fontSize: '0.85rem', color: '#4338ca', marginTop: '0.5rem', fontWeight: 600, direction: 'rtl', textAlign: 'right' }}>✅ سيتم تأكيد طلبك فور التحقق من التحويل.</p>
+
+                                    <div style={{ marginBottom: '2.5rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.2rem' }}>
+                                            <div style={{ backgroundColor: '#0f172a', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(15, 23, 42, 0.2)' }}>١</div>
+                                            <p style={{ fontSize: '1.1rem', color: '#334155', margin: 0, fontWeight: 700, lineHeight: 1.6 }}>
+                                                قم بتحويل إجمالي الطلب <strong style={{ color: '#ef4444', fontSize: '1.2rem', backgroundColor: '#fee2e2', padding: '4px 10px', borderRadius: '8px', display: 'inline-block' }}>{total.toFixed(0)} ج.م</strong> إلى الرقم التالي:
+                                            </p>
+                                        </div>
+
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', backgroundColor: '#f8fafc', padding: '1.2rem 1.5rem', borderRadius: '12px', border: '1px solid #cbd5e1', marginRight: 'clamp(0rem, 3vw, 3rem)' }}>
+                                            <span style={{ fontWeight: 900, fontSize: 'clamp(1.4rem, 5vw, 1.8rem)', color: '#0f172a', letterSpacing: '2px', direction: 'ltr' }}>{paymentSettings.eWalletNumber || '01000000000'}</span>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    navigator.clipboard.writeText(paymentSettings.eWalletNumber || '01000000000');
+                                                    const btn = e.currentTarget;
+                                                    const originalText = btn.innerHTML;
+                                                    btn.innerHTML = '<span style="display:flex;align-items:center;gap:6px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> تم النسخ بنجاح</span>';
+                                                    btn.style.backgroundColor = '#10b981';
+                                                    setTimeout(() => {
+                                                        btn.innerHTML = originalText;
+                                                        btn.style.backgroundColor = '#0f172a';
+                                                    }, 2000);
+                                                }}
+                                                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0f172a', color: '#fff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontSize: '1rem', transition: 'all 0.2s', width: 'max-content' }}
+                                            >
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                                نسخ الرقم
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '2.5rem' }}>
+                                        <div style={{ backgroundColor: '#25D366', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(37, 211, 102, 0.3)' }}>٢</div>
+                                        <div style={{ flex: 1 }}>
+                                            <p style={{ fontSize: '1.1rem', color: '#334155', margin: '0 0 1rem 0', fontWeight: 700, lineHeight: 1.6 }}>أرسل صورة إيصال التحويل عبر واتساب لتأكيد الدفع سريعاً.</p>
+                                            <a href={`https://wa.me/${(paymentSettings.eWalletNumber || '').startsWith('0') ? '2' + paymentSettings.eWalletNumber : paymentSettings.eWalletNumber}?text=${encodeURIComponent(`مرحباً أكسيس، قمت بتحويل مبلغ ${total.toFixed(0)} ج.م عبر المحفظة. طلب رقم: لم يتم الإصدار بعد ، وهذا إيصال التحويل الخاص بي:`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '14px 28px', borderRadius: '10px', fontWeight: 800, fontSize: '1.1rem', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 8px 16px rgba(37,211,102,0.25)' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                                إرسال الإيصال عبر واتساب
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1.5rem', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '12px' }}>
+                                        <div style={{ backgroundColor: '#ef4444', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(239, 68, 68, 0.3)' }}>٣</div>
+                                        <div style={{ flex: 1, width: '100%' }}>
+                                            <p style={{ fontSize: '1.1rem', color: '#991b1b', margin: '0 0 1rem 0', fontWeight: 800 }}>أدخل رقم المحفظة الذي قمت بالتحويل <strong style={{ textDecoration: 'underline' }}>منه</strong>:</p>
+                                            <input required className="input" type="tel" placeholder="مثال: 01012345678" value={form.vodafoneCashNumber} onChange={e => setForm({ ...form, vodafoneCashNumber: e.target.value })} style={{ direction: 'ltr', textAlign: 'left', border: '2px solid #fca5a5', backgroundColor: '#fff', padding: '16px', fontSize: '1.2rem', borderRadius: '8px', width: '100%', outline: 'none', transition: 'border-color 0.2s' }} onFocus={e => e.currentTarget.style.borderColor = '#ef4444'} onBlur={e => e.currentTarget.style.borderColor = '#fca5a5'} />
+                                            <p style={{ fontSize: '0.9rem', color: '#b91c1c', margin: '1rem 0 0 0', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                بمجرد التأكد، سيتم معالجة شحنتك فوراً.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
 
