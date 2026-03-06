@@ -100,39 +100,7 @@ function SuccessContent() {
                 </div>
             </div>
 
-            {method !== 'Cash on Delivery' && (
-                <div className="wallet-container" style={{ backgroundColor: '#ffffff', padding: 'clamp(1.5rem, 5vw, 2.5rem)', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', marginBottom: '3rem' }}>
-                    <h3 style={{ color: '#0f172a', fontWeight: 900, marginBottom: '2rem', fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', textAlign: 'center' }}>💳 الدفع عبر المحفظة الإلكترونية</h3>
 
-                    <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fca5a5', padding: '1.2rem', borderRadius: '12px', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', flexDirection: 'column', textAlign: 'center', boxShadow: '0 4px 12px rgba(220, 38, 38, 0.05)' }}>
-                        <AlertTriangle color="#dc2626" size={36} />
-                        <div>
-                            <p style={{ color: '#991b1b', fontWeight: 900, margin: '0 0 0.5rem 0', fontSize: '1.2rem', letterSpacing: '-0.5px' }}>تنبيه هام جداً!</p>
-                            <p style={{ color: '#b91c1c', fontWeight: 600, margin: 0, fontSize: '1rem', lineHeight: 1.6 }}>يرجى عدم مغادرة هذه الصفحة قبل إتمام عملية التحويل ورفع صورة الإيصال لتأكيد طلبك.</p>
-                        </div>
-                    </div>
-
-                    <div style={{ marginBottom: '2.5rem', backgroundColor: '#f8fafc', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                        <p style={{ marginBottom: '1rem', fontWeight: 700, color: '#475569', fontSize: '1.1rem' }}>الرجاء التحويل للرقم التالي:</p>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '1rem', backgroundColor: '#fff', padding: '1.2rem', borderRadius: '8px', border: '2px dashed #cbd5e1', marginBottom: '1rem' }}>
-                            <span style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 900, color: '#0f172a', letterSpacing: '2px' }}>{walletNumber}</span>
-                            <button onClick={handleCopyWallet} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: copiedWallet ? '#10b981' : '#0f172a', color: '#fff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, transition: 'all 0.2s', fontSize: '1rem' }}>
-                                <Copy size={18} /> {copiedWallet ? 'تم النسخ بنجاح' : 'نسخ الرقم'}
-                            </button>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                            <span style={{ fontWeight: 600, color: '#475569', fontSize: '1.1rem' }}>المبلغ المطلوب تحويله:</span>
-                            <span style={{ fontWeight: 900, color: '#ef4444', fontSize: '1.2rem' }}>{amount} ج.م</span>
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                        <a href={waLink} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '18px', borderRadius: '12px', fontWeight: 800, fontSize: 'clamp(1rem, 4vw, 1.2rem)', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 8px 16px rgba(37,211,102,0.2)' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                            إرسال إيصال الدفع عبر واتساب
-                        </a>
-                    </div>
-                </div>
-            )}
 
             <button onClick={() => router.push(`/track-order?id=${id}`)} className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', padding: '18px 32px', fontSize: '1.2rem', borderRadius: '8px', width: '100%', justifyContent: 'center', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
                 تتبع طلبي الآن
