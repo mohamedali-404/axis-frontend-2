@@ -130,7 +130,7 @@ export default function ProductCard({ product }: { product: any }) {
                         )}
 
                         {/* Quick Add Button */}
-                        {product.stock > 0 && (
+                        {product.stock !== 0 && (
                             <button
                                 className="product-card-quick-add"
                                 onClick={handleAddToCart}
@@ -196,8 +196,9 @@ export default function ProductCard({ product }: { product: any }) {
                                 className="btn-primary"
                                 style={{ width: '100%', padding: '14px', fontSize: '0.95rem' }}
                                 onClick={handleAddToCart}
+                                disabled={product.stock === 0}
                             >
-                                {t('product.addToCart')} - {product.sizes?.[0] || 'OS'}
+                                {product.stock === 0 ? t('product.soldOut') : `${t('product.addToCart')} - ${product.sizes?.[0] || 'OS'}`}
                             </button>
                             <Link
                                 href={`/product/${product._id}`}
