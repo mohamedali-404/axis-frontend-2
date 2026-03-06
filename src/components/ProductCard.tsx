@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import { ShoppingBag } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCartStore } from '@/store/cartStore';
 
@@ -88,16 +89,17 @@ export default function ProductCard({ product }: { product: any }) {
                             <button
                                 className="product-card-quick-add"
                                 onClick={handleAddToCart}
+                                aria-label="Quick Add"
                             >
-                                + Add to Cart
+                                <ShoppingBag size={18} />
                             </button>
                         )}
                     </div>
 
                     {/* Card Info */}
                     <div className="product-card-info">
-                        <h3 className="product-card-name">{product.name}</h3>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <h3 className="product-card-name" title={product.name}>{product.name}</h3>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
                             {product.discountPrice ? (
                                 <>
                                     <span className="product-card-price-sale">{product.discountPrice.toFixed(0)} ج.م</span>
