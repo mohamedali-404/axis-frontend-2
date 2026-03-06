@@ -131,7 +131,8 @@ export default function AdminDashboard() {
                 setCoupons(data);
             } else if (activeTab === 'settings') {
                 const { data } = await axios.get(`https://axis-backend-2.onrender.com/api/settings`);
-                setSettings(data);
+                // Ensure announcementText exists in state (may be missing from older DB documents)
+                setSettings({ announcementText: '', ...data });
             }
         } catch (err) {
             console.error(err);
@@ -705,6 +706,15 @@ export default function AdminDashboard() {
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                         <label style={{ fontWeight: 600, fontSize: '0.9rem' }}>Sub Headline</label>
                                         <input className="input" value={settings.subHeadline} onChange={e => setSettings({ ...settings, subHeadline: e.target.value })} />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 className="admin-section-subtitle">📢 Announcement Bar / شريط الإعلان</h4>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                        <label style={{ fontWeight: 600, fontSize: '0.9rem' }}>Announcement Text (Scrolling Ticker)</label>
+                                        <input className="input" placeholder="e.g. Free shipping on orders over $50 ✦ New arrivals every week" value={settings.announcementText || ''} onChange={e => setSettings({ ...settings, announcementText: e.target.value })} />
+                                        <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0 }}>This text will scroll across the top bar of your website. Use ✦ to separate messages.</p>
                                     </div>
                                 </div>
 

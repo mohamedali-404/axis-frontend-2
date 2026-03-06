@@ -66,7 +66,7 @@ export default async function RootLayout({
             <body style={themeColors}>
                 <LanguageProvider>
                     <Navbar />
-                    <main style={{ minHeight: 'calc(100vh - 200px)' }}>{children}</main>
+                    <main style={{ minHeight: 'calc(100vh - 200px)', paddingTop: 0 }}>{children}</main>
                     <HideOnAdmin>
                         <Footer />
                     </HideOnAdmin>
