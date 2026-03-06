@@ -131,7 +131,10 @@ export default function Checkout() {
             if (res.ok) {
                 const createdOrder = await res.json();
                 clearCart();
-                router.push(`/checkout/success?id=${createdOrder._id}`);
+                const methodParam = encodeURIComponent(orderData.paymentMethod);
+                const amountParam = orderData.total.toFixed(0);
+                const walletParam = encodeURIComponent(paymentSettings.eWalletNumber || '01000000000');
+                router.push(`/checkout/success?id=${createdOrder._id}&amount=${amountParam}&method=${methodParam}&walletNumber=${walletParam}`);
             } else {
                 alert(t('checkout.orderFailed'));
                 setIsProcessing(false);

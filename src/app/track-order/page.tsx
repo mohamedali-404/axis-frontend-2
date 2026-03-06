@@ -57,9 +57,12 @@ function TrackOrderContent() {
     };
 
     const getStatusStep = (status: string) => {
-        if (status === 'Pending') return 1;
-        if (status === 'Shipped') return 2;
-        if (status === 'Delivered') return 3;
+        if (status === 'Pending' || status === 'Placed') return 1;
+        if (status === 'Payment Review') return 2;
+        if (status === 'Confirmed') return 3;
+        if (status === 'Preparing') return 4;
+        if (status === 'Shipped') return 5;
+        if (status === 'Delivered') return 6;
         return 1;
     };
 
@@ -100,33 +103,38 @@ function TrackOrderContent() {
                 <div style={{ animation: 'fadeIn 0.5s ease-out', marginTop: '3rem', borderTop: '2px dashed var(--border-color)', paddingTop: '3rem' }}>
 
                     {/* Status Timeline */}
-                    <div style={{ marginBottom: '3rem', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '20px', left: '10%', right: '10%', height: '4px', backgroundColor: 'var(--border-color)', zIndex: 1 }}>
-                            <div style={{ height: '100%', backgroundColor: 'var(--accent-color)', width: getStatusStep(order.status) === 1 ? '0%' : getStatusStep(order.status) === 2 ? '50%' : '100%', transition: 'width 0.5s ease-in-out' }} />
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
-                            {[
-                                { step: 1, label: t('track.pending'), icon: '📦' },
-                                { step: 2, label: t('track.shipped'), icon: '🚚' },
-                                { step: 3, label: t('track.delivered'), icon: '✅' }
-                            ].map((s) => {
-                                const isActive = getStatusStep(order.status) >= s.step;
-                                return (
-                                    <div key={s.step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                                        <div style={{
-                                            width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem',
-                                            backgroundColor: isActive ? 'var(--accent-color)' : 'rgb(var(--background-start-rgb))',
-                                            color: isActive ? 'var(--accent-foreground)' : 'var(--accent-color)',
-                                            border: `2px solid ${isActive ? 'var(--accent-color)' : 'var(--border-color)'}`,
-                                            transition: 'all 0.3s ease',
-                                            boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
-                                        }}>
-                                            {s.icon}
+                    <div style={{ marginBottom: '3rem', position: 'relative', overflowX: 'auto', paddingBottom: '1rem' }}>
+                        <div style={{ minWidth: '450px', position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: '20px', left: '8%', right: '8%', height: '4px', backgroundColor: 'var(--border-color)', zIndex: 1 }}>
+                                <div style={{ height: '100%', backgroundColor: 'var(--accent-color)', width: `${(getStatusStep(order.status) - 1) * 20}%`, transition: 'width 0.5s ease-in-out' }} />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
+                                {[
+                                    { step: 1, label: 'Placed', icon: '🆕' },
+                                    { step: 2, label: 'Payment Review', icon: '💸' },
+                                    { step: 3, label: 'Confirmed', icon: '✅' },
+                                    { step: 4, label: 'Preparing', icon: '📦' },
+                                    { step: 5, label: 'Shipped', icon: '🚚' },
+                                    { step: 6, label: 'Delivered', icon: '🎉' }
+                                ].map((s) => {
+                                    const isActive = getStatusStep(order.status) >= s.step;
+                                    return (
+                                        <div key={s.step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                                            <div style={{
+                                                width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
+                                                backgroundColor: isActive ? 'var(--accent-color)' : 'rgb(var(--background-start-rgb))',
+                                                color: isActive ? 'var(--accent-foreground)' : 'var(--accent-color)',
+                                                border: `2px solid ${isActive ? 'var(--accent-color)' : 'var(--border-color)'}`,
+                                                transition: 'all 0.3s ease',
+                                                boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                                            }}>
+                                                {s.icon}
+                                            </div>
+                                            <span style={{ fontWeight: isActive ? 800 : 700, fontSize: '0.7rem', color: isActive ? 'inherit' : 'var(--border-color)', textAlign: 'center' }}>{s.label}</span>
                                         </div>
-                                        <span style={{ fontWeight: isActive ? 800 : 600, fontSize: '0.85rem', color: isActive ? 'inherit' : 'var(--border-color)' }}>{s.label}</span>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
 
@@ -163,6 +171,13 @@ function TrackOrderContent() {
                             <span>{t('track.totalAmount')}</span> <span style={{ color: '#10b981', fontSize: '1.1rem' }}>{order.total.toFixed(0)} ج.م</span>
                         </p>
                     </div>
+
+                    {order.receiptImage && (
+                        <div style={{ marginBottom: '1.5rem', backgroundColor: 'var(--secondary-color)', padding: '1.5rem', borderRadius: '12px', border: '1px dashed var(--border-color)' }}>
+                            <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.1rem' }}>{t('track.receiptPreview') || 'Receipt Preview'}</h4>
+                            <img src={order.receiptImage} alt="Payment Receipt" style={{ width: '100%', maxWidth: '300px', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'block', margin: '0 auto' }} />
+                        </div>
+                    )}
 
                     <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.1rem' }}>{t('track.items')}</h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
