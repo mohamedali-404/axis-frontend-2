@@ -130,11 +130,6 @@ function SuccessContent() {
                         <a href={waLink} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '18px', borderRadius: '12px', fontWeight: 800, fontSize: 'clamp(1rem, 4vw, 1.2rem)', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 8px 16px rgba(37,211,102,0.2)' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
                             إرسال إيصال الدفع عبر واتساب
                         </a>
-
-                        <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: receiptOk ? '#10b981' : '#fff', color: receiptOk ? '#fff' : '#0f172a', border: receiptOk ? '2px solid #10b981' : '2px dashed #cbd5e1', padding: '18px', borderRadius: '12px', fontWeight: 800, fontSize: 'clamp(1rem, 4vw, 1.2rem)', transition: 'all 0.3s' }}>
-                            {receiptOk ? '✅ تم رفع الإيصال بنجاح!' : (uploading ? 'جاري الرفع...' : 'رفع صورة إيصال الدفع هنا 📎')}
-                            {!receiptOk && !uploading && <input type="file" accept=".jpg,.jpeg,.png,.webp" onChange={handleFileUpload} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />}
-                        </div>
                     </div>
                 </div>
             )}
