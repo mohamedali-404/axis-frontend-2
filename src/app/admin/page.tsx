@@ -23,10 +23,10 @@ export default function AdminDashboard() {
 
     // Products
     const [products, setProducts] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({ name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[], colorVariants: [] as { name: string; hexCode: string; imageObjs: File[]; existingImages: string[] }[] });
+    const [productForm, setProductForm] = useState({ name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', sleeveType: 'Short', imageObjs: [] as File[], colorVariants: [] as { name: string; hexCode: string; imageObjs: File[]; existingImages: string[] }[] });
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
-    const emptyForm = { name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', imageObjs: [] as File[], colorVariants: [] as { name: string; hexCode: string; imageObjs: File[]; existingImages: string[] }[] };
+    const emptyForm = { name: '', price: '', discountPrice: '', stock: '', descriptionEn: '', descriptionAr: '', sizes: 'S, M, L, XL', sleeveType: 'Short', imageObjs: [] as File[], colorVariants: [] as { name: string; hexCode: string; imageObjs: File[]; existingImages: string[] }[] };
 
     // Orders
     const [orders, setOrders] = useState<any[]>([]);
@@ -211,6 +211,7 @@ export default function AdminDashboard() {
                 descriptionEn: productForm.descriptionEn || '',
                 descriptionAr: productForm.descriptionAr || '',
                 sizes: productForm.sizes.split(',').map((s: string) => s.trim()).filter(Boolean),
+                sleeveType: productForm.sleeveType,
                 colorVariants: finalColorVariants
             };
 
@@ -243,6 +244,7 @@ export default function AdminDashboard() {
             descriptionEn: p.descriptionEn || '',
             descriptionAr: p.descriptionAr || '',
             sizes: p.sizes ? p.sizes.join(', ') : 'S, M, L, XL',
+            sleeveType: p.sleeveType || 'Short',
             imageObjs: [] as File[],
             colorVariants: (p.colorVariants || []).map((cv: any) => ({ name: cv.name, hexCode: cv.hexCode, imageObjs: [] as File[], existingImages: cv.images || [] }))
         });
@@ -502,6 +504,13 @@ export default function AdminDashboard() {
                                     <label className="field-label">{t('admin.availableSizes')}</label>
                                     <input required className="input" placeholder="e.g. S, M, L, XL" value={productForm.sizes} onChange={e => setProductForm({ ...productForm, sizes: e.target.value })} />
                                     <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0 }}>{t('admin.sizesHint')}</p>
+                                </div>
+                                <div className="field-group full-width">
+                                    <label className="field-label">Sleeve Type</label>
+                                    <select className="input" value={productForm.sleeveType} onChange={e => setProductForm({ ...productForm, sleeveType: e.target.value })}>
+                                        <option value="Short">Short Sleeve</option>
+                                        <option value="Long">Long Sleeve</option>
+                                    </select>
                                 </div>
 
                                 {/* ── COLOR VARIANTS (OPTIONAL) ── */}
