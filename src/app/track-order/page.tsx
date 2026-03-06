@@ -172,12 +172,7 @@ function TrackOrderContent() {
                         </p>
                     </div>
 
-                    {order.receiptImage && (
-                        <div style={{ marginBottom: '1.5rem', backgroundColor: 'var(--secondary-color)', padding: '1.5rem', borderRadius: '12px', border: '1px dashed var(--border-color)' }}>
-                            <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.1rem' }}>{t('track.receiptPreview') || 'Receipt Preview'}</h4>
-                            <img src={order.receiptImage} alt="Payment Receipt" style={{ width: '100%', maxWidth: '300px', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'block', margin: '0 auto' }} />
-                        </div>
-                    )}
+
 
                     <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.1rem' }}>{t('track.items')}</h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

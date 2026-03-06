@@ -214,12 +214,26 @@ export default function Checkout() {
                                     <p style={{ fontSize: '0.95rem', color: '#4338ca', marginBottom: '0.5rem', fontWeight: 700, direction: 'rtl', textAlign: 'right' }}>
                                         ١. برجاء تحويل إجمالي المبلغ <strong style={{ fontSize: '1.1rem', color: '#ef4444' }}>{total.toFixed(0)} ج.م</strong> على الرقم التالي:
                                     </p>
-                                    <div style={{ backgroundColor: '#fff', padding: '0.5rem 1rem', borderRadius: '4px', display: 'inline-block', fontWeight: 800, fontSize: '1.2rem', color: '#ef4444', marginBottom: '0.8rem', border: '2px dashed #c7d2fe' }}>
-                                        {paymentSettings.eWalletNumber || '01000000000'}
+                                    <div style={{ backgroundColor: '#fff', padding: '1rem', borderRadius: '8px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '2px dashed #c7d2fe', marginBottom: '1rem' }}>
+                                        <span style={{ fontWeight: 900, fontSize: '1.4rem', color: '#ef4444', letterSpacing: '1px' }}>{paymentSettings.eWalletNumber || '01000000000'}</span>
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                navigator.clipboard.writeText(paymentSettings.eWalletNumber || '01000000000');
+                                                const btn = e.currentTarget;
+                                                const originalText = btn.innerHTML;
+                                                btn.innerHTML = 'تم النسخ!';
+                                                setTimeout(() => btn.innerHTML = originalText, 2000);
+                                            }}
+                                            style={{ backgroundColor: '#4f46e5', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem' }}
+                                        >
+                                            نسخ
+                                        </button>
                                     </div>
-                                    <p style={{ fontSize: '0.9rem', color: '#4338ca', marginBottom: '1rem', fontWeight: 600, direction: 'rtl', textAlign: 'right' }}>
-                                        ثم أرسل سكرين شوت للتحويل على نفس الرقم واتس اب.
-                                    </p>
+                                    <a href={`https://wa.me/${(paymentSettings.eWalletNumber || '').startsWith('0') ? '2' + paymentSettings.eWalletNumber : paymentSettings.eWalletNumber}?text=${encodeURIComponent('Hello AXIS, I want to transfer payment for my new order.')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '12px', borderRadius: '8px', fontWeight: 800, textAlign: 'center', marginBottom: '1.5rem', boxShadow: '0 4px 12px rgba(37,211,102,0.3)' }}>
+                                        إرسال إيصال الدفع عبر واتساب
+                                    </a>
                                     <p style={{ fontSize: '0.95rem', color: '#4338ca', marginBottom: '1rem', fontWeight: 700, direction: 'rtl', textAlign: 'right' }}>
                                         ٢. أدخل رقم المحفظة اللي حولت <strong>منه</strong> للتأكيد:
                                     </p>
