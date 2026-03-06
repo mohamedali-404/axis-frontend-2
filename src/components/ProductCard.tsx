@@ -14,13 +14,17 @@ export default function ProductCard({ product }: { product: any }) {
     const { t, lang } = useLanguage();
     const addItem = useCartStore((state) => state.addItem);
 
+    // Sanitize images to prevent broken images
+    const validImages = product.images?.filter((img: string) => img && typeof img === 'string' && img.trim() !== '') || [];
+    const imagesToDisplay = validImages.length > 0 ? validImages : ['https://via.placeholder.com/600'];
+
     const handleMouseEnter = () => {
         setIsHovered(true);
-        if (product.images && product.images.length > 1) {
+        if (imagesToDisplay.length > 1) {
             let i = 1;
             setCurrentImgIndex(i);
             hoverIntervalRef.current = setInterval(() => {
-                i = (i + 1) % product.images.length;
+                i = (i + 1) % imagesToDisplay.length;
                 setCurrentImgIndex(i);
             }, 1200);
         }
@@ -46,7 +50,7 @@ export default function ProductCard({ product }: { product: any }) {
             price: product.discountPrice || product.price,
             size: product.sizes?.[0] || 'OS',
             quantity: 1,
-            image: product.images?.[0] || 'https://via.placeholder.com/150',
+            image: imagesToDisplay[0],
         });
         setIsModalOpen(false);
     };
@@ -65,7 +69,7 @@ export default function ProductCard({ product }: { product: any }) {
                     <div className="product-card-image-wrap">
                         {/* Desktop: Auto Preview Slider */}
                         <div className="desktop-preview">
-                            {(product.images?.length ? product.images : ['https://via.placeholder.com/600']).map((img: string, idx: number) => {
+                            {imagesToDisplay.map((img: string, idx: number) => {
                                 const isActive = idx === currentImgIndex;
                                 return (
                                     <img
@@ -74,6 +78,7 @@ export default function ProductCard({ product }: { product: any }) {
                                         alt={product.name}
                                         loading="lazy"
                                         className={`preview-img ${isActive ? 'active' : ''}`}
+                                        onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/600'; }}
                                     />
                                 );
                             })}
@@ -88,13 +93,14 @@ export default function ProductCard({ product }: { product: any }) {
                                 setCurrentImgIndex(index);
                             }}
                         >
-                            {(product.images?.length ? product.images : ['https://via.placeholder.com/600']).map((img: string, idx: number) => (
+                            {imagesToDisplay.map((img: string, idx: number) => (
                                 <img
                                     key={idx}
                                     src={img}
                                     alt={product.name}
                                     loading="lazy"
                                     className="swipe-img"
+                                    onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/600'; }}
                                 />
                             ))}
                         </div>
@@ -115,9 +121,9 @@ export default function ProductCard({ product }: { product: any }) {
                         )}
 
                         {/* Indicator Dots */}
-                        {product.images?.length > 1 && (
+                        {imagesToDisplay.length > 1 && (
                             <div className="product-card-dots">
-                                {product.images.map((_: any, idx: number) => (
+                                {imagesToDisplay.map((_: any, idx: number) => (
                                     <span key={idx} className={`dot ${idx === currentImgIndex ? 'active' : ''}`} />
                                 ))}
                             </div>
@@ -160,10 +166,11 @@ export default function ProductCard({ product }: { product: any }) {
 
                         <div style={{ width: '100%', aspectRatio: '3/4', backgroundColor: 'var(--secondary-color)', borderRadius: '8px', overflow: 'hidden' }}>
                             <img
-                                src={product.images?.[0] || 'https://via.placeholder.com/600'}
+                                src={imagesToDisplay[0]}
                                 alt={product.name}
                                 loading="lazy"
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/600'; }}
                             />
                         </div>
 
