@@ -209,12 +209,7 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
         return baseImages;
     })();
 
-    // Auto-select first color if product has color variants
-    useEffect(() => {
-        if (colorVariants.length > 0 && !selectedColor) {
-            setSelectedColor(colorVariants[0].name);
-        }
-    }, [colorVariants]);
+
 
     // Close size guide on Escape
     useEffect(() => {
@@ -311,7 +306,7 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
                                         key={cv.name}
                                         className={`color-swatch${selectedColor === cv.name ? ' selected' : ''}`}
                                         style={{ '--swatch-color': cv.hexCode } as React.CSSProperties}
-                                        onClick={() => setSelectedColor(cv.name)}
+                                        onClick={() => setSelectedColor(prev => prev === cv.name ? null : cv.name)}
                                         title={cv.name}
                                         aria-label={`Select color ${cv.name}`}
                                         aria-pressed={selectedColor === cv.name}

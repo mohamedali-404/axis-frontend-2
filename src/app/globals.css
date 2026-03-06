@@ -2468,3 +2468,36 @@ a {
     background-color: rgba(10, 102, 194, 0.15) !important;
     transform: translateY(-2px);
 }
+
+/* ================================
+   COLOR VARIANTS
+   ================================ */
+.color-selector {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--swatch-color, #000);
+    border: 2px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.color-swatch.selected {
+    border: 2px solid var(--accent-color, #000);
+    transform: scale(1.1);
+    box-shadow: 0 0 0 2px #fff inset, 0 4px 8px rgba(0, 0, 0, 0.15);
+}
