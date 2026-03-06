@@ -101,34 +101,37 @@ function SuccessContent() {
             </div>
 
             {method !== 'Cash on Delivery' && (
-                <div className="wallet-container" style={{ backgroundColor: '#eef2ff', padding: 'clamp(1rem, 4vw, 2rem)', borderRadius: '12px', border: '2px solid #6366f1', marginBottom: '2.5rem' }}>
-                    <h3 style={{ color: '#4338ca', fontWeight: 800, marginBottom: '1.5rem', fontSize: 'clamp(1.1rem, 4vw, 1.4rem)' }}>💳 الدفع عبر المحفظة الإلكترونية</h3>
+                <div className="wallet-container" style={{ backgroundColor: '#ffffff', padding: 'clamp(1.5rem, 5vw, 2.5rem)', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', marginBottom: '3rem' }}>
+                    <h3 style={{ color: '#0f172a', fontWeight: 900, marginBottom: '2rem', fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', textAlign: 'center' }}>💳 الدفع عبر المحفظة الإلكترونية</h3>
 
-                    <div style={{ backgroundColor: '#fee2e2', border: '2px solid #ef4444', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexDirection: 'column', textAlign: 'center' }}>
-                        <AlertTriangle color="#ef4444" size={32} />
+                    <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fca5a5', padding: '1.2rem', borderRadius: '12px', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', flexDirection: 'column', textAlign: 'center', boxShadow: '0 4px 12px rgba(220, 38, 38, 0.05)' }}>
+                        <AlertTriangle color="#dc2626" size={36} />
                         <div>
-                            <p style={{ color: '#b91c1c', fontWeight: 900, margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>⚠️ تنبيه هام جداً!</p>
-                            <p style={{ color: '#b91c1c', fontWeight: 700, margin: 0, fontSize: '0.95rem' }}>يرجى عدم مغادرة هذه الصفحة قبل إتمام عملية التحويل ورفع صورة الإيصال لتأكيد طلبك.</p>
+                            <p style={{ color: '#991b1b', fontWeight: 900, margin: '0 0 0.5rem 0', fontSize: '1.2rem', letterSpacing: '-0.5px' }}>تنبيه هام جداً!</p>
+                            <p style={{ color: '#b91c1c', fontWeight: 600, margin: 0, fontSize: '1rem', lineHeight: 1.6 }}>يرجى عدم مغادرة هذه الصفحة قبل إتمام عملية التحويل ورفع صورة الإيصال لتأكيد طلبك.</p>
                         </div>
                     </div>
 
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <p style={{ marginBottom: '0.8rem', fontWeight: 700, color: '#4338ca', fontSize: '1rem' }}>أو قم بالتحويل للرقم التالي:</p>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '1rem', backgroundColor: '#fff', padding: '1rem', borderRadius: '8px', border: '1px solid #c7d2fe' }}>
-                            <span style={{ fontSize: 'clamp(1.2rem, 5vw, 1.6rem)', fontWeight: 900, color: '#ef4444', letterSpacing: '2px' }}>{walletNumber}</span>
-                            <button onClick={handleCopyWallet} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: copiedWallet ? '#10b981' : '#4f46e5', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700 }}>
-                                <Copy size={16} /> {copiedWallet ? 'تم النسخ' : 'نسخ'}
+                    <div style={{ marginBottom: '2.5rem', backgroundColor: '#f8fafc', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                        <p style={{ marginBottom: '1rem', fontWeight: 700, color: '#475569', fontSize: '1.1rem' }}>الرجاء التحويل للرقم التالي:</p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '1rem', backgroundColor: '#fff', padding: '1.2rem', borderRadius: '8px', border: '2px dashed #cbd5e1', marginBottom: '1rem' }}>
+                            <span style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 900, color: '#0f172a', letterSpacing: '2px' }}>{walletNumber}</span>
+                            <button onClick={handleCopyWallet} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: copiedWallet ? '#10b981' : '#0f172a', color: '#fff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, transition: 'all 0.2s', fontSize: '1rem' }}>
+                                <Copy size={18} /> {copiedWallet ? 'تم النسخ بنجاح' : 'نسخ الرقم'}
                             </button>
                         </div>
-                        <p style={{ fontWeight: 800, color: '#ef4444', marginTop: '1rem', fontSize: '1.1rem' }}>المبلغ المطلوب: {amount} ج.م</p>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                            <span style={{ fontWeight: 600, color: '#475569', fontSize: '1.1rem' }}>المبلغ المطلوب تحويله:</span>
+                            <span style={{ fontWeight: 900, color: '#ef4444', fontSize: '1.2rem' }}>{amount} ج.م</span>
+                        </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <a href={waLink} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '16px', borderRadius: '8px', fontWeight: 800, fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(37,211,102,0.3)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                        <a href={waLink} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '18px', borderRadius: '12px', fontWeight: 800, fontSize: 'clamp(1rem, 4vw, 1.2rem)', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 8px 16px rgba(37,211,102,0.2)' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
                             إرسال إيصال الدفع عبر واتساب
                         </a>
 
-                        <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: receiptOk ? '#10b981' : '#fff', color: receiptOk ? '#fff' : '#4338ca', border: '2px dashed #6366f1', padding: '16px', borderRadius: '8px', fontWeight: 800, fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', transition: 'all 0.3s' }}>
+                        <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: receiptOk ? '#10b981' : '#fff', color: receiptOk ? '#fff' : '#0f172a', border: receiptOk ? '2px solid #10b981' : '2px dashed #cbd5e1', padding: '18px', borderRadius: '12px', fontWeight: 800, fontSize: 'clamp(1rem, 4vw, 1.2rem)', transition: 'all 0.3s' }}>
                             {receiptOk ? '✅ تم رفع الإيصال بنجاح!' : (uploading ? 'جاري الرفع...' : 'رفع صورة إيصال الدفع هنا 📎')}
                             {!receiptOk && !uploading && <input type="file" accept=".jpg,.jpeg,.png,.webp" onChange={handleFileUpload} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />}
                         </div>
