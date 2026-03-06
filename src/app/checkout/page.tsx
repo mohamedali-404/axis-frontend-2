@@ -94,9 +94,13 @@ export default function Checkout() {
             return;
         }
         setStep(2);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const prevStep = () => { setStep(1); };
+    const prevStep = () => {
+        setStep(1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -201,9 +205,16 @@ export default function Checkout() {
 
                     {step === 2 && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            <div>
-                                <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase', fontSize: '0.9rem', color: 'var(--accent-color)' }}>{t('checkout.paymentMethod')} {t('checkout.required')}</label>
-                                <select className="select" value={form.paymentMethod} onChange={e => setForm({ ...form, paymentMethod: e.target.value })}>
+                            <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', border: '2px solid #cbd5e1', borderRadius: '12px' }}>
+                                <label style={{ display: 'block', fontWeight: 900, marginBottom: '1rem', textTransform: 'uppercase', fontSize: '1.2rem', color: 'var(--accent-color)' }}>
+                                    {t('checkout.paymentMethod')} <span style={{ color: '#ef4444' }}>*</span>
+                                </label>
+                                <select
+                                    className="select"
+                                    style={{ padding: '18px', fontSize: '1.3rem', fontWeight: 700, borderRadius: '8px', border: '2px solid var(--accent-color)', width: '100%', cursor: 'pointer', backgroundColor: '#fff', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                                    value={form.paymentMethod}
+                                    onChange={e => setForm({ ...form, paymentMethod: e.target.value })}
+                                >
                                     {paymentSettings.cashOnDelivery !== false && <option value="Cash on Delivery">{t('checkout.cashOnDelivery')}</option>}
                                     {paymentSettings.eWallet !== false && <option value={paymentSettings.eWalletName || 'E-Wallet / Cash'}>{paymentSettings.eWalletName || 'E-Wallet / Cash'}</option>}
                                 </select>
