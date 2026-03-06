@@ -1,8 +1,7 @@
 'use client';
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { CheckCircle, Copy, ArrowRight } from 'lucide-react';
-import { QRCodeCanvas } from 'qrcode.react';
+import { CheckCircle, Copy, ArrowRight, AlertTriangle } from 'lucide-react';
 
 function SuccessContent() {
     const searchParams = useSearchParams();
@@ -105,14 +104,12 @@ function SuccessContent() {
                 <div style={{ backgroundColor: '#eef2ff', padding: '2rem', borderRadius: '12px', border: '2px solid #6366f1', marginBottom: '2.5rem' }}>
                     <h3 style={{ color: '#4338ca', fontWeight: 800, marginBottom: '1.5rem', fontSize: '1.4rem' }}>💳 الدفع عبر المحفظة الإلكترونية</h3>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <img src="/icon-192x192.png" alt="AXIS" style={{ width: 40, height: 40, borderRadius: '8px' }} onError={(e: any) => e.target.style.display = 'none'} />
-                            <div style={{ backgroundColor: '#fff', padding: '10px', borderRadius: '12px', border: '1px solid #c7d2fe', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
-                                <QRCodeCanvas value={walletNumber} size={150} level="H" includeMargin imageSettings={{ src: "/icon-192x192.png", height: 24, width: 24, excavate: true }} />
-                            </div>
+                    <div style={{ backgroundColor: '#fee2e2', border: '2px solid #ef4444', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <AlertTriangle color="#ef4444" size={32} />
+                        <div>
+                            <p style={{ color: '#b91c1c', fontWeight: 900, margin: 0, fontSize: '1.1rem' }}>⚠️ تنبيه هام جداً!</p>
+                            <p style={{ color: '#b91c1c', fontWeight: 700, margin: 0 }}>يرجى عدم مغادرة هذه الصفحة قبل إتمام عملية التحويل البنكي/المحفظة ورفع صورة الإيصال لتأكيد طلبك.</p>
                         </div>
-                        <p style={{ fontSize: '1rem', fontWeight: 700, color: '#4338ca', margin: 0 }}>امسح الكود عبر تطبيق محفظتك</p>
                     </div>
 
                     <div style={{ marginBottom: '1.5rem' }}>
