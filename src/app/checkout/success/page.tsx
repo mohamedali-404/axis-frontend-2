@@ -101,34 +101,34 @@ function SuccessContent() {
             </div>
 
             {method !== 'Cash on Delivery' && (
-                <div style={{ backgroundColor: '#eef2ff', padding: '2rem', borderRadius: '12px', border: '2px solid #6366f1', marginBottom: '2.5rem' }}>
-                    <h3 style={{ color: '#4338ca', fontWeight: 800, marginBottom: '1.5rem', fontSize: '1.4rem' }}>💳 الدفع عبر المحفظة الإلكترونية</h3>
+                <div className="wallet-container" style={{ backgroundColor: '#eef2ff', padding: 'clamp(1rem, 4vw, 2rem)', borderRadius: '12px', border: '2px solid #6366f1', marginBottom: '2.5rem' }}>
+                    <h3 style={{ color: '#4338ca', fontWeight: 800, marginBottom: '1.5rem', fontSize: 'clamp(1.1rem, 4vw, 1.4rem)' }}>💳 الدفع عبر المحفظة الإلكترونية</h3>
 
-                    <div style={{ backgroundColor: '#fee2e2', border: '2px solid #ef4444', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ backgroundColor: '#fee2e2', border: '2px solid #ef4444', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexDirection: 'column', textAlign: 'center' }}>
                         <AlertTriangle color="#ef4444" size={32} />
                         <div>
-                            <p style={{ color: '#b91c1c', fontWeight: 900, margin: 0, fontSize: '1.1rem' }}>⚠️ تنبيه هام جداً!</p>
-                            <p style={{ color: '#b91c1c', fontWeight: 700, margin: 0 }}>يرجى عدم مغادرة هذه الصفحة قبل إتمام عملية التحويل البنكي/المحفظة ورفع صورة الإيصال لتأكيد طلبك.</p>
+                            <p style={{ color: '#b91c1c', fontWeight: 900, margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>⚠️ تنبيه هام جداً!</p>
+                            <p style={{ color: '#b91c1c', fontWeight: 700, margin: 0, fontSize: '0.95rem' }}>يرجى عدم مغادرة هذه الصفحة قبل إتمام عملية التحويل ورفع صورة الإيصال لتأكيد طلبك.</p>
                         </div>
                     </div>
 
                     <div style={{ marginBottom: '1.5rem' }}>
-                        <p style={{ marginBottom: '0.5rem', fontWeight: 700, color: '#4338ca' }}>أو قم بالتحويل للرقم التالي:</p>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}>
-                            <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ef4444', letterSpacing: '2px' }}>{walletNumber}</span>
-                            <button onClick={handleCopyWallet} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: copiedWallet ? '#10b981' : '#4f46e5', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700 }}>
+                        <p style={{ marginBottom: '0.8rem', fontWeight: 700, color: '#4338ca', fontSize: '1rem' }}>أو قم بالتحويل للرقم التالي:</p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '1rem', backgroundColor: '#fff', padding: '1rem', borderRadius: '8px', border: '1px solid #c7d2fe' }}>
+                            <span style={{ fontSize: 'clamp(1.2rem, 5vw, 1.6rem)', fontWeight: 900, color: '#ef4444', letterSpacing: '2px' }}>{walletNumber}</span>
+                            <button onClick={handleCopyWallet} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: copiedWallet ? '#10b981' : '#4f46e5', color: '#fff', border: 'none', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700 }}>
                                 <Copy size={16} /> {copiedWallet ? 'تم النسخ' : 'نسخ'}
                             </button>
                         </div>
-                        <p style={{ fontWeight: 800, color: '#ef4444', marginTop: '1rem' }}>المبلغ المطلوب: {amount} ج.م</p>
+                        <p style={{ fontWeight: 800, color: '#ef4444', marginTop: '1rem', fontSize: '1.1rem' }}>المبلغ المطلوب: {amount} ج.م</p>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <a href={waLink} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '14px', borderRadius: '8px', fontWeight: 800, fontSize: '1.1rem', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(37,211,102,0.3)' }}>
+                        <a href={waLink} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '16px', borderRadius: '8px', fontWeight: 800, fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(37,211,102,0.3)' }}>
                             إرسال إيصال الدفع عبر واتساب
                         </a>
 
-                        <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: receiptOk ? '#10b981' : '#fff', color: receiptOk ? '#fff' : '#4338ca', border: '2px dashed #6366f1', padding: '14px', borderRadius: '8px', fontWeight: 800, transition: 'all 0.3s' }}>
+                        <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: receiptOk ? '#10b981' : '#fff', color: receiptOk ? '#fff' : '#4338ca', border: '2px dashed #6366f1', padding: '16px', borderRadius: '8px', fontWeight: 800, fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', transition: 'all 0.3s' }}>
                             {receiptOk ? '✅ تم رفع الإيصال بنجاح!' : (uploading ? 'جاري الرفع...' : 'رفع صورة إيصال الدفع هنا 📎')}
                             {!receiptOk && !uploading && <input type="file" accept=".jpg,.jpeg,.png,.webp" onChange={handleFileUpload} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />}
                         </div>
@@ -136,7 +136,7 @@ function SuccessContent() {
                 </div>
             )}
 
-            <button onClick={() => router.push(`/track-order?id=${id}`)} className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', padding: '16px 32px', fontSize: '1.1rem', borderRadius: '8px', width: '100%', justifyContent: 'center' }}>
+            <button onClick={() => router.push(`/track-order?id=${id}`)} className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', padding: '18px 32px', fontSize: '1.2rem', borderRadius: '8px', width: '100%', justifyContent: 'center', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
                 تتبع طلبي الآن
                 <ArrowRight size={20} />
             </button>
