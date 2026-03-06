@@ -151,6 +151,22 @@ export default function Checkout() {
 
     return (
         <div style={{ padding: '8rem 2rem 4rem', maxWidth: 1400, margin: '0 auto', display: 'flex', gap: '4rem', flexWrap: 'wrap' }}>
+            <style>{`
+                .e-wallet-container { padding: clamp(1rem, 3vw, 2.5rem); }
+                .ew-step-num { width: 28px; height: 28px; font-size: 1rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 900; }
+                .ew-text { font-size: clamp(0.9rem, 2.5vw, 1.1rem); line-height: 1.6; margin: 0; }
+                .ew-copy-box { display: flex; flex-direction: column; gap: 0.8rem; background-color: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #cbd5e1; margin-top: 0.8rem; }
+                .ew-number { font-weight: 900; font-size: clamp(1.2rem, 5vw, 1.6rem); color: #0f172a; letter-spacing: 2px; direction: ltr; text-align: center; }
+                .ew-copy-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: #0f172a; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.95rem; transition: all 0.2s; width: 100%; }
+                .ew-wa-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; background-color: #25D366; color: #fff; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: 800; font-size: 0.95rem; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 8px 16px rgba(37,211,102,0.25); width: 100%; margin-top: 0.5rem; }
+                @media (min-width: 640px) {
+                    .ew-step-num { width: 32px; height: 32px; font-size: 1.1rem; }
+                    .ew-copy-box { flex-direction: row; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; margin-right: 2.5rem; }
+                    .ew-number { font-size: 1.8rem; text-align: left; }
+                    .ew-copy-btn { width: max-content; padding: 12px 20px; font-size: 1rem; }
+                    .ew-wa-btn { width: max-content; padding: 14px 28px; font-size: 1.1rem; }
+                }
+            `}</style>
 
             {/* Form Section */}
             <div style={{ flex: '1 1 600px' }}>
@@ -220,62 +236,63 @@ export default function Checkout() {
                                 </select>
                             </div>
                             {form.paymentMethod !== 'Cash on Delivery' && paymentSettings.eWallet !== false && (
-                                <div style={{ marginTop: '1.5rem', padding: 'clamp(1.5rem, 4vw, 2.5rem)', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', direction: 'rtl' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '2rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '1.2rem' }}>
-                                        <span style={{ fontSize: '1.8rem' }}>💳</span>
-                                        <h4 style={{ color: '#0f172a', margin: 0, fontWeight: 900, fontSize: 'clamp(1.2rem, 4vw, 1.4rem)' }}>تعليمات الدفع بالمحفظة الإلكترونية</h4>
+                                <div className="e-wallet-container" style={{ marginTop: '1.5rem', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', direction: 'rtl' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '1rem' }}>
+                                        <span style={{ fontSize: '1.6rem' }}>💳</span>
+                                        <h4 style={{ color: '#0f172a', margin: 0, fontWeight: 900, fontSize: 'clamp(1.1rem, 3.5vw, 1.4rem)' }}>تعليمات الدفع بالمحفظة الإلكترونية</h4>
                                     </div>
 
-                                    <div style={{ marginBottom: '2.5rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.2rem' }}>
-                                            <div style={{ backgroundColor: '#0f172a', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(15, 23, 42, 0.2)' }}>١</div>
-                                            <p style={{ fontSize: '1.1rem', color: '#334155', margin: 0, fontWeight: 700, lineHeight: 1.6 }}>
-                                                قم بتحويل إجمالي الطلب <strong style={{ color: '#ef4444', fontSize: '1.2rem', backgroundColor: '#fee2e2', padding: '4px 10px', borderRadius: '8px', display: 'inline-block' }}>{total.toFixed(0)} ج.م</strong> إلى الرقم التالي:
-                                            </p>
-                                        </div>
-
-                                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', backgroundColor: '#f8fafc', padding: '1.2rem 1.5rem', borderRadius: '12px', border: '1px solid #cbd5e1', marginRight: 'clamp(0rem, 3vw, 3rem)' }}>
-                                            <span style={{ fontWeight: 900, fontSize: 'clamp(1.4rem, 5vw, 1.8rem)', color: '#0f172a', letterSpacing: '2px', direction: 'ltr' }}>{paymentSettings.eWalletNumber || '01000000000'}</span>
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    navigator.clipboard.writeText(paymentSettings.eWalletNumber || '01000000000');
-                                                    const btn = e.currentTarget;
-                                                    const originalText = btn.innerHTML;
-                                                    btn.innerHTML = '<span style="display:flex;align-items:center;gap:6px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> تم النسخ بنجاح</span>';
-                                                    btn.style.backgroundColor = '#10b981';
-                                                    setTimeout(() => {
-                                                        btn.innerHTML = originalText;
-                                                        btn.style.backgroundColor = '#0f172a';
-                                                    }, 2000);
-                                                }}
-                                                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#0f172a', color: '#fff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, fontSize: '1rem', transition: 'all 0.2s', width: 'max-content' }}
-                                            >
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                                نسخ الرقم
-                                            </button>
+                                    <div style={{ marginBottom: '2rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.8rem' }}>
+                                            <div className="ew-step-num" style={{ backgroundColor: '#0f172a', color: '#fff', boxShadow: '0 4px 10px rgba(15, 23, 42, 0.2)' }}>١</div>
+                                            <div style={{ flex: 1 }}>
+                                                <p className="ew-text" style={{ color: '#334155', fontWeight: 700 }}>
+                                                    قم بتحويل <strong style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '2px 8px', borderRadius: '6px' }}>{total.toFixed(0)} ج.م</strong> للمحفظة التالية:
+                                                </p>
+                                                <div className="ew-copy-box">
+                                                    <span className="ew-number">{paymentSettings.eWalletNumber || '01000000000'}</span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            navigator.clipboard.writeText(paymentSettings.eWalletNumber || '01000000000');
+                                                            const btn = e.currentTarget;
+                                                            const originalText = btn.innerHTML;
+                                                            btn.innerHTML = '<span style="display:flex;align-items:center;gap:6px;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> تم النسخ</span>';
+                                                            btn.style.backgroundColor = '#10b981';
+                                                            setTimeout(() => {
+                                                                btn.innerHTML = originalText;
+                                                                btn.style.backgroundColor = '#0f172a';
+                                                            }, 2000);
+                                                        }}
+                                                        className="ew-copy-btn"
+                                                    >
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                                        نسخ الرقم
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '2.5rem' }}>
-                                        <div style={{ backgroundColor: '#25D366', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(37, 211, 102, 0.3)' }}>٢</div>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.8rem', marginBottom: '2rem' }}>
+                                        <div className="ew-step-num" style={{ backgroundColor: '#25D366', color: '#fff', boxShadow: '0 4px 10px rgba(37, 211, 102, 0.3)' }}>٢</div>
                                         <div style={{ flex: 1 }}>
-                                            <p style={{ fontSize: '1.1rem', color: '#334155', margin: '0 0 1rem 0', fontWeight: 700, lineHeight: 1.6 }}>أرسل صورة إيصال التحويل عبر واتساب لتأكيد الدفع سريعاً.</p>
-                                            <a href={`https://wa.me/${(paymentSettings.eWalletNumber || '').startsWith('0') ? '2' + paymentSettings.eWalletNumber : paymentSettings.eWalletNumber}?text=${encodeURIComponent(`مرحباً أكسيس، قمت بتحويل مبلغ ${total.toFixed(0)} ج.م عبر المحفظة. طلب رقم: لم يتم الإصدار بعد ، وهذا إيصال التحويل الخاص بي:`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', backgroundColor: '#25D366', color: '#fff', textDecoration: 'none', padding: '14px 28px', borderRadius: '10px', fontWeight: 800, fontSize: '1.1rem', transition: 'transform 0.2s, box-shadow 0.2s', boxShadow: '0 8px 16px rgba(37,211,102,0.25)' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                                                إرسال الإيصال عبر واتساب
+                                            <p className="ew-text" style={{ color: '#334155', fontWeight: 700 }}>أرسل صورة إيصال التحويل لتأكيد الدفع سريعاً.</p>
+                                            <a href={`https://wa.me/${(paymentSettings.eWalletNumber || '').startsWith('0') ? '2' + paymentSettings.eWalletNumber : paymentSettings.eWalletNumber}?text=${encodeURIComponent(`مرحباً أكسيس، قمت بتحويل مبلغ ${total.toFixed(0)} ج.م عبر المحفظة. وهذا إيصال التحويل الخاص بي:`)}`} target="_blank" rel="noopener noreferrer" className="ew-wa-btn" onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                                إرسال الإيصال
                                             </a>
                                         </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1.5rem', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '12px' }}>
-                                        <div style={{ backgroundColor: '#ef4444', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(239, 68, 68, 0.3)' }}>٣</div>
-                                        <div style={{ flex: 1, width: '100%' }}>
-                                            <p style={{ fontSize: '1.1rem', color: '#991b1b', margin: '0 0 1rem 0', fontWeight: 800 }}>أدخل رقم المحفظة الذي قمت بالتحويل <strong style={{ textDecoration: 'underline' }}>منه</strong>:</p>
-                                            <input required className="input" type="tel" placeholder="مثال: 01012345678" value={form.vodafoneCashNumber} onChange={e => setForm({ ...form, vodafoneCashNumber: e.target.value })} style={{ direction: 'ltr', textAlign: 'left', border: '2px solid #fca5a5', backgroundColor: '#fff', padding: '16px', fontSize: '1.2rem', borderRadius: '8px', width: '100%', outline: 'none', transition: 'border-color 0.2s' }} onFocus={e => e.currentTarget.style.borderColor = '#ef4444'} onBlur={e => e.currentTarget.style.borderColor = '#fca5a5'} />
-                                            <p style={{ fontSize: '0.9rem', color: '#b91c1c', margin: '1rem 0 0 0', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.8rem', padding: 'clamp(1rem, 3vw, 1.5rem)', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '12px' }}>
+                                        <div className="ew-step-num" style={{ backgroundColor: '#ef4444', color: '#fff', boxShadow: '0 4px 10px rgba(239, 68, 68, 0.3)' }}>٣</div>
+                                        <div style={{ flex: 1, width: '100%', minWidth: 0 }}>
+                                            <p className="ew-text" style={{ color: '#991b1b', fontWeight: 800, marginBottom: '0.5rem' }}>رقم المحفظة الذي حولت <strong style={{ textDecoration: 'underline' }}>منه</strong>:</p>
+                                            <input required className="input" type="tel" placeholder="مثال: 01012345678" value={form.vodafoneCashNumber} onChange={e => setForm({ ...form, vodafoneCashNumber: e.target.value })} style={{ direction: 'ltr', textAlign: 'left', border: '2px solid #fca5a5', backgroundColor: '#fff', padding: '14px', fontSize: '1.1rem', borderRadius: '8px', width: '100%', outline: 'none', transition: 'border-color 0.2s', boxSizing: 'border-box' }} onFocus={e => e.currentTarget.style.borderColor = '#ef4444'} onBlur={e => e.currentTarget.style.borderColor = '#fca5a5'} />
+                                            <p style={{ fontSize: '0.85rem', color: '#b91c1c', margin: '0.8rem 0 0 0', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                 بمجرد التأكد، سيتم معالجة شحنتك فوراً.
                                             </p>
                                         </div>
