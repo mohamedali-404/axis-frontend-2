@@ -1,20 +1,14 @@
 'use client';
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { CheckCircle, Copy, ArrowRight, AlertTriangle } from 'lucide-react';
+import { CheckCircle, Copy, ArrowRight } from 'lucide-react';
 
 function SuccessContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const id = searchParams?.get('id');
-    const method = searchParams?.get('method') || 'Cash on Delivery';
-    const amount = searchParams?.get('amount') || '0';
-    const walletNumber = searchParams?.get('walletNumber') || '';
 
     const [copiedId, setCopiedId] = useState(false);
-    const [copiedWallet, setCopiedWallet] = useState(false);
-    const [uploading, setUploading] = useState(false);
-    const [receiptOk, setReceiptOk] = useState(false);
 
     useEffect(() => {
         if (!id) {
@@ -30,52 +24,7 @@ function SuccessContent() {
         }
     };
 
-    const handleCopyWallet = () => {
-        if (walletNumber) {
-            navigator.clipboard.writeText(walletNumber);
-            setCopiedWallet(true);
-            setTimeout(() => setCopiedWallet(false), 2000);
-        }
-    };
-
-    const handleFileUpload = async (e: any) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setUploading(true);
-        const formData = new FormData();
-        formData.append('image', file);
-
-        try {
-            const res = await fetch('https://axis-backend-2.onrender.com/api/upload/receipt', {
-                method: 'POST',
-                body: formData
-            });
-            if (res.ok) {
-                const data = await res.json();
-                // Update Order with receipt
-                const updateRes = await fetch(`https://axis-backend-2.onrender.com/api/orders/${id}/receipt`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ receiptImage: data.url })
-                });
-                if (updateRes.ok) {
-                    setReceiptOk(true);
-                }
-            } else {
-                alert('Upload failed. Allowed formats: jpg, png, webp, svg.');
-            }
-        } catch {
-            alert('Error during upload.');
-        } finally {
-            setUploading(false);
-        }
-    };
-
     if (!id) return null;
-
-    const waMsg = `Hello AXIS, I have transferred the payment for order #${id} amount ${amount}. I am sending the receipt.`;
-    const waPhone = walletNumber.startsWith('0') ? `2${walletNumber}` : walletNumber;
-    const waLink = `https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`;
 
     return (
         <div style={{ maxWidth: 650, width: '100%', margin: '0 auto', textAlign: 'center', backgroundColor: 'rgb(var(--background-start-rgb))', padding: '4rem 2rem', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' }}>
