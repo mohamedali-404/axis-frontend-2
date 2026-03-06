@@ -213,7 +213,7 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
 
     const handleAddToCart = () => {
         if (!selectedSize) { alert('Please select a size'); return; }
-        if (product.stock < qty) { alert('Not enough stock available.'); return; }
+        if (product.stock != null && product.stock < qty) { alert('Not enough stock available.'); return; }
         addItem({
             id: product._id,
             name: product.name,
@@ -270,12 +270,14 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
                         )}
                     </div>
 
-                    {/* Stock badge */}
-                    <div>
-                        <span className={`pp-stock-badge${product.stock > 0 ? ' in-stock' : ' out-stock'}`}>
-                            {product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
-                        </span>
-                    </div>
+                    {/* Stock badge — only show when admin set a stock value */}
+                    {product.stock != null && (
+                        <div>
+                            <span className={`pp-stock-badge${product.stock > 0 ? ' in-stock' : ' out-stock'}`}>
+                                {product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
+                            </span>
+                        </div>
+                    )}
 
                     {/* ── SIZE SELECTOR ── */}
                     <div className="pp-field-block">
@@ -302,7 +304,7 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
                         <div className="pp-qty-control">
                             <button className="pp-qty-btn" onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease quantity"><Minus size={15} /></button>
                             <span className="pp-qty-val">{qty}</span>
-                            <button className="pp-qty-btn" onClick={() => setQty(Math.min(product.stock, qty + 1))} aria-label="Increase quantity"><Plus size={15} /></button>
+                            <button className="pp-qty-btn" onClick={() => setQty(Math.min(product.stock != null ? product.stock : 99, qty + 1))} aria-label="Increase quantity"><Plus size={15} /></button>
                         </div>
                     </div>
 
@@ -362,7 +364,7 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
             <RelatedProducts products={relatedProducts} />
 
             {/* ── STICKY MOBILE BAR ── */}
-            {product.stock > 0 && (
+            {product.stock !== 0 && (
                 <div className="sticky-atc-bar">
                     <div className="sticky-atc-price">
                         {product.discountPrice ? (

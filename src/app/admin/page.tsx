@@ -191,7 +191,7 @@ export default function AdminDashboard() {
                 name: productForm.name,
                 price: Number(productForm.price),
                 discountPrice: productForm.discountPrice ? Number(productForm.discountPrice) : undefined,
-                stock: Number(productForm.stock),
+                stock: productForm.stock !== '' ? Number(productForm.stock) : null,
                 descriptionEn: productForm.descriptionEn,
                 descriptionAr: productForm.descriptionAr,
                 sizes: productForm.sizes.split(',').map((s: string) => s.trim()).filter(Boolean)
@@ -222,7 +222,7 @@ export default function AdminDashboard() {
             name: p.name || '',
             price: p.price || '',
             discountPrice: p.discountPrice || '',
-            stock: p.stock || '',
+            stock: p.stock != null ? String(p.stock) : '',
             descriptionEn: p.descriptionEn || '',
             descriptionAr: p.descriptionAr || '',
             sizes: p.sizes ? p.sizes.join(', ') : 'S, M, L, XL',
@@ -456,8 +456,8 @@ export default function AdminDashboard() {
                                     <input required className="input" placeholder="e.g. Graphic T-Shirt" value={productForm.name} onChange={e => setProductForm({ ...productForm, name: e.target.value })} />
                                 </div>
                                 <div className="field-group">
-                                    <label className="field-label">{t('admin.stock')}</label>
-                                    <input required className="input" type="number" placeholder="0" value={productForm.stock} onChange={e => setProductForm({ ...productForm, stock: e.target.value })} />
+                                    <label className="field-label">{t('admin.stock')} <span style={{ opacity: 0.5, fontSize: '0.75rem', textTransform: 'none' }}>({t('admin.optional')})</span></label>
+                                    <input className="input" type="number" min="0" placeholder="Leave empty to hide from customers" value={productForm.stock} onChange={e => setProductForm({ ...productForm, stock: e.target.value })} />
                                 </div>
                                 <div className="field-group">
                                     <label className="field-label">{t('admin.price')}</label>
@@ -511,8 +511,8 @@ export default function AdminDashboard() {
                                             <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', fontWeight: 600 }}>{p.name}</td>
                                             <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', fontWeight: 700 }}>{p.price} ج.م</td>
                                             <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)' }}>
-                                                <span className={p.stock > 0 ? 'badge badge-info' : 'badge badge-danger'}>
-                                                    {p.stock > 0 ? `${p.stock} ${t('admin.inStock')}` : t('admin.outOfStock')}
+                                                <span className={p.stock == null ? 'badge' : p.stock > 0 ? 'badge badge-info' : 'badge badge-danger'} style={p.stock == null ? { background: '#f3f4f6', color: '#6b7280' } : {}}>
+                                                    {p.stock == null ? 'N/A' : p.stock > 0 ? `${p.stock} ${t('admin.inStock')}` : t('admin.outOfStock')}
                                                 </span>
                                             </td>
                                             <td style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)' }}>
@@ -534,8 +534,8 @@ export default function AdminDashboard() {
                                             <p style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                                                 <span style={{ fontWeight: 800, fontSize: '1rem' }}>{p.price} ج.م</span>
-                                                <span className={p.stock > 0 ? 'badge badge-info' : 'badge badge-danger'} style={{ fontSize: '0.72rem' }}>
-                                                    {p.stock > 0 ? `${p.stock} ${t('admin.inStock')}` : t('admin.outOfStock')}
+                                                <span className={p.stock == null ? 'badge' : p.stock > 0 ? 'badge badge-info' : 'badge badge-danger'} style={p.stock == null ? { fontSize: '0.72rem', background: '#f3f4f6', color: '#6b7280' } : { fontSize: '0.72rem' }}>
+                                                    {p.stock == null ? 'N/A' : p.stock > 0 ? `${p.stock} ${t('admin.inStock')}` : t('admin.outOfStock')}
                                                 </span>
                                             </div>
                                         </div>
