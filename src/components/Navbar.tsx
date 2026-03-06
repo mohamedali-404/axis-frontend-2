@@ -1,13 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { ShoppingBag, Menu, X, Search } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useCartStore } from '@/store/cartStore';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { getSocket } from '@/lib/socket';
 
+const API = 'https://axis-backend-2.onrender.com/api';
 const DEFAULT_ANNOUNCEMENT = 'Free shipping on orders over $50 ✦ New arrivals every week ✦ Premium quality sportswear';
 
 export default function Navbar() {
@@ -15,22 +16,30 @@ export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [logoUrl, setLogoUrl] = useState('');
     const [announcementText, setAnnouncementText] = useState(DEFAULT_ANNOUNCEMENT);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const searchTimerRef = useRef<NodeJS.Timeout | null>(null);
     const toggleCart = useCartStore((state) => state.toggleCart);
     const items = useCartStore((state) => state.items);
     const pathname = usePathname();
+    const router = useRouter();
     const { t } = useLanguage();
-
     const [mounted, setMounted] = useState(false);
 
+    // Scroll handler
     const handleScroll = useCallback(() => {
         setIsScrolled(window.scrollY > 10);
     }, []);
 
+    // Fetch settings + Socket.IO listener
     useEffect(() => {
         setMounted(true);
 
-        // Fetch settings
-        fetch(`https://axis-backend-2.onrender.com/api/settings`)
+        fetch(`${API}/settings`)
             .then(res => res.json())
             .then(data => {
                 if (data.brandLogo) {
@@ -43,20 +52,14 @@ export default function Navbar() {
                     }
                     link.href = data.brandLogo;
                 }
-                // Use the announcement text from the database, or fall back to default
                 setAnnouncementText(data.announcementText || DEFAULT_ANNOUNCEMENT);
             })
             .catch(console.error);
 
-        // Listen for real-time settings updates via Socket.IO
         const socket = getSocket();
-        const onSettingsUpdated = (newSettings: any) => {
-            if (newSettings.announcementText !== undefined) {
-                setAnnouncementText(newSettings.announcementText || DEFAULT_ANNOUNCEMENT);
-            }
-            if (newSettings.brandLogo) {
-                setLogoUrl(newSettings.brandLogo);
-            }
+        const onSettingsUpdated = (s: any) => {
+            if (s.announcementText !== undefined) setAnnouncementText(s.announcementText || DEFAULT_ANNOUNCEMENT);
+            if (s.brandLogo) setLogoUrl(s.brandLogo);
         };
         socket.on('settings_updated', onSettingsUpdated);
 
@@ -67,43 +70,83 @@ export default function Navbar() {
         };
     }, [handleScroll]);
 
+    // Lock body scroll when menu/search open
     useEffect(() => {
-        if (mobileMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = (mobileMenuOpen || searchOpen) ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
-    }, [mobileMenuOpen]);
+    }, [mobileMenuOpen, searchOpen]);
+
+    // Focus search input when opened
+    useEffect(() => {
+        if (searchOpen) {
+            setTimeout(() => searchInputRef.current?.focus(), 100);
+        } else {
+            setSearchQuery('');
+            setSearchResults([]);
+            setHasSearched(false);
+        }
+    }, [searchOpen]);
+
+    // Debounced search
+    const handleSearchChange = (value: string) => {
+        setSearchQuery(value);
+        if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+
+        if (!value.trim()) {
+            setSearchResults([]);
+            setSearchLoading(false);
+            setHasSearched(false);
+            return;
+        }
+
+        setSearchLoading(true);
+        searchTimerRef.current = setTimeout(async () => {
+            try {
+                const res = await fetch(`${API}/products/search?q=${encodeURIComponent(value.trim())}`);
+                const data = await res.json();
+                setSearchResults(Array.isArray(data) ? data : []);
+            } catch {
+                setSearchResults([]);
+            }
+            setSearchLoading(false);
+            setHasSearched(true);
+        }, 350);
+    };
+
+    const handleResultClick = (productId: string) => {
+        setSearchOpen(false);
+        router.push(`/product/${productId}`);
+    };
 
     const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
     if (pathname.startsWith('/admin')) return null;
 
-    // The marquee text content
     const marqueeContent = announcementText;
 
     return (
         <>
-            {/* Announcement Bar — Marquee Ticker */}
+            {/* Announcement Bar */}
             <div className={`announcement-bar ${isScrolled ? 'hidden' : ''}`}>
                 <div className="announcement-marquee-wrapper">
-                    <div className="announcement-marquee">
-                        <span className="announcement-marquee-text">{marqueeContent}</span>
-                        <span className="announcement-marquee-spacer">✦</span>
-                        <span className="announcement-marquee-text">{marqueeContent}</span>
-                        <span className="announcement-marquee-spacer">✦</span>
-                        <span className="announcement-marquee-text">{marqueeContent}</span>
-                        <span className="announcement-marquee-spacer">✦</span>
-                        <span className="announcement-marquee-text">{marqueeContent}</span>
-                        <span className="announcement-marquee-spacer">✦</span>
+                    <div className="announcement-marquee-track">
+                        {/* Render exactly 2 identical halves for mathematically perfect infinite scrolling */}
+                        {[0, 1].map((half) => (
+                            <div key={half} className="announcement-marquee-half" aria-hidden={half === 1 ? 'true' : undefined}>
+                                {[...Array(10)].map((_, i) => (
+                                    <span key={i} className="announcement-item">
+                                        <span className="announcement-text">{marqueeContent}</span>
+                                        <span className="announcement-spacer">✦</span>
+                                    </span>
+                                ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
 
             {/* Main Header */}
             <header className={`site-header ${isScrolled ? 'scrolled' : ''}`}>
-                {/* Left: Hamburger (mobile) */}
                 <div className="header-left">
                     <button
                         className="header-icon-btn mobile-menu-btn"
@@ -113,7 +156,6 @@ export default function Navbar() {
                         <Menu size={22} />
                     </button>
 
-                    {/* Desktop Nav Links */}
                     <nav className="desktop-menu" style={{ gap: '2rem', alignItems: 'center', marginLeft: '1rem' }} suppressHydrationWarning>
                         <Link href="/" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }} suppressHydrationWarning>{t('nav.home')}</Link>
                         <Link href="/shop" className="hover-opacity" style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }} suppressHydrationWarning>{t('nav.shop')}</Link>
@@ -122,30 +164,73 @@ export default function Navbar() {
                     </nav>
                 </div>
 
-                {/* Center: Logo */}
                 <div className="header-center">
-                    <Link href="/" className="header-logo">
-                        AXIS
-                    </Link>
+                    <Link href="/" className="header-logo">AXIS</Link>
                 </div>
 
-                {/* Right: Search + Cart */}
                 <div className="header-right">
-                    <Link href="/shop" className="header-icon-btn" aria-label="Search">
+                    <button className="header-icon-btn" onClick={() => setSearchOpen(true)} aria-label="Search">
                         <Search size={20} />
-                    </Link>
+                    </button>
                     <button className="header-icon-btn" onClick={toggleCart} aria-label="Cart">
                         <ShoppingBag size={20} />
                         {mounted && totalItems > 0 && (
-                            <span className="cart-badge">
-                                {totalItems}
-                            </span>
+                            <span className="cart-badge">{totalItems}</span>
                         )}
                     </button>
                 </div>
             </header>
 
-            {/* Mobile Menu Portal */}
+            {/* Search Overlay */}
+            {mounted && createPortal(
+                <div className={`search-overlay ${searchOpen ? 'open' : ''}`} onClick={() => setSearchOpen(false)}>
+                    <div className="search-container" onClick={e => e.stopPropagation()}>
+                        <Search size={18} className="search-icon-inside" />
+                        <input
+                            ref={searchInputRef}
+                            type="text"
+                            className="search-input"
+                            placeholder={t('nav.searchPlaceholder') || 'Search products...'}
+                            value={searchQuery}
+                            onChange={e => handleSearchChange(e.target.value)}
+                        />
+                        <button className="search-close-btn" onClick={() => setSearchOpen(false)}>
+                            <X size={18} />
+                        </button>
+                    </div>
+
+                    {/* Search Results */}
+                    {searchQuery.trim() && (
+                        <div className="search-results" onClick={e => e.stopPropagation()}>
+                            {searchLoading ? (
+                                <div className="search-loading">Searching...</div>
+                            ) : searchResults.length > 0 ? (
+                                searchResults.map(p => (
+                                    <div key={p._id} className="search-result-item" onClick={() => handleResultClick(p._id)}>
+                                        <img
+                                            src={p.images?.[0] || 'https://via.placeholder.com/56x68'}
+                                            alt={p.name}
+                                            className="search-result-img"
+                                            loading="lazy"
+                                        />
+                                        <div className="search-result-info">
+                                            <div className="search-result-name">{p.name}</div>
+                                            <div className="search-result-price">
+                                                {p.discountPrice ? `${p.discountPrice.toFixed(0)} ج.م` : `${p.price.toFixed(0)} ج.م`}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : hasSearched ? (
+                                <div className="search-no-results">No products found</div>
+                            ) : null}
+                        </div>
+                    )}
+                </div>,
+                document.body
+            )}
+
+            {/* Mobile Menu */}
             {mounted && createPortal(
                 <div className={`mobile-menu-fullscreen ${mobileMenuOpen ? 'open' : 'closed'}`}>
                     <div className="mobile-menu-header">

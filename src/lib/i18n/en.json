@@ -4,7 +4,8 @@
         "shop": "Shop",
         "trackOrder": "Track Order",
         "about": "About",
-        "contact": "Contact"
+        "contact": "Contact",
+        "searchPlaceholder": "Search products..."
     },
     "home": {
         "shopNow": "SHOP NOW",
@@ -44,7 +45,8 @@
         "share": "Share",
         "backToShop": "Back to Shop",
         "quantity": "Quantity",
-        "size": "Size"
+        "size": "Size",
+        "viewDetails": "View Details"
     },
     "checkout": {
         "title": "Checkout",
