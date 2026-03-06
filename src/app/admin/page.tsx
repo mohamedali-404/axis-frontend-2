@@ -861,6 +861,24 @@ export default function AdminDashboard() {
                                 </div>
 
                                 <div>
+                                    <h4 className="admin-section-subtitle">Product Page Information</h4>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <label style={{ fontWeight: 600, fontSize: '0.9rem' }}>Materials & Care</label>
+                                            <textarea className="input" rows={3} value={settings.materialsAndCare || ''} onChange={e => setSettings({ ...settings, materialsAndCare: e.target.value })} style={{ padding: '12px', resize: 'vertical' }} />
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <label style={{ fontWeight: 600, fontSize: '0.9rem' }}>Shipping Information</label>
+                                            <textarea className="input" rows={3} value={settings.shippingInfo || ''} onChange={e => setSettings({ ...settings, shippingInfo: e.target.value })} style={{ padding: '12px', resize: 'vertical' }} />
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <label style={{ fontWeight: 600, fontSize: '0.9rem' }}>Returns & Exchanges</label>
+                                            <textarea className="input" rows={3} value={settings.returnsInfo || ''} onChange={e => setSettings({ ...settings, returnsInfo: e.target.value })} style={{ padding: '12px', resize: 'vertical' }} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
                                     <h4 className="admin-section-subtitle">{t('admin.contactFooter')}</h4>
                                     <div className="settings-grid-3">
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

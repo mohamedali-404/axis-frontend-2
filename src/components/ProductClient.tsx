@@ -10,6 +10,7 @@ import Image from 'next/image';
 interface ProductClientProps {
     initialProduct: any;
     relatedProducts: any[];
+    settings?: any;
 }
 
 // ── Accordion Section ─────────────────────────────────────────────────────────
@@ -31,8 +32,6 @@ function AccordionSection({ title, children }: { title: string; children: React.
 // ── Product Gallery ───────────────────────────────────────────────────────────
 function ProductGallery({ images, productName }: { images: string[]; productName: string }) {
     const [mainIndex, setMainIndex] = useState(0);
-    const [zoomed, setZoomed] = useState(false);
-    const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
     const imgRef = useRef<HTMLDivElement>(null);
 
     // Reset to first image when images array changes (e.g. color switch)
@@ -40,37 +39,23 @@ function ProductGallery({ images, productName }: { images: string[]; productName
 
     const mainImage = images[mainIndex] || '';
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!imgRef.current) return;
-        const rect = imgRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        setZoomPos({ x, y });
-    };
-
     return (
         <div className="pg-gallery">
             {/* Main image */}
             <div
                 ref={imgRef}
-                className={`pg-main-wrap${zoomed ? ' zoomed' : ''}`}
-                onMouseEnter={() => setZoomed(true)}
-                onMouseLeave={() => setZoomed(false)}
-                onMouseMove={handleMouseMove}
+                className="pg-main-wrap"
             >
                 {mainImage ? (
                     <img
                         src={mainImage}
                         alt={productName}
                         className="pg-main-img"
-                        style={zoomed ? { transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`, transform: 'scale(1.7)' } : {}}
                     />
                 ) : (
                     <div className="pg-no-image">No Image</div>
                 )}
-                {images.length > 1 && (
-                    <div className="pg-zoom-hint"><ZoomIn size={14} /> Hover to zoom</div>
-                )}
+
             </div>
 
             {/* Thumbnails */}
@@ -189,7 +174,7 @@ function RelatedProducts({ products }: { products: any[] }) {
 }
 
 // ── Main ProductClient ────────────────────────────────────────────────────────
-export default function ProductClient({ initialProduct, relatedProducts = [] }: ProductClientProps) {
+export default function ProductClient({ initialProduct, relatedProducts = [], settings }: ProductClientProps) {
     const product = initialProduct;
     const [qty, setQty] = useState(1);
     const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || '');
@@ -367,30 +352,33 @@ export default function ProductClient({ initialProduct, relatedProducts = [] }: 
                     {/* ── ACCORDION INFO ── */}
                     <div className="pp-accordions">
                         <AccordionSection title="Description">
-                            <p>{product.descriptionEn || 'Premium quality activewear designed for performance and style.'}</p>
+                            {product.descriptionEn ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                                    {product.descriptionEn.split('\n').map((line: string, i: number) => <p key={i}>{line}</p>)}
+                                </div>
+                            ) : (
+                                <p>Premium quality activewear designed for performance and style.</p>
+                            )}
                         </AccordionSection>
                         <AccordionSection title="Materials & Care">
                             <ul className="accordion-list">
-                                <li>90% Polyester, 10% Elastane</li>
-                                <li>Moisture-wicking fabric</li>
-                                <li>Machine wash cold, gentle cycle</li>
-                                <li>Do not bleach or tumble dry</li>
+                                {(settings?.materialsAndCare || "90% Polyester, 10% Elastane\nMoisture-wicking fabric\nMachine wash cold, gentle cycle\nDo not bleach or tumble dry").split('\n').map((line: string, i: number) => (
+                                    <li key={i}>{line}</li>
+                                ))}
                             </ul>
                         </AccordionSection>
                         <AccordionSection title="Shipping Information">
                             <ul className="accordion-list">
-                                <li>Standard delivery: 3–5 business days</li>
-                                <li>Express delivery: 1–2 business days</li>
-                                <li>Free shipping on orders over 500 ج.م</li>
-                                <li>Orders placed before 2 PM ship same day</li>
+                                {(settings?.shippingInfo || "Standard delivery: 3–5 business days\nExpress delivery: 1–2 business days\nFree shipping on orders over 500 ج.م\nOrders placed before 2 PM ship same day").split('\n').map((line: string, i: number) => (
+                                    <li key={i}>{line}</li>
+                                ))}
                             </ul>
                         </AccordionSection>
                         <AccordionSection title="Returns & Exchanges">
                             <ul className="accordion-list">
-                                <li>Free returns within 30 days of purchase</li>
-                                <li>Items must be unworn and in original packaging</li>
-                                <li>Exchanges available for different sizes</li>
-                                <li>Contact support to initiate a return</li>
+                                {(settings?.returnsInfo || "Free returns within 30 days of purchase\nItems must be unworn and in original packaging\nExchanges available for different sizes\nContact support to initiate a return").split('\n').map((line: string, i: number) => (
+                                    <li key={i}>{line}</li>
+                                ))}
                             </ul>
                         </AccordionSection>
                     </div>

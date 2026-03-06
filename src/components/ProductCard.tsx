@@ -22,7 +22,7 @@ export default function ProductCard({ product }: { product: any }) {
             hoverIntervalRef.current = setInterval(() => {
                 i = (i + 1) % product.images.length;
                 setCurrentImgIndex(i);
-            }, 800);
+            }, 1200);
         }
     };
 
@@ -63,11 +63,41 @@ export default function ProductCard({ product }: { product: any }) {
                     style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                     <div className="product-card-image-wrap">
-                        <img
-                            src={product.images?.[currentImgIndex] || product.images?.[0] || 'https://via.placeholder.com/600'}
-                            alt={product.name}
-                            loading="lazy"
-                        />
+                        {/* Desktop: Auto Preview Slider */}
+                        <div className="desktop-preview">
+                            {(product.images?.length ? product.images : ['https://via.placeholder.com/600']).map((img: string, idx: number) => {
+                                const isActive = idx === currentImgIndex;
+                                return (
+                                    <img
+                                        key={idx}
+                                        src={img}
+                                        alt={product.name}
+                                        loading="lazy"
+                                        className={`preview-img ${isActive ? 'active' : ''}`}
+                                    />
+                                );
+                            })}
+                        </div>
+
+                        {/* Mobile: Swipeable Scroller */}
+                        <div
+                            className="mobile-swipe-scroller"
+                            onScroll={(e) => {
+                                const target = e.currentTarget;
+                                const index = Math.round(target.scrollLeft / target.clientWidth);
+                                setCurrentImgIndex(index);
+                            }}
+                        >
+                            {(product.images?.length ? product.images : ['https://via.placeholder.com/600']).map((img: string, idx: number) => (
+                                <img
+                                    key={idx}
+                                    src={img}
+                                    alt={product.name}
+                                    loading="lazy"
+                                    className="swipe-img"
+                                />
+                            ))}
+                        </div>
 
                         {/* Overlay */}
                         <div className="product-card-overlay" />
@@ -82,6 +112,15 @@ export default function ProductCard({ product }: { product: any }) {
                             <span className="product-card-badge product-card-badge-out">
                                 {t('product.soldOut')}
                             </span>
+                        )}
+
+                        {/* Indicator Dots */}
+                        {product.images?.length > 1 && (
+                            <div className="product-card-dots">
+                                {product.images.map((_: any, idx: number) => (
+                                    <span key={idx} className={`dot ${idx === currentImgIndex ? 'active' : ''}`} />
+                                ))}
+                            </div>
                         )}
 
                         {/* Quick Add Button */}

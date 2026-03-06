@@ -8,10 +8,16 @@ export default async function ProductPage({ params }: { params: { id: string } }
     let relatedProducts: any[] = [];
 
     try {
-        const [prodRes, allRes] = await Promise.all([
+        const [prodRes, allRes, settingsRes] = await Promise.all([
             fetch(`https://axis-backend-2.onrender.com/api/products/${id}`, { next: { revalidate: 60 } }),
-            fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } })
+            fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } }),
+            fetch(`https://axis-backend-2.onrender.com/api/settings`, { next: { revalidate: 60 } })
         ]);
+
+        let settings = null;
+        if (settingsRes.ok) {
+            settings = await settingsRes.json();
+        }
 
         if (prodRes.ok) {
             initialProduct = await prodRes.json();
@@ -26,9 +32,10 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 relatedProducts = allProducts.filter((p: any) => p._id !== id).slice(0, 4);
             }
         }
+
+        return <ProductClient initialProduct={initialProduct} relatedProducts={relatedProducts} settings={settings} />;
     } catch (e) {
         console.error("Failed to fetch product data:", e);
+        return <ProductClient initialProduct={initialProduct} relatedProducts={relatedProducts} settings={null} />;
     }
-
-    return <ProductClient initialProduct={initialProduct} relatedProducts={relatedProducts} />;
 }
