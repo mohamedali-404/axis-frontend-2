@@ -4,16 +4,18 @@ import { Facebook, Instagram } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-export default function Footer() {
-    const [settings, setSettings] = useState<any>(null);
+export default function Footer({ settings: initialSettings }: { settings?: any }) {
+    const [settings, setSettings] = useState<any>(initialSettings || null);
     const { t } = useLanguage();
 
     useEffect(() => {
-        fetch(`https://axis-backend-2.onrender.com/api/settings`)
-            .then(res => res.json())
-            .then(data => setSettings(data))
-            .catch(console.error);
-    }, []);
+        if (!initialSettings) {
+            fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' })
+                .then(res => res.json())
+                .then(data => setSettings(data))
+                .catch(console.error);
+        }
+    }, [initialSettings]);
 
     return (
         <footer className="footer-container" style={{ backgroundColor: '#000', color: '#fff', padding: '4rem 2rem 2rem', marginTop: '3rem', fontFamily: 'var(--font-family, system-ui, sans-serif)' }}>

@@ -7,14 +7,26 @@ export default function Contact() {
         phone: '+20 100 000 0000',
         address: 'Cairo, Egypt'
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`https://axis-backend-2.onrender.com/api/settings`)
+        fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 if (data.contactInfo) setContactInfo(data.contactInfo);
-            });
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
     }, []);
+
+    if (loading) {
+        return (
+            <div style={{ padding: '8rem 2rem', maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
+                <h1 style={{ fontSize: '3rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '2rem', opacity: 0.5 }}>Contact Us</h1>
+                <div style={{ height: '250px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '12px', animation: 'pulse 2s infinite' }} />
+            </div>
+        );
+    }
 
     return (
         <div style={{ padding: '8rem 2rem', maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>

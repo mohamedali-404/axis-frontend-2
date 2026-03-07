@@ -11,11 +11,11 @@ import { getSocket } from '@/lib/socket';
 const API = 'https://axis-backend-2.onrender.com/api';
 const DEFAULT_ANNOUNCEMENT = 'Free shipping on orders over $50 ✦ New arrivals every week ✦ Premium quality sportswear';
 
-export default function Navbar() {
+export default function Navbar({ settings }: { settings?: any }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [logoUrl, setLogoUrl] = useState('');
-    const [announcementText, setAnnouncementText] = useState(DEFAULT_ANNOUNCEMENT);
+    const [logoUrl, setLogoUrl] = useState(settings?.brandLogo || '');
+    const [announcementText, setAnnouncementText] = useState(settings?.announcementText || DEFAULT_ANNOUNCEMENT);
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -35,26 +35,30 @@ export default function Navbar() {
         setIsScrolled(window.scrollY > 10);
     }, []);
 
-    // Fetch settings + Socket.IO listener
+    // Fetch settings gracefully if missing + Socket.IO listener
     useEffect(() => {
         setMounted(true);
 
-        fetch(`${API}/settings`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.brandLogo) {
-                    setLogoUrl(data.brandLogo);
-                    let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-                    if (!link) {
-                        link = document.createElement('link');
-                        link.rel = 'icon';
-                        document.head.appendChild(link);
+        if (!settings) {
+            fetch(`${API}/settings`, { cache: 'no-store' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.brandLogo && !logoUrl) {
+                        setLogoUrl(data.brandLogo);
+                        let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+                        if (!link) {
+                            link = document.createElement('link');
+                            link.rel = 'icon';
+                            document.head.appendChild(link);
+                        }
+                        link.href = data.brandLogo;
                     }
-                    link.href = data.brandLogo;
-                }
-                setAnnouncementText(data.announcementText || DEFAULT_ANNOUNCEMENT);
-            })
-            .catch(console.error);
+                    if (data.announcementText && announcementText === DEFAULT_ANNOUNCEMENT) {
+                        setAnnouncementText(data.announcementText);
+                    }
+                })
+                .catch(console.error);
+        }
 
         const socket = getSocket();
         const onSettingsUpdated = (s: any) => {

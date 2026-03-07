@@ -1,12 +1,13 @@
 import ShopClient from '@/components/ShopClient';
 
-export const revalidate = 60; // Cache and update incrementally every 60s
+// Force dynamic rendering to ensure products are always fresh
+export const dynamic = 'force-dynamic';
 
 export default async function Shop() {
     let initialProducts = [];
 
     try {
-        const res = await fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } });
+        const res = await fetch(`https://axis-backend-2.onrender.com/api/products`, { cache: 'no-store' });
         if (res.ok) {
             initialProducts = await res.json();
         }

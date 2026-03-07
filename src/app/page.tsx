@@ -1,8 +1,7 @@
 import HomeClient from '@/components/HomeClient';
 
-// Enable ISR (Incremental Static Regeneration)
-// Vercel will cache this page and update it every 60 seconds in the background
-export const revalidate = 60;
+// Opt out of caching to ensure data is always fresh and no stale banners flash
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
     let initialProducts = [];
@@ -10,8 +9,8 @@ export default async function Home() {
 
     try {
         const [prodsRes, settsRes] = await Promise.all([
-            fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } }),
-            fetch(`https://axis-backend-2.onrender.com/api/settings`, { next: { revalidate: 60 } }),
+            fetch(`https://axis-backend-2.onrender.com/api/products`, { cache: 'no-store' }),
+            fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' }),
         ]);
 
         if (prodsRes.ok) initialProducts = await prodsRes.json();

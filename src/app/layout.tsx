@@ -65,10 +65,10 @@ export default async function RootLayout({
             </head>
             <body style={themeColors}>
                 <LanguageProvider>
-                    <Navbar />
+                    <Navbar settings={settings} />
                     <main style={{ minHeight: 'calc(100vh - 200px)', paddingTop: 0 }}>{children}</main>
                     <HideOnAdmin>
-                        <Footer />
+                        <Footer settings={settings} />
                     </HideOnAdmin>
                     <FloatingCart />
                     <CartDrawer />
