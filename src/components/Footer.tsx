@@ -133,16 +133,20 @@ export default function Footer() {
                         padding-bottom: 6rem !important;
                     }
                     .dev-badge {
-                        flex-direction: column;
-                        text-align: center;
-                        border-radius: 20px !important;
-                        padding: 15px !important;
+                        flex-direction: row;
+                        justify-content: center;
+                        border-radius: 40px !important;
+                        padding: 10px 15px !important;
+                        flex-wrap: wrap;
+                        gap: 0.5rem !important;
                     }
                     .dev-divider {
-                        display: none;
+                        display: block;
+                        font-size: 1.2rem;
+                        margin: 0 2px;
                     }
                     .dev-socials {
-                        margin-top: 10px;
+                        margin-top: 0;
                     }
                 }
             `}} />
