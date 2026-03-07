@@ -134,16 +134,18 @@ export default function Footer() {
                     }
                     .dev-badge {
                         flex-direction: row;
+                        align-items: center;
                         justify-content: center;
                         border-radius: 40px !important;
-                        padding: 10px 15px !important;
-                        flex-wrap: wrap;
-                        gap: 0.5rem !important;
+                        padding: 8px 12px !important;
+                        flex-wrap: nowrap;
+                        gap: 0.3rem !important;
+                        transform: scale(0.95);
                     }
                     .dev-divider {
                         display: block;
                         font-size: 1.2rem;
-                        margin: 0 2px;
+                        margin: 0 1px;
                     }
                     .dev-socials {
                         margin-top: 0;
