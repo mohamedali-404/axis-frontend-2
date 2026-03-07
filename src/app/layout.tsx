@@ -58,12 +58,12 @@ export default async function RootLayout({
     } as React.CSSProperties : {} as React.CSSProperties;
 
     return (
-        <html lang="en" dir="ltr">
+        <html lang="en" dir="ltr" suppressHydrationWarning>
             <head>
                 <link rel="manifest" href="/manifest.json" />
                 <meta name="theme-color" content={settings?.themeSettings?.accentColor || '#000000'} />
             </head>
-            <body style={themeColors}>
+            <body style={themeColors} suppressHydrationWarning>
                 <LanguageProvider>
                     <Navbar settings={settings} />
                     <main style={{ minHeight: 'calc(100vh - 200px)', paddingTop: 0 }}>{children}</main>
