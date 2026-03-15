@@ -2194,7 +2194,7 @@ a {
 .admin-stat-card {
     background: var(--secondary-color);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
@@ -2234,7 +2234,7 @@ a {
 .admin-section-card {
     background: var(--secondary-color);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 2rem;
     margin-bottom: 2rem;
 }
@@ -2333,7 +2333,7 @@ a {
     color: var(--accent-foreground);
     padding: 8px 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.85rem;
@@ -2349,7 +2349,7 @@ a {
     color: #ef4444;
     padding: 8px 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.85rem;
@@ -2607,6 +2607,23 @@ a {
         display: flex;
         flex-direction: column;
     }
+    
+    .product-card-mobile {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .product-card-mobile > div:last-child {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .product-card-mobile > div:last-child button {
+        width: 100%;
+        font-size: 0.9rem !important;
+        padding: 10px !important;
+    }
 
     .shipping-rate-row {
         grid-template-columns: 1fr;
@@ -2615,7 +2632,7 @@ a {
     .admin-section-card {
         padding: 1.25rem 1rem;
         margin-bottom: 1.5rem;
-        border-radius: 8px;
+        border-radius: 4px;
     }
 
     .admin-stats-grid {
@@ -2625,7 +2642,25 @@ a {
 
     .admin-stat-card {
         padding: 1rem;
+        align-items: flex-start;
     }
+    
+    /* Input type file overflow fix */
+    input[type="file"].input {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* ── ADMIN INPUTS BORDER RADIUS ── */
+.admin-layout .input,
+.admin-layout select.input,
+.admin-layout textarea.input,
+.admin-layout .select,
+.admin-layout button {
+    border-radius: 4px !important;
 }
 
 /* ================================

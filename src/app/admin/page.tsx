@@ -383,9 +383,9 @@ export default function AdminDashboard() {
                 <div style={{ fontSize: '1.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '3px' }}>AXIS</div>
                 <div style={{ fontSize: '0.75rem', opacity: 0.5, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>Admin Panel</div>
             </div>
-            <nav style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', flex: 1 }}>
+            <nav style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 }}>
                 {TABS.map(({ id, icon }) => (
-                    <button key={id} onClick={() => handleTabChange(id)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.85rem 1rem', textAlign: 'left', backgroundColor: activeTab === id ? 'var(--accent-color)' : 'transparent', color: activeTab === id ? 'var(--accent-foreground)' : 'currentColor', border: 'none', cursor: 'pointer', fontWeight: 700, borderRadius: '10px', transition: 'all 0.2s', opacity: activeTab !== id ? 0.65 : 1, fontSize: '0.95rem', gap: '0.75rem', width: '100%' }}>
+                    <button key={id} onClick={() => handleTabChange(id)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.15rem', textAlign: 'left', backgroundColor: activeTab === id ? 'var(--accent-color)' : 'transparent', color: activeTab === id ? 'var(--accent-foreground)' : 'currentColor', border: 'none', cursor: 'pointer', fontWeight: 700, borderRadius: '4px', transition: 'all 0.2s', opacity: activeTab !== id ? 0.65 : 1, fontSize: '1rem', gap: '0.75rem', width: '100%' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <span style={{ fontSize: '1.1rem' }}>{icon}</span>
                             <span>{t(`admin.${id}`)}</span>
@@ -398,8 +398,8 @@ export default function AdminDashboard() {
                     </button>
                 ))}
             </nav>
-            <div style={{ padding: '1rem', borderTop: '1px solid var(--border-color)' }}>
-                <button onClick={() => { setToken(''); localStorage.removeItem('axis_token'); setSidebarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1rem', width: '100%', textAlign: 'left', background: 'rgba(239,68,68,0.08)', border: 'none', cursor: 'pointer', fontWeight: 700, color: '#ef4444', borderRadius: '10px', transition: 'all 0.2s', fontSize: '0.95rem' }}>
+            <div style={{ padding: '1.25rem', borderTop: '1px solid var(--border-color)' }}>
+                <button onClick={() => { setToken(''); localStorage.removeItem('axis_token'); setSidebarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '1rem 1.15rem', width: '100%', textAlign: 'left', background: 'rgba(239,68,68,0.08)', border: 'none', cursor: 'pointer', fontWeight: 700, color: '#ef4444', borderRadius: '4px', transition: 'all 0.2s', fontSize: '1rem' }}>
                     <span>🚪</span> {t('admin.logout')}
                 </button>
             </div>
@@ -746,8 +746,8 @@ export default function AdminDashboard() {
                                 <div className="settings-grid-2">
                                     <div>
                                         <label style={{ fontWeight: 700, display: 'block', marginBottom: '1rem' }}>Brand Logo</label>
-                                        <div style={{ padding: '1rem', border: '1px dashed var(--border-color)', borderRadius: '8px', textAlign: 'center' }}>
-                                            {settings.brandLogo ? <img src={settings.brandLogo} alt="Logo" style={{ height: 60, objectFit: 'contain', margin: '0 auto 1rem' }} /> : <div style={{ height: 60, marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>NO LOGO</div>}
+                                        <div style={{ padding: '1rem', border: '1px dashed var(--border-color)', borderRadius: '4px', textAlign: 'center' }}>
+                                            {settings.brandLogo ? <img src={settings.brandLogo} alt="Logo" style={{ height: 60, maxWidth: '100%', objectFit: 'contain', margin: '0 auto 1rem' }} /> : <div style={{ height: 60, marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>NO LOGO</div>}
                                             <input type="file" className="input" onChange={e => setLogoObj(e.target.files?.[0])} style={{ padding: '8px', fontSize: '0.8rem' }} />
                                         </div>
                                     </div>
@@ -772,10 +772,10 @@ export default function AdminDashboard() {
 
                                 <div>
                                     <h4 className="admin-section-subtitle">📢 Announcement Bar / شريط الإعلان</h4>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                        <label style={{ fontWeight: 600, fontSize: '0.9rem' }}>Announcement Text (Scrolling Ticker)</label>
-                                        <input className="input" placeholder="e.g. Free shipping on orders over $50 ✦ New arrivals every week" value={settings.announcementText || ''} onChange={e => setSettings({ ...settings, announcementText: e.target.value })} />
-                                        <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0 }}>This text will scroll across the top bar of your website. Use ✦ to separate messages.</p>
+                                    <div className="field-group" style={{ backgroundColor: 'rgb(var(--background-start-rgb))', padding: '1.5rem', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+                                        <label className="field-label" style={{ fontWeight: 800, fontSize: '0.85rem' }}>Announcement Text (Scrolling Ticker)</label>
+                                        <input className="input" placeholder="e.g. Free shipping on orders over $50 ✦ New arrivals every week" value={settings.announcementText || ''} onChange={e => setSettings({ ...settings, announcementText: e.target.value })} style={{ marginTop: '0.25rem' }} />
+                                        <p style={{ fontSize: '0.8rem', opacity: 0.6, margin: 0, marginTop: '0.5rem', fontWeight: 600 }}>This text will scroll across the top bar of your website. Use ✦ to separate messages.</p>
                                     </div>
                                 </div>
 
