@@ -67,36 +67,36 @@ function TrackOrderContent() {
     };
 
     return (
-        <div style={{ maxWidth: 700, width: '100%', backgroundColor: 'rgb(var(--background-start-rgb))', padding: '3rem', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' }}>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '1rem', textAlign: 'center', color: 'var(--accent-color)' }}>{t('track.title')}</h1>
-            <p style={{ textAlign: 'center', marginBottom: '1.5rem', opacity: 0.7, fontWeight: 500 }}>{t('track.subtitle')}</p>
+        <div style={{ maxWidth: 640, width: '100%', backgroundColor: 'rgb(var(--background-start-rgb))', padding: 'clamp(1.5rem, 6vw, 3rem)', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' }}>
+            <h1 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', lineHeight: 1.1, fontWeight: 900, textTransform: 'uppercase', marginBottom: '0.5rem', textAlign: 'center', color: 'var(--accent-color)' }}>{t('track.title')}</h1>
+            <p style={{ textAlign: 'center', marginBottom: '1.5rem', color: 'rgba(0,0,0,0.5)', fontSize: '0.9rem', fontWeight: 500 }}>{t('track.subtitle')}</p>
 
             {orderId && !order && (
-                <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', color: '#b45309', padding: '1rem 1.5rem', borderRadius: '8px', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', fontWeight: 600, boxShadow: '0 4px 12px rgba(245, 158, 11, 0.1)' }}>
+                <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', color: '#b45309', padding: '1rem', borderRadius: '4px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', fontWeight: 600, boxShadow: '0 4px 12px rgba(245, 158, 11, 0.1)' }}>
                     <span style={{ fontSize: '1.5rem' }}>⚠️</span>
                     <div>
                         <p style={{ margin: 0, fontWeight: 800 }}>{t('track.saveOrderId')}</p>
-                        <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.9 }}>{t('track.saveOrderIdDesc')}</p>
+                        <p style={{ margin: 0, fontSize: '0.85rem', opacity: 0.9 }}>{t('track.saveOrderIdDesc')}</p>
                     </div>
                 </div>
             )}
 
-            <form onSubmit={handleTrack} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
-                <div>
-                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.5rem', fontSize: '0.9rem' }}>{t('track.orderId')}</label>
-                    <input required className="input" placeholder={t('track.orderIdPlaceholder')} value={orderId} onChange={(e) => setOrderId(e.target.value)} />
+            <form onSubmit={handleTrack} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginBottom: '1rem' }}>
+                <div style={{ width: '100%' }}>
+                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', fontSize: '0.85rem' }}>{t('track.orderId')}</label>
+                    <input required className="input" placeholder={t('track.orderIdPlaceholder')} value={orderId} onChange={(e) => setOrderId(e.target.value)} style={{ width: '100%', borderRadius: '4px', padding: '14px', border: '1px solid var(--border-color)', backgroundColor: '#fff' }} />
                 </div>
-                <div>
-                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.5rem', fontSize: '0.9rem' }}>{t('track.phoneNumber')}</label>
-                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0', backgroundColor: 'var(--secondary-color)', overflow: 'hidden' }}>
-                        <span style={{ fontWeight: 800, padding: '16px 1rem', borderRight: '1px solid var(--border-color)', backgroundColor: 'rgba(0,0,0,0.02)', color: 'var(--accent-color)', opacity: 0.8 }}>+20</span>
-                        <input required type="tel" className="input" placeholder="10 123 456 78" style={{ border: 'none', borderRadius: 0, boxShadow: 'none', width: '100%', padding: '16px' }} value={phone.replace(/^\+?20\s*/, '')} onChange={e => setPhone('+20 ' + e.target.value.replace(/^\+?20\s*/, ''))} />
+                <div style={{ width: '100%' }}>
+                    <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', fontSize: '0.85rem' }}>{t('track.phoneNumber')}</label>
+                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--border-color)', borderRadius: '4px', backgroundColor: '#fff', width: '100%' }}>
+                        <span style={{ fontWeight: 800, padding: '14px 12px', borderRight: '1px solid #e5e5e5', color: 'var(--accent-color)', fontSize: '0.95rem' }}>+20</span>
+                        <input required type="tel" className="input" placeholder="10 123 456 78" style={{ border: 'none', borderRadius: 0, boxShadow: 'none', width: '100%', padding: '14px', backgroundColor: 'transparent' }} value={phone.replace(/^\+?20\s*/, '')} onChange={e => setPhone('+20 ' + e.target.value.replace(/^\+?20\s*/, ''))} />
                     </div>
                 </div>
-                <button type="submit" disabled={loading} className="btn-primary" style={{ padding: '16px', fontSize: '1.1rem', borderRadius: '8px', opacity: loading ? 0.7 : 1, marginTop: '1rem', cursor: loading ? 'not-allowed' : 'pointer' }}>
+                <button type="submit" disabled={loading} className="btn-primary" style={{ width: '100%', padding: '14px', fontSize: '1rem', borderRadius: '4px', opacity: loading ? 0.7 : 1, marginTop: '0.5rem', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: 800, letterSpacing: '1px' }}>
                     {loading ? t('track.searching') : t('track.trackOrder')}
                 </button>
-                {error && <p style={{ color: '#ef4444', textAlign: 'center', fontWeight: 600, marginTop: '0.5rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '12px', borderRadius: '8px' }}>{error}</p>}
+                {error && <p style={{ color: '#ef4444', textAlign: 'center', fontWeight: 600, marginTop: '0.5rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '12px', borderRadius: '4px' }}>{error}</p>}
             </form>
 
             {order && (
@@ -195,7 +195,7 @@ function TrackOrderContent() {
 
 export default function TrackOrder() {
     return (
-        <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10rem 2rem 4rem', backgroundColor: 'var(--secondary-color)' }}>
+        <div style={{ minHeight: '85vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 'max(8rem, 12vh)', paddingBottom: '4rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', backgroundColor: 'var(--secondary-color)' }}>
             <Suspense fallback={<div style={{ padding: '5rem', textAlign: 'center', fontWeight: 'bold' }}>Loading...</div>}>
                 <TrackOrderContent />
             </Suspense>
