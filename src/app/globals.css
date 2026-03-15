@@ -527,7 +527,7 @@ a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 75%;
+    width: 55%;
     max-width: 320px;
     height: 52px;
     background: #fff;
@@ -606,7 +606,7 @@ a {
     .hero-content  { padding-top: 4vh; }
     .hero-title    { letter-spacing: 3px; font-size: clamp(14px, 4.5vw, 18px); }
     .hero-subtitle { font-size: 0.7rem; }
-    .hero-cta      { width: 75%; height: 50px; font-size: 0.8rem; border-radius: 2px; }
+    .hero-cta      { width: 55%; height: 50px; font-size: 0.8rem; border-radius: 2px; }
     .hero-cta-wrapper { padding-bottom: 5vh; }
 }
 
