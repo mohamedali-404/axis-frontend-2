@@ -522,30 +522,33 @@ a {
     letter-spacing: 0.4px;
 }
 
-/* Mobile: wide pill button */
+/* Mobile: modern sleek frosted glass button */
 .hero-cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 70%;
-    max-width: 280px;
+    width: 65%;
+    max-width: 260px;
     height: 48px;
-    background: rgba(255, 255, 255, 0.93);
-    color: #000;
-    font-weight: 700;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    font-family: inherit;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 0.78rem;
-    border-radius: 12px;
-    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    font-size: 0.8rem;
+    border-radius: 24px; /* full pill */
+    transition: all 0.3s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .hero-cta:hover {
     background: #fff;
+    color: #000;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
 }
 
 .hero-cta:active {
@@ -605,7 +608,7 @@ a {
     .hero-content  { padding-top: 6vh; }
     .hero-title    { letter-spacing: 3px; font-size: clamp(14px, 4.5vw, 18px); }
     .hero-subtitle { font-size: 0.7rem; }
-    .hero-cta      { width: 72%; height: 46px; font-size: 0.75rem; }
+    .hero-cta      { width: 70%; height: 46px; font-size: 0.75rem; border-radius: 24px; }
     .hero-cta-wrapper { padding-bottom: 8vh; }
 }
 
@@ -619,12 +622,14 @@ a {
 }
 
 .section-title {
-    font-size: clamp(1rem, 2.5vw, 1.4rem);
-    font-weight: 800;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 3px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    color: #111;
 }
 
 /* ================================
@@ -640,7 +645,7 @@ a {
    PRODUCT CARD
    ================================ */
 .product-card {
-    border-radius: 6px;
+    border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: rgb(var(--background-start-rgb));
@@ -884,7 +889,7 @@ a {
 
 .collection-card {
     position: relative;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     aspect-ratio: 3 / 4;
     display: block;
@@ -937,22 +942,23 @@ a {
 }
 
 .collection-card-title {
-    font-size: clamp(0.65rem, 2vw, 0.95rem);
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(0.75rem, 2.8vw, 1.1rem);
     font-weight: 700;
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     line-height: 1.2;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
 
 .collection-card-btn {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.75);
-    margin-top: 3px;
+    color: rgba(255, 255, 255, 0.95);
+    margin-top: 6px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
 }
 
 /* ================================
