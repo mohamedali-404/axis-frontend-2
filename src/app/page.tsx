@@ -1,7 +1,7 @@
 import HomeClient from '@/components/HomeClient';
 
-// Opt out of caching to ensure data is always fresh and no stale banners flash
-export const dynamic = 'force-dynamic';
+// Opt out of dynamic rendering to ensure lightning fast initial page loads (ISR)
+export const revalidate = 60;
 
 export default async function Home() {
     let initialProducts = [];
@@ -9,8 +9,8 @@ export default async function Home() {
 
     try {
         const [prodsRes, settsRes] = await Promise.all([
-            fetch(`https://axis-backend-2.onrender.com/api/products`, { cache: 'no-store' }),
-            fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' }),
+            fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } }),
+            fetch(`https://axis-backend-2.onrender.com/api/settings`, { next: { revalidate: 60 } }),
         ]);
 
         if (prodsRes.ok) initialProducts = await prodsRes.json();

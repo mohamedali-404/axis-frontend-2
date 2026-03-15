@@ -1,13 +1,13 @@
 import ShopClient from '@/components/ShopClient';
 
-// Force dynamic rendering to ensure products are always fresh
-export const dynamic = 'force-dynamic';
+// Use ISR so the page is served incredibly fast to users
+export const revalidate = 60;
 
 export default async function Shop() {
     let initialProducts = [];
 
     try {
-        const res = await fetch(`https://axis-backend-2.onrender.com/api/products`, { cache: 'no-store' });
+        const res = await fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } });
         if (res.ok) {
             initialProducts = await res.json();
         }

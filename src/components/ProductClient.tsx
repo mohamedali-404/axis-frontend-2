@@ -47,10 +47,13 @@ function ProductGallery({ images, productName }: { images: string[]; productName
                 className="pg-main-wrap"
             >
                 {mainImage ? (
-                    <img
+                    <Image
                         src={mainImage}
                         alt={productName}
+                        fill
+                        priority
                         className="pg-main-img"
+                        style={{ objectFit: 'cover' }}
                     />
                 ) : (
                     <div className="pg-no-image">No Image</div>
@@ -67,8 +70,9 @@ function ProductGallery({ images, productName }: { images: string[]; productName
                             className={`pg-thumb-btn${mainIndex === idx ? ' active' : ''}`}
                             onClick={() => setMainIndex(idx)}
                             aria-label={`View image ${idx + 1}`}
+                            style={{ position: 'relative', overflow: 'hidden' }}
                         >
-                            <img src={img} alt={`${productName} view ${idx + 1}`} />
+                            <Image src={img} alt={`${productName} view ${idx + 1}`} fill sizes="80px" style={{ objectFit: 'cover' }} />
                         </button>
                     ))}
                 </div>
@@ -146,10 +150,13 @@ function RelatedProducts({ products }: { products: any[] }) {
                 {products.map(rp => (
                     <Link href={`/product/${rp._id}`} key={rp._id} className="related-card">
                         <div className="related-card-img-wrap">
-                            <img
-                                src={rp.images?.[0] || 'https://placehold.co/400x533/f0f0f0/999?text=No+Image'}
+                            <Image
+                                src={rp.images?.[0] || 'https://via.placeholder.com/400x533'}
                                 alt={rp.name}
                                 loading="lazy"
+                                fill
+                                sizes="(max-width: 768px) 50vw, 25vw"
+                                style={{ objectFit: 'cover' }}
                             />
                             {rp.discountPrice && <span className="product-card-badge product-card-badge-sale">SALE</span>}
                         </div>

@@ -27,7 +27,7 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 
 const nextConfig = {
     images: {
-        domains: ['res.cloudinary.com', 'localhost', 'axis-backend-2.onrender.com'],
+        domains: ['res.cloudinary.com', 'localhost', 'axis-backend-2.onrender.com', 'images.unsplash.com', 'via.placeholder.com'],
     },
     async headers() {
         return [

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingBag } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useCartStore } from '@/store/cartStore';
@@ -72,13 +73,15 @@ export default function ProductCard({ product }: { product: any }) {
                             {imagesToDisplay.map((img: string, idx: number) => {
                                 const isActive = idx === currentImgIndex;
                                 return (
-                                    <img
+                                    <Image
                                         key={idx}
                                         src={img}
                                         alt={product.name}
                                         loading="lazy"
+                                        fill
+                                        sizes="(max-width: 768px) 50vw, 25vw"
                                         className={`preview-img ${isActive ? 'active' : ''}`}
-                                        onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/600'; }}
+                                        style={{ objectFit: 'cover' }}
                                     />
                                 );
                             })}
@@ -94,14 +97,16 @@ export default function ProductCard({ product }: { product: any }) {
                             }}
                         >
                             {imagesToDisplay.map((img: string, idx: number) => (
-                                <img
-                                    key={idx}
-                                    src={img}
-                                    alt={product.name}
-                                    loading="lazy"
-                                    className="swipe-img"
-                                    onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/600'; }}
-                                />
+                                <div key={idx} className="swipe-img-container" style={{ position: 'relative', width: '100%', height: '100%', flexShrink: 0, scrollSnapAlign: 'start' }}>
+                                    <Image
+                                        src={img}
+                                        alt={product.name}
+                                        loading="lazy"
+                                        fill
+                                        sizes="(max-width: 768px) 50vw, 25vw"
+                                        style={{ objectFit: 'cover' }}
+                                    />
+                                </div>
                             ))}
                         </div>
 
@@ -165,12 +170,13 @@ export default function ProductCard({ product }: { product: any }) {
                         <button className="quick-view-close" onClick={() => setIsModalOpen(false)}>×</button>
 
                         <div style={{ width: '100%', aspectRatio: '3/4', backgroundColor: 'var(--secondary-color)', borderRadius: '8px', overflow: 'hidden' }}>
-                            <img
+                            <Image
                                 src={imagesToDisplay[0]}
                                 alt={product.name}
                                 loading="lazy"
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/600'; }}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                style={{ objectFit: 'cover' }}
                             />
                         </div>
 
