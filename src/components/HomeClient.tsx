@@ -33,6 +33,9 @@ export default function HomeClient({ initialProducts = [], initialSettings = nul
                     <p className="hero-subtitle">
                         {settings?.subHeadline || "Minimal design. Maximum performance."}
                     </p>
+                </div>
+                {/* CTA pinned to bottom — below the banner logo */}
+                <div className="hero-cta-wrapper" style={{ opacity: settingsReady ? 1 : 0, transition: 'opacity 0.6s ease 0.2s' }}>
                     <Link href="/shop" className="hero-cta">
                         {t('home.shopNow')}
                     </Link>

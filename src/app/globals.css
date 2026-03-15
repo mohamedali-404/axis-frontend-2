@@ -444,8 +444,11 @@ a {
     max-height: 400px;
     min-height: 260px;
     overflow: hidden;
+    /* Stack children top-to-bottom so text sits above the banner logo */
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     margin-top: var(--total-header);
 }
 
@@ -460,46 +463,87 @@ a {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+    /* Lighter top so the text area stays readable; dark bottom covers logo zone */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.10) 40%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
 }
 
+/* ── Text block: top-center, above the banner logo ── */
 .hero-content {
     position: relative;
     z-index: 2;
-    padding: 0 var(--mobile-pad-x) 32px;
-    animation: fadeSlideUp 0.8s ease-out;
+    /* Push away from navbar with comfortable spacing */
+    padding: 28px var(--mobile-pad-x) 0;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    animation: fadeSlideDown 0.8s ease-out;
 }
 
+/* ── CTA wrapper: pinned to bottom of hero ──
+   margin-top:auto in a flex-column pushes this to the
+   bottom of the hero — landing below the AXIS banner logo */
+.hero-cta-wrapper {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding-bottom: 28px;
+    text-align: center;
+    width: 100%;
+    animation: fadeSlideUp 0.8s ease-out 0.15s both;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Hero Title — Space Grotesk, elegant & premium ── */
 .hero-title {
-    font-size: clamp(1.8rem, 5vw, 3rem);
-    font-weight: 900;
-    color: #fff;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Smaller, elegant introductory line — not a dominant headline */
+    font-size: clamp(14px, 2vw, 22px);
+    font-weight: 500;
+    /* Softened — premium feel, avoids clashing with banner logo */
+    color: rgba(255, 255, 255, 0.75);
     text-transform: uppercase;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
-    margin-bottom: 8px;
+    letter-spacing: 4px;
+    line-height: 1.3;
+    margin-bottom: 6px;
 }
 
 .hero-subtitle {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: clamp(0.85rem, 2vw, 1.1rem);
-    max-width: 420px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    max-width: 380px;
+    margin: 0 auto 18px;
     line-height: 1.5;
-    margin-bottom: 20px;
     font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 .hero-cta {
     display: inline-block;
-    padding: 14px 36px;
-    background: #fff;
+    padding: 12px 32px;
+    background: rgba(255, 255, 255, 0.92);
     color: #000;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    font-size: 0.8rem;
     border-radius: 4px;
     transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
 .hero-cta:hover {
@@ -509,15 +553,73 @@ a {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes fadeSlideUp {
+/* ── Entry animation: subtle drop-in from above ── */
+@keyframes fadeSlideDown {
     from {
         opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(-16px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ── Responsive: tablet (768px–1023px) ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .hero-content {
+        padding-top: 32px;
+    }
+    .hero-title {
+        letter-spacing: 5px;
+    }
+    .hero-cta-wrapper {
+        padding-bottom: 30px;
+    }
+}
+
+/* ── Responsive: desktop (1024px–1439px) ── */
+@media (min-width: 1024px) {
+    .hero-content {
+        padding-top: 36px;
+    }
+    .hero-title {
+        letter-spacing: 6px;
+    }
+    .hero-cta-wrapper {
+        padding-bottom: 32px;
+    }
+}
+
+/* ── Responsive: large desktop (≥1440px) ── */
+@media (min-width: 1440px) {
+    .hero-section {
+        max-height: 480px;
+    }
+    .hero-content {
+        padding-top: 40px;
+    }
+    .hero-cta-wrapper {
+        padding-bottom: 36px;
+    }
+}
+
+/* ── Responsive: small mobile (≤430px) ── */
+@media (max-width: 430px) {
+    .hero-section {
+        min-height: 240px;
+    }
+    .hero-content {
+        padding-top: 22px;
+    }
+    .hero-title {
+        letter-spacing: 3px;
+    }
+    .hero-subtitle {
+        font-size: 0.72rem;
+    }
+    .hero-cta-wrapper {
+        padding-bottom: 20px;
     }
 }
 
