@@ -522,33 +522,31 @@ a {
     letter-spacing: 0.4px;
 }
 
-/* Mobile: modern sleek frosted glass button */
+/* Mobile: sharp professional athletic button */
 .hero-cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 65%;
-    max-width: 260px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #fff;
+    width: 75%;
+    max-width: 320px;
+    height: 52px;
+    background: #fff;
+    border: none;
+    color: #000;
     font-family: inherit;
-    font-weight: 600;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.8rem;
-    border-radius: 24px; /* full pill */
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+    border-radius: 2px; /* Sharp corners */
     transition: all 0.3s ease;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
 
 .hero-cta:hover {
-    background: #fff;
-    color: #000;
+    background: #000;
+    color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .hero-cta:active {
@@ -576,7 +574,7 @@ a {
     .hero-bg { background-size: 70% auto; }
     .hero-content  { padding-top: 10vh; }
     .hero-title    { letter-spacing: 5px; }
-    .hero-cta      { width: auto; padding: 0 40px; border-radius: 8px; }
+    .hero-cta      { width: auto; padding: 0 40px; border-radius: 2px; }
     .hero-cta-wrapper { padding-bottom: 12vh; }
 }
 
@@ -589,7 +587,7 @@ a {
     .hero-bg { background-size: 60% auto; }
     .hero-content  { padding-top: 15vh; }
     .hero-title    { letter-spacing: 6px; }
-    .hero-cta      { width: auto; padding: 0 48px; border-radius: 8px; }
+    .hero-cta      { width: auto; padding: 0 48px; border-radius: 2px; }
     .hero-cta-wrapper { padding-bottom: 16vh; }
 }
 
@@ -608,7 +606,7 @@ a {
     .hero-content  { padding-top: 4vh; }
     .hero-title    { letter-spacing: 3px; font-size: clamp(14px, 4.5vw, 18px); }
     .hero-subtitle { font-size: 0.7rem; }
-    .hero-cta      { width: 70%; height: 46px; font-size: 0.75rem; border-radius: 24px; }
+    .hero-cta      { width: 75%; height: 50px; font-size: 0.8rem; border-radius: 2px; }
     .hero-cta-wrapper { padding-bottom: 5vh; }
 }
 
