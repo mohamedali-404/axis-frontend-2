@@ -236,16 +236,32 @@ export default function Navbar({ settings }: { settings?: any }) {
 
             {/* Mobile Menu */}
             {mounted && createPortal(
-                <div className={`mobile-menu-fullscreen ${mobileMenuOpen ? 'open' : 'closed'}`}>
-                    <div className="mobile-menu-header">
-                        <X size={28} cursor="pointer" onClick={() => setMobileMenuOpen(false)} style={{ color: '#ffffff', transition: 'transform 0.3s ease' }} />
-                    </div>
-                    <div className="mobile-menu-links" style={{ opacity: mobileMenuOpen ? 1 : 0, transition: 'opacity 0.4s ease 0.2s' }} suppressHydrationWarning>
-                        <Link href="/" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.home')}</Link>
-                        <Link href="/shop" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.shop')}</Link>
-                        <Link href="/track-order" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.trackOrder')}</Link>
-                        <Link href="/about" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.about')}</Link>
-                        <Link href="/contact" onClick={() => setMobileMenuOpen(false)} suppressHydrationWarning>{t('nav.contact')}</Link>
+                <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`} onClick={() => setMobileMenuOpen(false)}>
+                    <div className={`mobile-menu-sidebar ${mobileMenuOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
+                        <div className="mobile-menu-header">
+                            <span style={{ fontSize: '1.4rem', fontWeight: 900, fontStyle: 'italic', color: '#fff' }}>AXIS</span>
+                            <X size={28} cursor="pointer" onClick={() => setMobileMenuOpen(false)} style={{ color: '#ffffff', transition: 'transform 0.3s ease' }} />
+                        </div>
+                        <div className="mobile-menu-links" suppressHydrationWarning>
+                            {[
+                                { href: '/', label: t('nav.home') },
+                                { href: '/shop', label: t('nav.shop') },
+                                { href: '/track-order', label: t('nav.trackOrder') },
+                                { href: '/about', label: t('nav.about') },
+                                { href: '/contact', label: t('nav.contact') }
+                            ].map((link, i) => (
+                                <Link
+                                    key={i}
+                                    href={link.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`stagger-link ${mobileMenuOpen ? 'in' : ''}`}
+                                    style={{ transitionDelay: `${0.1 + (i * 0.05)}s` }}
+                                    suppressHydrationWarning
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 </div>,
                 document.body

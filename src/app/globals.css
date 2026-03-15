@@ -380,58 +380,91 @@ a {
     display: flex;
 }
 
-.mobile-menu-fullscreen {
+/* ================================
+   MOBILE MENU (Slide-in)
+   ================================ */
+.mobile-menu-overlay {
     position: fixed;
     inset: 0;
-    background: var(--accent-color);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
-.mobile-menu-fullscreen.open {
-    transform: translateX(0);
+.mobile-menu-overlay.open {
     opacity: 1;
     pointer-events: auto;
 }
 
-.mobile-menu-fullscreen.closed {
+.mobile-menu-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 85%;
+    max-width: 380px;
+    background: #050505;
+    display: flex;
+    flex-direction: column;
+    /* GPU Accelerated */
     transform: translateX(-100%);
-    opacity: 0;
-    pointer-events: none;
+    will-change: transform;
+    /* User requested timing */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+}
+
+.mobile-menu-sidebar.open {
+    transform: translateX(0);
 }
 
 .mobile-menu-header {
     display: flex;
-    justify-content: flex-end;
-    padding: 18px 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .mobile-menu-links {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    padding: 2rem 2rem;
+    padding: 16px 24px;
+    overflow-y: auto;
 }
 
-.mobile-menu-links a {
-    color: var(--accent-foreground);
+.stagger-link {
+    display: block;
+    color: #fff;
     font-weight: 700;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: opacity 0.2s;
+    padding: 24px 12px; /* Large clickable area */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 10% transparent divider */
+    text-decoration: none;
+    
+    /* Animation initial state */
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mobile-menu-links a:last-child {
+.stagger-link:last-child {
     border-bottom: none;
 }
 
-.mobile-menu-links a:hover {
-    opacity: 0.7;
+.stagger-link.in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.stagger-link:active {
+    background: rgba(255, 255, 255, 0.05); /* Tap highlight */
 }
 
 /* ================================
