@@ -440,11 +440,11 @@ a {
 .hero-section {
     position: relative;
     width: 100%;
-    height: 40vh;
-    max-height: 400px;
-    min-height: 260px;
+    /* Mobile: 75vh, constrained by min/max */
+    height: 75vh;
+    max-height: 560px;
+    min-height: 320px;
     overflow: hidden;
-    /* Stack children top-to-bottom so text sits above the banner logo */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -458,17 +458,23 @@ a {
     background-size: cover;
     background-position: center;
     transition: opacity 0.6s ease;
+    /* Subtle scale-in on load */
+    animation: heroScaleIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes heroScaleIn {
+    from { transform: scale(1.06); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    /* Lighter top so the text area stays readable; dark bottom covers logo zone */
     background: linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.45) 0%,
-        rgba(0, 0, 0, 0.10) 40%,
-        rgba(0, 0, 0, 0.55) 100%
+        rgba(0, 0, 0, 0.50) 0%,
+        rgba(0, 0, 0, 0.08) 38%,
+        rgba(0, 0, 0, 0.50) 100%
     );
 }
 
@@ -476,151 +482,126 @@ a {
 .hero-content {
     position: relative;
     z-index: 2;
-    /* Push away from navbar with comfortable spacing */
-    padding: 28px var(--mobile-pad-x) 0;
+    padding: 20px var(--mobile-pad-x) 0;
     text-align: center;
     width: 100%;
-    max-width: 100%;
-    animation: fadeSlideDown 0.8s ease-out;
+    animation: fadeSlideDown 0.5s ease-out both;
 }
 
-/* ── CTA wrapper: pinned to bottom of hero ──
-   margin-top:auto in a flex-column pushes this to the
-   bottom of the hero — landing below the AXIS banner logo */
+/* ── CTA wrapper: pinned to bottom of hero ── */
 .hero-cta-wrapper {
     position: relative;
     z-index: 2;
     margin-top: auto;
-    padding-bottom: 28px;
+    padding-bottom: 24px;
     text-align: center;
     width: 100%;
-    animation: fadeSlideUp 0.8s ease-out 0.15s both;
+    animation: fadeSlideUp 0.5s ease-out 0.25s both;
 }
 
-@keyframes fadeSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ── Hero Title — Space Grotesk, elegant & premium ── */
+/* ── Hero Title — Space Grotesk, premium ── */
 .hero-title {
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    /* Smaller, elegant introductory line — not a dominant headline */
-    font-size: clamp(14px, 2vw, 22px);
+    font-size: clamp(16px, 2vw, 24px);
     font-weight: 500;
-    /* Softened — premium feel, avoids clashing with banner logo */
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.85);
     text-transform: uppercase;
     letter-spacing: 4px;
     line-height: 1.3;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .hero-subtitle {
-    color: rgba(255, 255, 255, 0.55);
-    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
-    max-width: 380px;
-    margin: 0 auto 18px;
+    color: rgba(255, 255, 255, 0.60);
+    font-size: clamp(0.72rem, 1.5vw, 0.95rem);
+    max-width: 320px;
+    margin: 0 auto 0;
     line-height: 1.5;
     font-weight: 400;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
 
+/* Mobile: wide pill button */
 .hero-cta {
-    display: inline-block;
-    padding: 12px 32px;
-    background: rgba(255, 255, 255, 0.92);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    max-width: 280px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.93);
     color: #000;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 0.8rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
+    letter-spacing: 2px;
+    font-size: 0.78rem;
+    border-radius: 12px;
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .hero-cta:hover {
-    background: var(--accent-color);
-    color: var(--accent-foreground);
+    background: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* ── Entry animation: subtle drop-in from above ── */
+.hero-cta:active {
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
+/* ── Animations ── */
 @keyframes fadeSlideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive: tablet (768px–1023px) ── */
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Tablet (768px–1023px) ── */
 @media (min-width: 768px) and (max-width: 1023px) {
-    .hero-content {
-        padding-top: 32px;
+    .hero-section {
+        height: 80vh;
+        max-height: 640px;
     }
-    .hero-title {
-        letter-spacing: 5px;
-    }
-    .hero-cta-wrapper {
-        padding-bottom: 30px;
-    }
+    .hero-content  { padding-top: 28px; }
+    .hero-title    { letter-spacing: 5px; }
+    .hero-cta      { width: auto; padding: 0 40px; border-radius: 8px; }
+    .hero-cta-wrapper { padding-bottom: 28px; }
 }
 
-/* ── Responsive: desktop (1024px–1439px) ── */
+/* ── Desktop (1024px–1439px) ── */
 @media (min-width: 1024px) {
-    .hero-content {
-        padding-top: 36px;
+    .hero-section {
+        height: 85vh;
+        max-height: 820px;
     }
-    .hero-title {
-        letter-spacing: 6px;
-    }
-    .hero-cta-wrapper {
-        padding-bottom: 32px;
-    }
+    .hero-content  { padding-top: 36px; }
+    .hero-title    { letter-spacing: 6px; }
+    .hero-cta      { width: auto; padding: 0 48px; border-radius: 8px; }
+    .hero-cta-wrapper { padding-bottom: 32px; }
 }
 
-/* ── Responsive: large desktop (≥1440px) ── */
+/* ── Large desktop (≥1440px) ── */
 @media (min-width: 1440px) {
-    .hero-section {
-        max-height: 480px;
-    }
-    .hero-content {
-        padding-top: 40px;
-    }
-    .hero-cta-wrapper {
-        padding-bottom: 36px;
-    }
+    .hero-section  { max-height: 940px; }
+    .hero-content  { padding-top: 44px; }
+    .hero-cta-wrapper { padding-bottom: 40px; }
 }
 
-/* ── Responsive: small mobile (≤430px) ── */
+/* ── Small mobile (≤430px) ── */
 @media (max-width: 430px) {
-    .hero-section {
-        min-height: 240px;
-    }
-    .hero-content {
-        padding-top: 22px;
-    }
-    .hero-title {
-        letter-spacing: 3px;
-    }
-    .hero-subtitle {
-        font-size: 0.72rem;
-    }
-    .hero-cta-wrapper {
-        padding-bottom: 20px;
-    }
+    .hero-section  { min-height: 300px; height: 72vh; }
+    .hero-content  { padding-top: 16px; }
+    .hero-title    { letter-spacing: 3px; font-size: clamp(14px, 4.5vw, 18px); }
+    .hero-subtitle { font-size: 0.7rem; }
+    .hero-cta      { width: 72%; height: 46px; font-size: 0.75rem; }
+    .hero-cta-wrapper { padding-bottom: 18px; }
 }
 
 /* ================================
@@ -893,53 +874,78 @@ a {
 .collection-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 6px;
 }
 
 .collection-card {
     position: relative;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
     aspect-ratio: 3 / 4;
     display: block;
+    /* Press feedback on mobile */
+    transition: transform 0.18s ease, box-shadow 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Desktop hover — card lift */
+.collection-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Mobile tap press-down feedback */
+.collection-card:active {
+    transform: scale(0.98);
+    box-shadow: none;
 }
 
 .collection-card-bg {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center;
-    transition: transform 0.5s ease;
+    background-position: center center;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.collection-card:hover .collection-card-bg {
-    transform: scale(1.08);
+/* Image zoom on hover — desktop only */
+@media (hover: hover) {
+    .collection-card:hover .collection-card-bg {
+        transform: scale(1.03);
+    }
 }
 
 .collection-card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 70%);
+    /* Stronger gradient for better text readability */
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.80) 0%,
+        rgba(0, 0, 0, 0.20) 45%,
+        transparent 75%
+    );
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 14px 12px;
+    padding: 12px 10px;
 }
 
 .collection-card-title {
-    font-size: clamp(0.7rem, 2vw, 1rem);
+    font-size: clamp(0.65rem, 2vw, 0.95rem);
     font-weight: 700;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     line-height: 1.2;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
 .collection-card-btn {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 3px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
