@@ -18,14 +18,14 @@ export default function Footer({ settings: initialSettings }: { settings?: any }
     }, [initialSettings]);
 
     return (
-        <footer className="footer-container" style={{ backgroundColor: '#000', color: '#fff', padding: '4rem 2rem 2rem', marginTop: '3rem', fontFamily: 'var(--font-family, system-ui, sans-serif)' }}>
-            <div style={{ maxWidth: 1400, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '4rem' }}>
+        <footer className="footer-container" style={{ backgroundColor: '#000', color: '#fff', fontFamily: 'var(--font-family, system-ui, sans-serif)' }}>
+            <div className="footer-grid">
                 <div>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900, fontStyle: 'italic', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '1.5rem', lineHeight: 1 }}>AXIS</h2>
-                    <p style={{ color: '#ccc', maxWidth: 300, marginBottom: '2.5rem', fontSize: '1.1rem', lineHeight: 1.6 }}>
+                    <h2 className="footer-logo">AXIS</h2>
+                    <p className="footer-tagline">
                         {t('footer.tagline')}
                     </p>
-                    <div style={{ display: 'flex', gap: '2rem' }}>
+                    <div className="footer-socials">
                         {settings?.socialLinks?.instagram && <a href={settings.socialLinks.instagram} className="footer-social-icon" target="_blank" rel="noopener noreferrer"><Instagram size={28} /></a>}
                         {settings?.socialLinks?.facebook && <a href={settings.socialLinks.facebook} className="footer-social-icon" target="_blank" rel="noopener noreferrer"><Facebook size={28} /></a>}
                         {settings?.socialLinks?.tiktok && <a href={settings.socialLinks.tiktok} className="footer-social-icon" target="_blank" rel="noopener noreferrer">
@@ -44,15 +44,15 @@ export default function Footer({ settings: initialSettings }: { settings?: any }
                 </div>
 
                 <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '1px' }}>{t('footer.support')}</h3>
-                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: 0 }}>
+                    <h3 className="footer-support-title">{t('footer.support')}</h3>
+                    <ul className="footer-support-list">
                         <li><Link href="/contact" className="footer-link">{t('footer.contactUs')}</Link></li>
                         <li><Link href="/policy" className="footer-link">{t('footer.returnExchange')}</Link></li>
                     </ul>
                 </div>
             </div>
 
-            <div style={{ maxWidth: 1400, margin: '3rem auto 0', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+            <div className="footer-bottom">
                 <div className="dev-badge" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '10px 20px', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: '40px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                         <img src="/dev-avatar.jpg" alt="Developer Avatar" className="dev-avatar" style={{ width: 44, height: 44, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.2)', objectFit: 'cover', objectPosition: 'center 15%' }} />
@@ -79,6 +79,63 @@ export default function Footer({ settings: initialSettings }: { settings?: any }
 
             <style dangerouslySetInnerHTML={{
                 __html: `
+                .footer-container {
+                    padding: 4rem 2rem 2rem;
+                    margin-top: 3rem;
+                }
+                .footer-grid {
+                    max-width: 1400px;
+                    margin: 0 auto;
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 4rem;
+                }
+                .footer-logo {
+                    font-size: 2.5rem;
+                    font-weight: 900;
+                    font-style: italic;
+                    letter-spacing: 4px;
+                    text-transform: uppercase;
+                    margin-bottom: 1.5rem;
+                    line-height: 1;
+                }
+                .footer-tagline {
+                    color: #ccc;
+                    max-width: 300px;
+                    margin-bottom: 2.5rem;
+                    font-size: 1.1rem;
+                    line-height: 1.6;
+                }
+                .footer-socials {
+                    display: flex;
+                    gap: 2rem;
+                    align-items: center;
+                    justify-content: flex-start;
+                }
+                .footer-support-title {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    margin-bottom: 2rem;
+                    letter-spacing: 1px;
+                }
+                .footer-support-list {
+                    list-style: none;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.2rem;
+                    padding: 0;
+                }
+                .footer-bottom {
+                    max-width: 1400px;
+                    margin: 3rem auto 0;
+                    padding-top: 2rem;
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1.5rem;
+                }
                 .footer-social-icon {
                     color: rgba(255, 255, 255, 0.7);
                     transition: all 0.2s ease-in-out;
@@ -132,7 +189,38 @@ export default function Footer({ settings: initialSettings }: { settings?: any }
                 }
                 @media (max-width: 600px) {
                     .footer-container {
-                        padding-bottom: 6rem !important;
+                        padding: 2rem 1.5rem 6.5rem;
+                        margin-top: 1.5rem;
+                    }
+                    .footer-grid {
+                        gap: 1.5rem;
+                    }
+                    .footer-logo {
+                        margin-bottom: 0.8rem;
+                        font-size: 2.2rem;
+                    }
+                    .footer-tagline {
+                        margin-bottom: 1.2rem;
+                        font-size: 1rem;
+                        line-height: 1.4;
+                    }
+                    .footer-socials {
+                        gap: 1rem;
+                    }
+                    .footer-support-title {
+                        margin-bottom: 0.8rem;
+                        font-size: 1.1rem;
+                    }
+                    .footer-support-list {
+                        gap: 0.5rem;
+                    }
+                    .footer-link {
+                        font-size: 0.95rem;
+                    }
+                    .footer-bottom {
+                        margin-top: 1.5rem;
+                        padding-top: 1.5rem;
+                        gap: 1rem;
                     }
                     .dev-badge {
                         flex-direction: row;
