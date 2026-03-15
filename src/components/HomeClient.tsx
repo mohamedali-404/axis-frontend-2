@@ -16,6 +16,16 @@ export default function HomeClient({ initialProducts = [], initialSettings = nul
         <div style={{ backgroundColor: 'rgb(var(--background-start-rgb))' }}>
             {/* Hero Section */}
             <section className="hero-section" style={{ backgroundColor: '#050505' }}>
+                <div
+                    className="hero-bg"
+                    style={{
+                        backgroundImage: settings?.heroBanner
+                            ? `url("${settings.heroBanner}")`
+                            : 'none',
+                        opacity: settingsReady ? 1 : 0,
+                    }}
+                />
+                <div className="hero-overlay" />
                 <div className="hero-content" style={{ opacity: settingsReady ? 1 : 0, transition: 'opacity 0.6s ease' }}>
                     <h1 className="hero-title">
                         {settings?.heroHeadline || "WELCOME TO AXIS"}
@@ -24,16 +34,7 @@ export default function HomeClient({ initialProducts = [], initialSettings = nul
                         {settings?.subHeadline || "Minimal design. Maximum performance."}
                     </p>
                 </div>
-
-                {settings?.heroBanner && (
-                    <img 
-                        src={settings.heroBanner} 
-                        alt="AXIS Banner"
-                        className="hero-logo-img"
-                        style={{ opacity: settingsReady ? 1 : 0, transition: 'opacity 0.6s ease' }}
-                    />
-                )}
-
+                {/* CTA pinned to bottom — below the banner logo */}
                 <div className="hero-cta-wrapper" style={{ opacity: settingsReady ? 1 : 0, transition: 'opacity 0.6s ease 0.2s' }}>
                     <Link href="/shop" className="hero-cta">
                         {t('home.shopNow')}
