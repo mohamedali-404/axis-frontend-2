@@ -8,7 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { getSocket } from '@/lib/socket';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+const API = 'https://axis-backend-2.onrender.com/api';
 const DEFAULT_ANNOUNCEMENT = 'Free shipping on orders over $50 ✦ New arrivals every week ✦ Premium quality sportswear';
 
 export default function Navbar({ settings }: { settings?: any }) {

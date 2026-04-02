@@ -5,7 +5,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { getSocket } from '@/lib/socket';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+const API = 'https://axis-backend-2.onrender.com/api';
 
 export default function AdminDashboard() {
     const { t, lang, setLang } = useLanguage();

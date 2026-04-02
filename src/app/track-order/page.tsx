@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { getSocket } from '@/lib/socket';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+const API = 'https://axis-backend-2.onrender.com/api';
 
 function TrackOrderContent() {
     const searchParams = useSearchParams();

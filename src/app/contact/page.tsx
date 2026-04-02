@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+const API = 'https://axis-backend-2.onrender.com/api';
 
 export default function Contact() {
     const [contactInfo, setContactInfo] = useState({

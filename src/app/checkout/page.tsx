@@ -4,7 +4,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+const API = 'https://axis-backend-2.onrender.com/api';
 
 export default function Checkout() {
     const router = useRouter();

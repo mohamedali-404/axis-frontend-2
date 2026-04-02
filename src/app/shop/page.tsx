@@ -1,15 +1,15 @@
 import ShopClient from '@/components/ShopClient';
 
 // Use ISR so the page is served incredibly fast to users
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+const API = 'https://axis-backend-2.onrender.com/api';
 
 export default async function Shop() {
     let initialProducts = [];
 
     try {
-        const res = await fetch(`${API}/products`, { next: { revalidate: 60 } });
+        const res = await fetch(`${API}/products`, { cache: 'no-store' });
         if (res.ok) {
             initialProducts = await res.json();
         }

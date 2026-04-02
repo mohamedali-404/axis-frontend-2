@@ -1,7 +1,7 @@
 import ProductClient from '@/components/ProductClient';
 
 // Use ISR for incredibly fast loading times
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
     const { id } = params;
@@ -10,9 +10,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
     try {
         const [prodRes, allRes, settingsRes] = await Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api'}/products/${id}`, { next: { revalidate: 60 } }),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api'}/products`, { next: { revalidate: 60 } }),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api'}/settings`, { next: { revalidate: 60 } })
+            fetch(`${'https://axis-backend-2.onrender.com/api'}/products/${id}`, { cache: 'no-store' }),
+            fetch(`${'https://axis-backend-2.onrender.com/api'}/products`, { cache: 'no-store' }),
+            fetch(`${'https://axis-backend-2.onrender.com/api'}/settings`, { cache: 'no-store' })
         ]);
 
         let settings = null;
