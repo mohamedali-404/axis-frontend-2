@@ -7,10 +7,12 @@ export default async function Home() {
     let initialProducts = [];
     let initialSettings = null;
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+
     try {
         const [prodsRes, settsRes] = await Promise.all([
-            fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } }),
-            fetch(`https://axis-backend-2.onrender.com/api/settings`, { next: { revalidate: 60 } }),
+            fetch(`${apiUrl}/products`, { next: { revalidate: 60 } }),
+            fetch(`${apiUrl}/settings`, { next: { revalidate: 60 } }),
         ]);
 
         if (prodsRes.ok) initialProducts = await prodsRes.json();

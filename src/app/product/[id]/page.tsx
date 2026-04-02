@@ -10,9 +10,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
     try {
         const [prodRes, allRes, settingsRes] = await Promise.all([
-            fetch(`https://axis-backend-2.onrender.com/api/products/${id}`, { next: { revalidate: 60 } }),
-            fetch(`https://axis-backend-2.onrender.com/api/products`, { next: { revalidate: 60 } }),
-            fetch(`https://axis-backend-2.onrender.com/api/settings`, { next: { revalidate: 60 } })
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api'}/products/${id}`, { next: { revalidate: 60 } }),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api'}/products`, { next: { revalidate: 60 } }),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api'}/settings`, { next: { revalidate: 60 } })
         ]);
 
         let settings = null;

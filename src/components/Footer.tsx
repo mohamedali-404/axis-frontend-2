@@ -4,13 +4,15 @@ import { Facebook, Instagram } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+
 export default function Footer({ settings: initialSettings }: { settings?: any }) {
     const [settings, setSettings] = useState<any>(initialSettings || null);
     const { t } = useLanguage();
 
     useEffect(() => {
         if (!initialSettings) {
-            fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' })
+            fetch(`${API}/settings`, { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => setSettings(data))
                 .catch(console.error);

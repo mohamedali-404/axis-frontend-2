@@ -2,13 +2,15 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+
 export default function About() {
     const [aboutText, setAboutText] = useState('');
     const [loading, setLoading] = useState(true);
     const { t } = useLanguage();
 
     useEffect(() => {
-        fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' })
+        fetch(`${API}/settings`, { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 if (data.aboutText) setAboutText(data.aboutText);

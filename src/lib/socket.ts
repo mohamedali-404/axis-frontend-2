@@ -4,9 +4,9 @@ let socket: Socket | null = null;
 
 export function getSocket(): Socket {
     if (!socket) {
-        const backendUrl =
-            'https://axis-backend-2.onrender.com/api'?.replace('/api', '') ||
-            'http://localhost:5001';
+        // Derive backend URL from the API env variable (strip the /api suffix)
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+        const backendUrl = apiUrl.replace('/api', '');
 
         socket = io(backendUrl, {
             transports: ['websocket', 'polling'],

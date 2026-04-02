@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { getSocket } from '@/lib/socket';
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+
 function TrackOrderContent() {
     const searchParams = useSearchParams();
     const [orderId, setOrderId] = useState(searchParams?.get('id') || '');
@@ -45,7 +47,7 @@ function TrackOrderContent() {
         setLoading(true);
 
         try {
-            const res = await axios.post(`https://axis-backend-2.onrender.com/api/orders/track`, {
+            const res = await axios.post(`${API}/orders/track`, {
                 orderId, phone
             });
             setOrder(res.data);

@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+
 export default function Contact() {
     const [contactInfo, setContactInfo] = useState({
         email: 'support@axis-store.com',
@@ -10,7 +12,7 @@ export default function Contact() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`https://axis-backend-2.onrender.com/api/settings`, { cache: 'no-store' })
+        fetch(`${API}/settings`, { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 if (data.contactInfo) setContactInfo(data.contactInfo);

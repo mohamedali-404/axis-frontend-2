@@ -4,6 +4,8 @@ import { useCartStore } from '@/store/cartStore';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://axis-backend-2.onrender.com/api';
+
 export default function Checkout() {
     const router = useRouter();
     const { items, clearCart } = useCartStore();
@@ -35,7 +37,7 @@ export default function Checkout() {
     useEffect(() => { setMounted(true); }, []);
 
     useEffect(() => {
-        fetch(`https://axis-backend-2.onrender.com/api/settings`)
+        fetch(`${API}/settings`)
             .then(res => res.json())
             .then(data => {
                 if (data.shippingRates) {
@@ -70,7 +72,7 @@ export default function Checkout() {
 
     const handleApplyCoupon = async () => {
         try {
-            const res = await fetch(`https://axis-backend-2.onrender.com/api/coupons/validate`, {
+            const res = await fetch(`${API}/coupons/validate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code: couponCode })
@@ -127,7 +129,7 @@ export default function Checkout() {
         };
 
         try {
-            const res = await fetch(`https://axis-backend-2.onrender.com/api/orders`, {
+            const res = await fetch(`${API}/orders`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)
